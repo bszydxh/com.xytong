@@ -38,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         binding.appBarMain.toolbar.setOnClickListener(new View.OnClickListener() {
-            int  tap = 0;
+            int tap = 0;
+
             @Override
             public void onClick(View view) {
-                Toast toast = Toast.makeText(MainActivity.this,"tap"+tap,Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(MainActivity.this, "tap" + tap, Toast.LENGTH_SHORT);
                 tap++;
                 toast.show();
             }
@@ -50,28 +51,30 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        mAppBarConfiguration = new AppBarConfiguration.Builder(//应用侧栏配置
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)//三人行,home...
+                .setOpenableLayout(drawer)//显示三条横用的qwq
+                .build();// 构造AppBarConfiguration实例
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        //构建新的NavController对象,实际上是找到已有的赋给该对象
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);//nav导航控制器,显示标题用
+//        NavigationUI.setupWithNavController(navigationView, navController);//绑定三个按键的导航
         Toast toast = Toast.makeText(MainActivity.this, "this is a toast", Toast.LENGTH_LONG);
         toast.show();
+
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {//创建一个菜单
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {//重写三条横的实现,即响应事件
+//       NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
 }
