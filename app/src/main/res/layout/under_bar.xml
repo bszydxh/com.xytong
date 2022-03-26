@@ -4,15 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <androidx.viewpager.widget.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200" />
+        android:theme="@style/Theme.校园通.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/sky_blue"
+            app:popupTheme="@style/Theme.校园通.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <include
+            android:id="@+id/run_errands_page"
+            layout="@layout/run_errands" />
+
+        <include
+            android:id="@+id/secondhand_page"
+            layout="@layout/secondhand" />
+
+        <include
+            android:id="@+id/moral_page"
+            layout="@layout/moral" />
+
+        <include
+            android:id="@+id/forums_page"
+            layout="@layout/forums" />
+    </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/btmNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:itemRippleColor="@color/sky_blue"
+        app:itemIconTint="@drawable/icon_change"
+        app:itemTextColor="@drawable/icon_change"
+        app:menu="@menu/btm_menu" />
 </LinearLayout>

@@ -6,7 +6,10 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
+    <string name="run_errands">跑腿</string>
+    <string name="moral">德育</string>
+    <string name="secondhand">二手</string>
+    <string name="forums">论坛</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
