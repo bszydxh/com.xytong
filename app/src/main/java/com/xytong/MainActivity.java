@@ -1,27 +1,22 @@
 package com.xytong;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
-import android.widget.Toast;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.xytong.databinding.ActivityMainBinding;
-import com.xytong.databinding.AppBarMainBinding;
 
 import java.util.ArrayList;
 
@@ -33,9 +28,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());//赋值阶段,inflate为调用生成的绑定类中包含的静态方法。这将为要使用的活动创建一个绑定类的实例。
-        setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用
+        setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         setSupportActionBar(binding.appBarMain.underBar.toolbar);//设置toolbar
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
             @Override
@@ -44,14 +38,12 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();//设置点击事件
             }
         });
-        binding.appBarMain.underBar.toolbar.setOnClickListener(new View.OnClickListener() {
-            int tap = 0;
-
+        View nav_header_view = binding.navView.getHeaderView(0);
+        nav_header_view.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
             @Override
-            public void onClick(View view) {
-                Toast toast = Toast.makeText(MainActivity.this, "tap" + tap, Toast.LENGTH_SHORT);
-                tap++;
-                toast.show();
+            public void onClick(View view) {//@override注释后对编译器会对重写的方法进行检查
+                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(intent);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
@@ -105,12 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffset2) {
-
                     }
 
                     @Override
                     public void onPageScrollStateChanged(int state) {
-
                     }
 
                     @Override
