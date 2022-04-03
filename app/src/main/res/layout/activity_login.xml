@@ -63,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="忘记密码?"
+                android:id="@+id/forget_password"
                 android:textSize="17sp"
                 android:textColor="@color/sky_blue"/>
         </LinearLayout>

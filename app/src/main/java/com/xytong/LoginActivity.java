@@ -34,7 +34,13 @@ public class LoginActivity extends AppCompatActivity {
         binding.signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "sign_up", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "sign up", Toast.LENGTH_SHORT).show();
+            }
+        });
+        binding.forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(LoginActivity.this, "forget password", Toast.LENGTH_SHORT).show();
             }
         });
     }
