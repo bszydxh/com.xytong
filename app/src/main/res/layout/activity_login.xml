@@ -58,14 +58,15 @@
                 android:ems="16"
                 android:hint="请输入密码"
                 android:inputType="textPassword" />
+
             <TextView
-                android:layout_marginLeft="3dp"
+                android:id="@+id/forget_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
                 android:text="忘记密码?"
-                android:id="@+id/forget_password"
-                android:textSize="17sp"
-                android:textColor="@color/sky_blue"/>
+                android:textColor="@color/sky_blue"
+                android:textSize="17sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -92,4 +93,5 @@
             android:layout_marginLeft="50dp"
             android:text="@string/注册" />
     </LinearLayout>
+
 </LinearLayout>

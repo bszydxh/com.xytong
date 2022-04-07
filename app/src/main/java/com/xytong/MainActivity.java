@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;//为activity_main.xml绑定视图,先定义一个类,之后赋值
+    private View nav_header_view;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private ViewPager viewPager;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +45,16 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();//设置点击事件
             }
         });
-        View nav_header_view = binding.navView.getHeaderView(0);
+        nav_header_view = binding.navView.getHeaderView(0);
         nav_header_view.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
             @Override
             public void onClick(View view) {//@override注释后对编译器会对重写的方法进行检查
-                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
-        DrawerLayout drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
-        NavigationView navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
+        drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
+        navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(//应用侧栏配置
@@ -59,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);//nav导航控制器,显示标题用
 //        NavigationUI.setupWithNavController(navigationView, navController);//绑定三个按键的导航
 
-        ViewPager viewPager = binding.appBarMain.underBar.pager;
+        viewPager = binding.appBarMain.underBar.pager;
+
         ArrayList<View> aListView = new ArrayList<View>();
         LayoutInflater layoutInflater = getLayoutInflater();
         aListView.add(layoutInflater.inflate(R.layout.run_errands, null, false));
@@ -68,6 +76,22 @@ public class MainActivity extends AppCompatActivity {
         aListView.add(layoutInflater.inflate(R.layout.forums, null, false));
         MyPagerAdapter myPagerAdapter = new MyPagerAdapter(aListView);
         viewPager.setAdapter(myPagerAdapter);
+        webView = aListView.get(1).findViewById(R.id.web_view);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);//设置支持js
+        //设置自适应屏幕
+        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(true);
+        ///////
+        webSettings.setSupportZoom(true);//支持缩放
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);//隐藏原生缩放控件
+        webSettings.setLoadsImagesAutomatically(true);//设置自动加载图片
+        webSettings.setDefaultTextEncodingName("utf-8");
+        webSettings.setAllowFileAccess(true);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.loadUrl("https://www.people.com.cn/");
         BottomNavigationView bottomnavigation = binding.appBarMain.underBar.btmNav;
         bottomnavigation.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -93,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
         viewPager.addOnPageChangeListener(
                 new ViewPager.OnPageChangeListener() {
                     @Override
@@ -108,20 +134,37 @@ public class MainActivity extends AppCompatActivity {
                         switch (position) {
                             case 0:
                                 bottomnavigation.setSelectedItemId(R.id.run_errands);
+                                //webView.onPause();
                                 break;
                             case 1:
                                 bottomnavigation.setSelectedItemId(R.id.moral);
+                                //webView.onResume();
                                 break;
                             case 2:
                                 bottomnavigation.setSelectedItemId(R.id.secondhand);
+                                //webView.onPause();
                                 break;
                             case 3:
                                 bottomnavigation.setSelectedItemId(R.id.forums);
+                                //webView.onPause();
                                 break;
                         }
                     }
                 }
         );
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //webView.pauseTimers();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //webView.resumeTimers();
     }
 
     @Override
