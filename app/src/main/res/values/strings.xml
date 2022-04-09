@@ -15,4 +15,6 @@
     <string name="注册">注册</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="发单">发单</string>
+    <string name="接单">接单</string>
 </resources>

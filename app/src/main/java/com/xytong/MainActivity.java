@@ -1,6 +1,7 @@
 package com.xytong;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -84,14 +86,30 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setLoadWithOverviewMode(true);
         ///////
         webSettings.setSupportZoom(true);//支持缩放
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);//隐藏原生缩放控件
         webSettings.setLoadsImagesAutomatically(true);//设置自动加载图片
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setAllowFileAccess(true);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webView.loadUrl("https://www.people.com.cn/");
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                super.shouldOverrideUrlLoading(view, url);
+                view.loadUrl(url);
+                return true;
+            }
+        });
         BottomNavigationView bottomnavigation = binding.appBarMain.underBar.btmNav;
         bottomnavigation.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
