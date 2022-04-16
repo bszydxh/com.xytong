@@ -14,4 +14,4 @@
 .cxx
 local.properties
 *.md
-test*.json
+test_http_forum_back.json

@@ -1,10 +1,10 @@
 package com.xytong.data;
 
 public class CardData {
-    private String user_name;
-    private String user_avatar_url;
-    private String title;
-    private String text;
+    private String user_name = "null";
+    private String user_avatar_url = "#ffffff";
+    private String title = "null";
+    private String text = "null";
 
     public String getText() {
         return text;

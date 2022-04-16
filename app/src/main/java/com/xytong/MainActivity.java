@@ -28,6 +28,10 @@ import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.xytong.adapter.ForumRecyclerAdapter;
+import com.xytong.adapter.RootPagerAdapter;
+import com.xytong.adapter.ShRecyclerAdapter;
+import com.xytong.data.ForumData;
 import com.xytong.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -81,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
         aListView.add(layoutInflater.inflate(R.layout.run_errands, null, false));
         aListView.add(layoutInflater.inflate(R.layout.moral, null, false));
         aListView.add(layoutInflater.inflate(R.layout.secondhand, null, false));
-        aListView.add(layoutInflater.inflate(R.layout.forums, null, false));
-        MyPagerAdapter viewPagerAdapter = new MyPagerAdapter(aListView);
+        aListView.add(layoutInflater.inflate(R.layout.forum, null, false));
+        RootPagerAdapter viewPagerAdapter = new RootPagerAdapter(aListView);
         viewPager.setAdapter(viewPagerAdapter);
         /////////////////////////////////////////////////////////////////////
         //第一页
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 12; i++) {
             shList.add(i + "");
         }
-        CustomAdapter shRecyclerAdapter = new CustomAdapter(shList);
+        ShRecyclerAdapter shRecyclerAdapter = new ShRecyclerAdapter(shList);
         shRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -161,17 +165,19 @@ public class MainActivity extends AppCompatActivity {
         RefreshLayout forumRefreshLayout = aListView.get(3).findViewById(R.id.forumRefreshLayout);
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
-        List<String> forumList = new ArrayList<>();
+        List<ForumData> forumList = new ArrayList<>();
+        ForumData forumData = new ForumData();
+        forumData.setUser_avatar_url("https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
         for (int i = 0; i < 15; i++) {
-            forumList.add(i + "");
+            forumList.add(forumData);
         }
-        CustomAdapter forumRecyclerAdapter = new CustomAdapter(forumList);
+        ForumRecyclerAdapter forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
         final int[] count = {1};
         forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshlayout) {
                 //Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
-                forumList.add(3, "插入" + count[0]);
+                forumList.add(3, forumData);
                 forumRecyclerAdapter.notifyItemInserted(3);
                 count[0]++;
                 refreshlayout.finishRefresh(2000);//传入false表示刷新失败
@@ -181,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
                 for (int i = 0; i < 15; i++) {
-                    forumList.add(forumList.size(), forumList.size() + "");
+                    forumList.add(forumList.size(), forumData);
                     forumRecyclerAdapter.notifyItemInserted(forumList.size());
                 }
                 refreshlayout.finishLoadMore(10/*,false*/);//传入false表示加载失败
@@ -278,12 +284,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
-// insert page ids
-//adapter2.insertViewId(R.id.run_errands_page);
-//adapter2.insertViewId(R.id.secondhand_page);
-//adapter2.insertViewId(R.id.moral_page);
-//adapter2.insertViewId(R.id.forums_page);
 // attach adapter to viewpager
 //    @Override
 //    public boolean onSupportNavigateUp() {//重写三条横的实现,即响应事件

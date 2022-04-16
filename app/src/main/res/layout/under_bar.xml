@@ -39,7 +39,7 @@
 
         <include
             android:id="@+id/forums_page"
-            layout="@layout/forums" />
+            layout="@layout/forum" />
     </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

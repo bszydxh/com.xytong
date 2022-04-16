@@ -1,22 +1,19 @@
-package com.xytong;
+package com.xytong.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MyPagerAdapter extends PagerAdapter {
+public class RootPagerAdapter extends PagerAdapter {
     private ArrayList<View> viewLists;
 
-    public MyPagerAdapter() {
+    public RootPagerAdapter() {
     }
 
-    public MyPagerAdapter(ArrayList<View> viewLists) {
+    public RootPagerAdapter(ArrayList<View> viewLists) {
         super();
         this.viewLists = viewLists;
     }

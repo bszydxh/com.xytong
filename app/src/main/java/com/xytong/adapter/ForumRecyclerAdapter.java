@@ -1,4 +1,4 @@
-package com.xytong;
+package com.xytong.adapter;
 
 
 import android.view.LayoutInflater;
@@ -9,12 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xytong.R;
+import com.xytong.data.ForumData;
+
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdapter.ViewHolder> {
 
     //private String[] localDataSet;
-    private List<String> localDataSet;
+    //private List<String> localDataSet;
+    private List<ForumData> localDataSet;
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -25,7 +29,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-            textView = (TextView) view.findViewById(R.id.textView);
+            textView = (TextView) view.findViewById(R.id.card_forum_user_name);
         }
 
         public TextView getTextView() {
@@ -39,7 +43,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * @param dataSet String[] containing the data to populate views to be used
      *                by RecyclerView.
      */
-    public CustomAdapter(List<String> dataSet) {
+    public ForumRecyclerAdapter(List<ForumData> dataSet) {
         localDataSet = dataSet;
     }
 
@@ -49,7 +53,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.card_row_item, viewGroup, false);
+                .inflate(R.layout.card_forum, viewGroup, false);
 
         return new ViewHolder(view);
     }
@@ -59,7 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(localDataSet.get(position));
+        //viewHolder.getTextView().setText(localDataSet.get(position).getText());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
