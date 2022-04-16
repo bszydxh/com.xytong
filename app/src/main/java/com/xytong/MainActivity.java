@@ -10,26 +10,33 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.MaterialHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xytong.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;//为activity_main.xml绑定视图,先定义一个类,之后赋值
-    private View nav_header_view;
-    private DrawerLayout drawer;
     private NavigationView navigationView;
     private ViewPager viewPager;
     private WebView webView;
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();//设置点击事件
             }
         });
-        nav_header_view = binding.navView.getHeaderView(0);
+        View nav_header_view = binding.navView.getHeaderView(0);
         nav_header_view.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
             @Override
             public void onClick(View view) {//@override注释后对编译器会对重写的方法进行检查
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
+        DrawerLayout drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
         navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -69,15 +76,21 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationUI.setupWithNavController(navigationView, navController);//绑定三个按键的导航
 
         viewPager = binding.appBarMain.underBar.pager;
-
         ArrayList<View> aListView = new ArrayList<View>();
         LayoutInflater layoutInflater = getLayoutInflater();
         aListView.add(layoutInflater.inflate(R.layout.run_errands, null, false));
         aListView.add(layoutInflater.inflate(R.layout.moral, null, false));
         aListView.add(layoutInflater.inflate(R.layout.secondhand, null, false));
         aListView.add(layoutInflater.inflate(R.layout.forums, null, false));
-        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(aListView);
-        viewPager.setAdapter(myPagerAdapter);
+        MyPagerAdapter viewPagerAdapter = new MyPagerAdapter(aListView);
+        viewPager.setAdapter(viewPagerAdapter);
+        /////////////////////////////////////////////////////////////////////
+        //第一页
+        /////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        //第二页
+        /////////////////////////////////////////////////////////////////////
         webView = aListView.get(1).findViewById(R.id.web_view);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);//设置支持js
@@ -110,6 +123,81 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        /////////////////////////////////////////////////////////////////////
+        //第三页
+        /////////////////////////////////////////////////////////////////////
+        RefreshLayout shRefreshLayout = aListView.get(2).findViewById(R.id.shRefreshLayout);
+        shRefreshLayout.setRefreshHeader(new MaterialHeader(this));
+        shRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
+        List<String> shList = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            shList.add(i + "");
+        }
+        CustomAdapter shRecyclerAdapter = new CustomAdapter(shList);
+        shRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
+                refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+            }
+        });
+        shRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                Toast.makeText(MainActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
+                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+            }
+        });
+        RecyclerView shRecyclerView = aListView.get(2).findViewById(R.id.shRecyclerView);
+
+        shRecyclerView.setAdapter(shRecyclerAdapter);
+        LinearLayoutManager shlinearLayoutManager = new LinearLayoutManager(this);
+        shRecyclerView.setLayoutManager(shlinearLayoutManager);
+        shlinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        /////////////////////////////////////////////////////////////////////
+        //第四页
+        /////////////////////////////////////////////////////////////////////
+        RefreshLayout forumRefreshLayout = aListView.get(3).findViewById(R.id.forumRefreshLayout);
+        forumRefreshLayout.setRefreshHeader(new MaterialHeader(this));
+        forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
+        List<String> forumList = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            forumList.add(i + "");
+        }
+        CustomAdapter forumRecyclerAdapter = new CustomAdapter(forumList);
+        final int[] count = {1};
+        forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
+                //Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
+                forumList.add(3, "插入" + count[0]);
+                forumRecyclerAdapter.notifyItemInserted(3);
+                count[0]++;
+                refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+            }
+        });
+        forumRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
+                for (int i = 0; i < 15; i++) {
+                    forumList.add(forumList.size(), forumList.size() + "");
+                    forumRecyclerAdapter.notifyItemInserted(forumList.size());
+                }
+                refreshlayout.finishLoadMore(10/*,false*/);//传入false表示加载失败
+                //Toast.makeText(MainActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+        RecyclerView forumRecyclerView = aListView.get(3).findViewById(R.id.forumRecyclerView);
+
+
+        forumRecyclerView.setAdapter(forumRecyclerAdapter);
+        LinearLayoutManager forumLinearLayoutManager = new LinearLayoutManager(this);
+        forumRecyclerView.setLayoutManager(forumLinearLayoutManager);
+        forumLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        /////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////
         BottomNavigationView bottomnavigation = binding.appBarMain.underBar.btmNav;
         bottomnavigation.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -135,8 +223,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
         viewPager.addOnPageChangeListener(
                 new ViewPager.OnPageChangeListener() {
                     @Override
@@ -152,19 +238,19 @@ public class MainActivity extends AppCompatActivity {
                         switch (position) {
                             case 0:
                                 bottomnavigation.setSelectedItemId(R.id.run_errands);
-                                //webView.onPause();
+                                webView.onPause();
                                 break;
                             case 1:
                                 bottomnavigation.setSelectedItemId(R.id.moral);
-                                //webView.onResume();
+                                webView.onResume();
                                 break;
                             case 2:
                                 bottomnavigation.setSelectedItemId(R.id.secondhand);
-                                //webView.onPause();
+                                webView.onPause();
                                 break;
                             case 3:
                                 bottomnavigation.setSelectedItemId(R.id.forums);
-                                //webView.onPause();
+                                webView.onPause();
                                 break;
                         }
                     }
