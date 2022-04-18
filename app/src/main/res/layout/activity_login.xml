@@ -63,10 +63,11 @@
                 android:id="@+id/forget_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:text="忘记密码?"
+                android:layout_marginStart="3dp"
+                android:text="@string/forget_word"
                 android:textColor="@color/sky_blue"
                 android:textSize="17sp" />
+
         </LinearLayout>
 
         <LinearLayout

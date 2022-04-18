@@ -10,7 +10,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,26 +28,30 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xytong.adapter.ForumRecyclerAdapter;
+import com.xytong.adapter.ReRecyclerAdapter;
 import com.xytong.adapter.RootPagerAdapter;
 import com.xytong.adapter.ShRecyclerAdapter;
 import com.xytong.data.ForumData;
+import com.xytong.data.ReData;
+import com.xytong.data.ShData;
 import com.xytong.databinding.ActivityMainBinding;
+import com.xytong.sqlite.MySQL;
 
+import java.io.File;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;//为activity_main.xml绑定视图,先定义一个类,之后赋值
-    private NavigationView navigationView;
     private ViewPager viewPager;
     private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
-        binding = ActivityMainBinding.inflate(getLayoutInflater());//赋值阶段,inflate为调用生成的绑定类中包含的静态方法。这将为要使用的活动创建一个绑定类的实例。
+        //为activity_main.xml绑定视图,先定义一个类,之后赋值
+        com.xytong.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());//赋值阶段,inflate为调用生成的绑定类中包含的静态方法。这将为要使用的活动创建一个绑定类的实例。
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         setSupportActionBar(binding.appBarMain.underBar.toolbar);//设置toolbar
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
@@ -67,20 +70,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         DrawerLayout drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
-        navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
+        NavigationView navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(//应用侧栏配置
+        //应用侧栏配置
+        //三人行,home...
+        //显示三条横用的qwq
+        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(//应用侧栏配置
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)//三人行,home...
                 .setOpenableLayout(drawer)//显示三条横用的qwq
                 .build();// 构造AppBarConfiguration实例
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        //构建新的NavController对象,实际上是找到已有的赋给该对象
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);//nav导航控制器,显示标题用
-//        NavigationUI.setupWithNavController(navigationView, navController);//绑定三个按键的导航
-
         viewPager = binding.appBarMain.underBar.pager;
-        ArrayList<View> aListView = new ArrayList<View>();
+        ArrayList<View> aListView = new ArrayList<>();
         LayoutInflater layoutInflater = getLayoutInflater();
         aListView.add(layoutInflater.inflate(R.layout.run_errands, null, false));
         aListView.add(layoutInflater.inflate(R.layout.moral, null, false));
@@ -89,8 +90,44 @@ public class MainActivity extends AppCompatActivity {
         RootPagerAdapter viewPagerAdapter = new RootPagerAdapter(aListView);
         viewPager.setAdapter(viewPagerAdapter);
         /////////////////////////////////////////////////////////////////////
+        //数据库配置
+        try {
+            File db_file = new File(getResources().getAssets().getLocales()+"/mydb.db");
+            MySQL sql = new MySQL(db_file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /////////////////////////////////////////////////////////////////////
         //第一页
         /////////////////////////////////////////////////////////////////////
+        RefreshLayout reRefreshLayout = aListView.get(0).findViewById(R.id.reRefreshLayout);
+        reRefreshLayout.setRefreshHeader(new MaterialHeader(this));
+        reRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
+        List<ReData> reList = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            ReData reData = new ReData();
+            reData.setUserName("bszydxh");
+            reList.add(reData);
+        }
+        ReRecyclerAdapter reRecyclerAdapter = new ReRecyclerAdapter(reList);
+        reRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+            }
+        });
+        reRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+            }
+        });
+        RecyclerView reRecyclerView = aListView.get(0).findViewById(R.id.reRecyclerView);
+
+        reRecyclerView.setAdapter(reRecyclerAdapter);
+        LinearLayoutManager reLinearLayoutManager = new LinearLayoutManager(this);
+        reRecyclerView.setLayoutManager(reLinearLayoutManager);
+        reLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         //第二页
@@ -133,22 +170,22 @@ public class MainActivity extends AppCompatActivity {
         RefreshLayout shRefreshLayout = aListView.get(2).findViewById(R.id.shRefreshLayout);
         shRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         shRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
-        List<String> shList = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            shList.add(i + "");
+        List<ShData> shList = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            ShData shData = new ShData();
+            shData.setUserName("bszydxh");
+            shList.add(shData);
         }
         ShRecyclerAdapter shRecyclerAdapter = new ShRecyclerAdapter(shList);
         shRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
+            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(2000);//传入false表示刷新失败
             }
         });
         shRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                Toast.makeText(MainActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
+            public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
             }
         });
@@ -162,24 +199,28 @@ public class MainActivity extends AppCompatActivity {
         /////////////////////////////////////////////////////////////////////
         //第四页
         /////////////////////////////////////////////////////////////////////
+        try {
+            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open("") );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         RefreshLayout forumRefreshLayout = aListView.get(3).findViewById(R.id.forumRefreshLayout);
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
         List<ForumData> forumList = new ArrayList<>();
         ForumData forumData = new ForumData();
-        forumData.setUser_avatar_url("https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
+        forumData.setUserAvatarUrl("https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
         for (int i = 0; i < 15; i++) {
+            forumData.setUserName("bszydxh");
             forumList.add(forumData);
         }
         ForumRecyclerAdapter forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
-        final int[] count = {1};
         forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshlayout) {
-                //Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
-                forumList.add(3, forumData);
-                forumRecyclerAdapter.notifyItemInserted(3);
-                count[0]++;
+                forumData.setUserName("bszydxh");
+                forumList.add(0, forumData);
+                forumRecyclerAdapter.notifyItemInserted(0);
                 refreshlayout.finishRefresh(2000);//传入false表示刷新失败
             }
         });
@@ -187,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
                 for (int i = 0; i < 15; i++) {
+                    forumData.setUserName("bszydxh");
                     forumList.add(forumList.size(), forumData);
                     forumRecyclerAdapter.notifyItemInserted(forumList.size());
                 }
@@ -210,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         String nav_name = item.getTitle().toString();
-                        int a = 0;
                         switch (nav_name) {
                             case "跑腿":
                                 viewPager.setCurrentItem(0);
@@ -268,13 +309,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //webView.pauseTimers();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //webView.resumeTimers();
     }
 
     @Override
@@ -284,11 +323,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-// attach adapter to viewpager
-//    @Override
-//    public boolean onSupportNavigateUp() {//重写三条横的实现,即响应事件
-//       NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
 }

@@ -1,8 +1,8 @@
 package com.xytong.data;
 
 public class CardData {
-    private String user_name = "null";
-    private String user_avatar_url = "#ffffff";
+    private String userName = "null";
+    private String userAvatarUrl = "http://127.0.0.1";
     private String title = "null";
     private String text = "null";
 
@@ -14,12 +14,12 @@ public class CardData {
         return title;
     }
 
-    public String getUser_avatar_url() {
-        return user_avatar_url;
+    public String getUserAvatarUrl() {
+        return userAvatarUrl;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
     public void setText(String text) {
@@ -30,11 +30,11 @@ public class CardData {
         this.title = title;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setUser_avatar_url(String user_avatar_url) {
-        this.user_avatar_url = user_avatar_url;
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
     }
 }

@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.data.ShData;
+import com.xytong.data.ReData;
 
 import java.util.List;
 
-public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.ViewHolder> {
+public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.ViewHolder> {
 
 
     //private String[] localDataSet;
     //private List<String> localDataSet;
-    private List<ShData> localDataSet;
+    private List<ReData> localDataSet;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -35,10 +35,10 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-            userName = view.findViewById(R.id.card_sh_user_name);
-            userAvatar = view.findViewById(R.id.card_sh_user_avatar);
-            title = view.findViewById(R.id.card_sh_title);
-            text = view.findViewById(R.id.card_sh_text);
+            userName = view.findViewById(R.id.card_re_user_name);
+            userAvatar = view.findViewById(R.id.card_re_user_avatar);
+            title = view.findViewById(R.id.card_re_title);
+            text = view.findViewById(R.id.card_re_text);
         }
 
         public TextView getUserName() {
@@ -64,24 +64,24 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
      * @param dataSet String[] containing the data to populate views to be used
      *                by RecyclerView.
      */
-    public ShRecyclerAdapter(List<ShData> dataSet) {
+    public ReRecyclerAdapter(List<ReData> dataSet) {
         localDataSet = dataSet;
     }
 
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public ShRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ReRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.card_sh, viewGroup, false);
+                .inflate(R.layout.card_re, viewGroup, false);
 
-        return new ShRecyclerAdapter.ViewHolder(view);
+        return new ReRecyclerAdapter.ViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ShRecyclerAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(ReRecyclerAdapter.ViewHolder viewHolder, final int position) {
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());

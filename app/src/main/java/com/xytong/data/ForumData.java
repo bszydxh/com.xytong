@@ -1,31 +1,33 @@
 package com.xytong.data;
 
 public class ForumData extends CardData {
-    private int likes = 0;
-    private int comments = 0;
-    private int forwarding = 0;
+    private Integer likes = 0;
+    private Integer comments = 0;
+    private Integer forwarding = 0;
 
-    public int getComments() {
+    public Integer getComments() {
         return comments;
     }
 
-    public int getForwarding() {
+    public Integer getForwarding() {
         return forwarding;
     }
 
-    public int getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setComments(int comments) {
+    public void setComments(Integer comments) {
         this.comments = comments;
     }
 
-    public void setForwarding(int forwarding) {
+    public void setForwarding(Integer forwarding) {
         this.forwarding = forwarding;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
+
+
 }
