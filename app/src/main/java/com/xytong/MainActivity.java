@@ -35,9 +35,7 @@ import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
 import com.xytong.databinding.ActivityMainBinding;
-import com.xytong.sqlite.MySQL;
 
-import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,12 +89,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         /////////////////////////////////////////////////////////////////////
         //数据库配置
-        try {
-            File db_file = new File(getResources().getAssets().getLocales()+"/mydb.db");
-            MySQL sql = new MySQL(db_file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //Toast.makeText(this,getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db", Toast.LENGTH_SHORT).show();
+        //MySQL sql = new MySQL(getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db");
+
         /////////////////////////////////////////////////////////////////////
         //第一页
         /////////////////////////////////////////////////////////////////////
@@ -200,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         //第四页
         /////////////////////////////////////////////////////////////////////
         try {
-            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open("") );
+            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(""));
         } catch (Exception e) {
             e.printStackTrace();
         }

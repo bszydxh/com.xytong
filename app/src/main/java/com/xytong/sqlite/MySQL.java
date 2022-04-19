@@ -1,22 +1,25 @@
 package com.xytong.sqlite;
 
 import android.database.sqlite.SQLiteDatabase;
-
-import androidx.annotation.NonNull;
+import android.util.Log;
 
 import java.io.File;
 
 public class MySQL {
     SQLiteDatabase db;
-    @NonNull
     File db_file;
-    public MySQL(File db_file)
-    {
-        this.db_file = db_file;
+    public MySQL(String address) {
+        db_file = new File(address);
+        if(db_file.exists())
+        {
+            Log.d("SQLite", "ok");
+        }
+        {
+            Log.e("SQLite", "error");
+        }
     }
-    public void read_setup()
-    {
-        db =SQLiteDatabase.openDatabase(db_file,null);
+    public void setup() {
+
     }
 
 }
