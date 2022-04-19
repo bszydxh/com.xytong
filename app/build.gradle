@@ -46,7 +46,8 @@ dependencies {
     implementation 'io.github.scwang90:refresh-header-material:2.0.5'    //谷歌刷新头
     implementation 'io.github.scwang90:refresh-header-two-level:2.0.5'   //二级刷新头
     implementation 'io.github.scwang90:refresh-footer-ball:2.0.5'        //球脉冲加载
-    implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
+    implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'
+    implementation 'com.google.firebase:firebase-firestore:23.0.2'//经典加载
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

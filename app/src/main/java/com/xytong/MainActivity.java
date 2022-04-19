@@ -10,6 +10,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +36,8 @@ import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
 import com.xytong.databinding.ActivityMainBinding;
+import com.xytong.sqlite.MySQL;
 
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         /////////////////////////////////////////////////////////////////////
         //数据库配置
-        //Toast.makeText(this,getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db", Toast.LENGTH_SHORT).show();
-        //MySQL sql = new MySQL(getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db");
+        Toast.makeText(this,getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db", Toast.LENGTH_SHORT).show();
+        MySQL sql = new MySQL(getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db");
 
         /////////////////////////////////////////////////////////////////////
         //第一页
@@ -187,46 +188,31 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView shRecyclerView = aListView.get(2).findViewById(R.id.shRecyclerView);
 
         shRecyclerView.setAdapter(shRecyclerAdapter);
-        LinearLayoutManager shlinearLayoutManager = new LinearLayoutManager(this);
-        shRecyclerView.setLayoutManager(shlinearLayoutManager);
-        shlinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager shLinearLayoutManager = new LinearLayoutManager(this);
+        shRecyclerView.setLayoutManager(shLinearLayoutManager);
+        shLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         /////////////////////////////////////////////////////////////////////
         //第四页
         /////////////////////////////////////////////////////////////////////
-        try {
-            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(""));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         RefreshLayout forumRefreshLayout = aListView.get(3).findViewById(R.id.forumRefreshLayout);
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
         List<ForumData> forumList = new ArrayList<>();
-        ForumData forumData = new ForumData();
-        forumData.setUserAvatarUrl("https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
-        for (int i = 0; i < 15; i++) {
-            forumData.setUserName("bszydxh");
-            forumList.add(forumData);
+        //ForumData forumData = new ForumData();
+        for (int i = 0; i < 5; i++) {
+            forumList.add(sql.read_forum_data());
         }
         ForumRecyclerAdapter forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
         forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshlayout) {
-                forumData.setUserName("bszydxh");
-                forumList.add(0, forumData);
-                forumRecyclerAdapter.notifyItemInserted(0);
                 refreshlayout.finishRefresh(2000);//传入false表示刷新失败
             }
         });
         forumRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
-                for (int i = 0; i < 15; i++) {
-                    forumData.setUserName("bszydxh");
-                    forumList.add(forumList.size(), forumData);
-                    forumRecyclerAdapter.notifyItemInserted(forumList.size());
-                }
                 refreshlayout.finishLoadMore(10/*,false*/);//传入false表示加载失败
                 //Toast.makeText(MainActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
             }
