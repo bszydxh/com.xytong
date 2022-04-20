@@ -10,7 +10,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         /////////////////////////////////////////////////////////////////////
         //数据库配置
-        Toast.makeText(this,getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db", Toast.LENGTH_SHORT).show();
         MySQL sql = new MySQL(getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db");
 
         /////////////////////////////////////////////////////////////////////
