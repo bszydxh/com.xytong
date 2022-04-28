@@ -44,7 +44,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/login_username"
+                android:id="@+id/logon_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -52,7 +52,7 @@
                 android:inputType="text" />
 
             <EditText
-                android:id="@+id/login_password"
+                android:id="@+id/logon_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="16"
@@ -85,7 +85,8 @@
             android:id="@+id/sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/登录" />
+            android:text="@string/登录"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/sign_up"

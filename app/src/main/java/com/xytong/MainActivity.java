@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,16 +36,18 @@ import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
 import com.xytong.databinding.ActivityMainBinding;
+import com.xytong.image.ImageDownloader;
 import com.xytong.sqlite.MySQL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private WebView webView;
-
+    private DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
@@ -52,12 +55,18 @@ public class MainActivity extends AppCompatActivity {
         com.xytong.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());//赋值阶段,inflate为调用生成的绑定类中包含的静态方法。这将为要使用的活动创建一个绑定类的实例。
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         setSupportActionBar(binding.appBarMain.underBar.toolbar);//设置toolbar
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
-            @Override
-            public void onClick(View view) {//@override注释后对编译器会对重写的方法进行检查
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)//snackbar类似于toast,它们在移动设备的屏幕底部和较大设备的左下方显示一条简短消息
-                        .setAction("Action", null).show();//设置点击事件
-            }
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
+        NavigationView navigationView =binding.navView;
+        ImageDownloader.setBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),"https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
+        ImageDownloader.setBitmap(binding.appBarMain.underBar.toolbarUserAvatar, "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
+        binding.appBarMain.underBar.toolbarUserAvatar.setOnClickListener(view -> {
+            drawer.openDrawer(GravityCompat.START);
+        });
+        //对右下方悬浮按键绑定监听事件
+        binding.appBarMain.fab.setOnClickListener(view -> {//@override注释后对编译器会对重写的方法进行检查
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)//snackbar类似于toast,它们在移动设备的屏幕底部和较大设备的左下方显示一条简短消息
+                    .setAction("Action", null).show();//设置点击事件
         });
         View nav_header_view = binding.navView.getHeaderView(0);
         nav_header_view.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
@@ -67,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        DrawerLayout drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
-        NavigationView navigationView = binding.navView;//跟上面同理//nav就是drawer的一个子视图
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         //应用侧栏配置
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         /////////////////////////////////////////////////////////////////////
         //数据库配置
         //Toast.makeText(this,getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db", Toast.LENGTH_SHORT).show();
-        MySQL sql = new MySQL(getApplicationContext().getExternalFilesDir("").getAbsolutePath()+"/mydb.db");
+        MySQL sql = new MySQL(getApplicationContext().getExternalFilesDir("").getAbsolutePath() + "/mydb.db");
 
         /////////////////////////////////////////////////////////////////////
         //第一页
@@ -295,7 +302,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
-
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {//创建一个菜单
         // Inflate the menu; this adds items to the action bar if it is present.

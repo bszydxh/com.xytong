@@ -1,7 +1,6 @@
 package com.xytong.adapter;
 
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
 import com.xytong.data.ForumData;
-import com.xytong.image.ImageCache;
+import com.xytong.image.ImageDownloader;
 
 import java.util.List;
 
@@ -104,17 +103,18 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
 
-        new Thread(() -> {
-            String url = localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl();
-            Bitmap bitmap = ImageCache.getBitmap(url);
-            viewHolder.getUserAvatar().post(
-                    () -> viewHolder.getUserAvatar().setImageBitmap(bitmap)
-
-            );
-//                viewHolder.getUserAvatar().setImageBitmap(ImageCache.getBitmap());
-
-        }).start();
-
+//        new Thread(() -> {
+//            String url = localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl();
+//            Bitmap bitmap = ImageCache.getBitmap(url);
+//            viewHolder.getUserAvatar().post(
+//                    () -> viewHolder.getUserAvatar().setImageBitmap(bitmap)
+//
+//            );
+//
+////                viewHolder.getUserAvatar().setImageBitmap(ImageCache.getBitmap());
+//
+//        }).start();
+        ImageDownloader.setBitmap(viewHolder.getUserAvatar(),localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());
