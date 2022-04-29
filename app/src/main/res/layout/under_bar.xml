@@ -89,21 +89,6 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <include
-            android:id="@+id/run_errands_page"
-            layout="@layout/run_errands" />
-
-        <include
-            android:id="@+id/secondhand_page"
-            layout="@layout/secondhand" />
-
-        <include
-            android:id="@+id/moral_page"
-            layout="@layout/moral" />
-
-        <include
-            android:id="@+id/forums_page"
-            layout="@layout/forum" />
     </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

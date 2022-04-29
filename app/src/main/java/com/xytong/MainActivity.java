@@ -10,6 +10,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private WebView webView;
     private DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.underBar.toolbar);//设置toolbar
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
-        NavigationView navigationView =binding.navView;
-        ImageDownloader.setBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),"https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
+        NavigationView navigationView = binding.navView;
+        ImageDownloader.setBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar), "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
         ImageDownloader.setBitmap(binding.appBarMain.underBar.toolbarUserAvatar, "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
         binding.appBarMain.underBar.toolbarUserAvatar.setOnClickListener(view -> {
             drawer.openDrawer(GravityCompat.START);
@@ -224,12 +226,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         RecyclerView forumRecyclerView = aListView.get(3).findViewById(R.id.forumRecyclerView);
-
-
         forumRecyclerView.setAdapter(forumRecyclerAdapter);
         LinearLayoutManager forumLinearLayoutManager = new LinearLayoutManager(this);
         forumRecyclerView.setLayoutManager(forumLinearLayoutManager);
         forumLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onTitleClick(View view, int position) {
+                Toast.makeText(MainActivity.this, position+"",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTitleLongClick(View view, int position) {
+                // TODO: 2022/4/29  
+            }
+        });
         /////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
@@ -302,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -310,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {//创建一个菜单
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -1,14 +1,18 @@
 package com.xytong;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+import com.xytong.adapter.LoginPagerAdapter;
 import com.xytong.databinding.ActivityLoginBinding;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
@@ -20,8 +24,6 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        username_edit_text = binding.loginUsername;
-        password_edit_text = binding.loginPassword;
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,30 +31,15 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-        binding.signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //请求服务器得到结果
-
-                Toast.makeText(LoginActivity.this, "sign in!" + username_edit_text.getText()+"||"
-                        + password_edit_text.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        binding.signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, LogonActivity.class);
-                startActivity(intent);
-                Toast.makeText(LoginActivity.this, "sign up!" + username_edit_text.getText()+"||"
-                        + password_edit_text.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        binding.forgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "forget password", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ViewPager viewPager = binding.loginPager;
+        ArrayList<View> loginListView = new ArrayList<>();
+        LayoutInflater layoutInflater = getLayoutInflater();
+        loginListView.add(layoutInflater.inflate(R.layout.login, null, false));
+        loginListView.add(layoutInflater.inflate(R.layout.logon, null, false));
+        LoginPagerAdapter loginPagerAdapter = new LoginPagerAdapter(loginListView);
+        viewPager.setAdapter(loginPagerAdapter);
+        TabLayout tabLayout = binding.loginTab;
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

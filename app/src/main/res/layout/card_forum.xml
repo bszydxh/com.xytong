@@ -112,6 +112,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/card_forum_likes_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -120,12 +121,14 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_gravity="center">
                     <ImageView
+                        android:id="@+id/card_forum_likes_image"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="@string/likes_image"
@@ -173,6 +176,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/card_forum_forwarding_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
