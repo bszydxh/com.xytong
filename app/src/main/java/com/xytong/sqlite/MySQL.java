@@ -5,16 +5,46 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.xytong.data.ForumData;
+import com.xytong.data.ReData;
 import com.xytong.data.ShData;
 
 import java.io.File;
 
 public class MySQL {
-    SQLiteDatabase db;
-    File db_file;
-    Cursor forum_cursor;
-    String sql_create_forum_table = "create table forum_list (id integer primary key autoincrement,user_name text,user_avatar text,title text,text text,likes text,comments text,forwarding text);";
-    String sql_create_secondhand_table = "create table secondhand_list (id integer primary key autoincrement,user_name text,user_avatar text,title text,text text);";
+    private SQLiteDatabase db;
+    private File db_file;
+    private Cursor forum_cursor;
+    private Cursor sh_cursor;
+    private Cursor re_cursor;
+
+    private final String sql_create_forum_table = "create table forum_list " +
+            "(id integer primary key autoincrement,user_name text," +
+            "user_avatar text,title text," +
+            "text text,likes text," +
+            "comments text,forwarding text);";
+    private final String sql_create_re_table = "create table run_errands_list(" +
+            "id integer primary key autoincrement,user_name text," +
+            "user_avatar text,title text," +
+            "text text,price text);";
+    private final String sql_create_sh_table = "create table secondhand_list (" +
+            "id integer primary key autoincrement,user_name text," +
+            "user_avatar text,title text," +
+            "text text,price text);";
+
+    private Cursor setup_cursor(Cursor cursor, String table, String sql) {
+        //db在内部隐式传递
+        try {
+            cursor = db.query(table, null, null, null, null, null, null, null);
+        } catch (Exception e) {
+            Log.e("SQLite", "not found needy db,now create");
+            db.execSQL(sql);
+            cursor = db.query(table, null, null, null, null, null, null, null);
+            cursor.moveToFirst();
+            //e.printStackTrace();
+        }
+        cursor.moveToFirst();
+        return cursor;
+    }
 
     public MySQL(String address) {
         db_file = new File(address);
@@ -29,52 +59,75 @@ public class MySQL {
             }
         }
         db = SQLiteDatabase.openOrCreateDatabase(db_file, null);
+        forum_cursor = setup_cursor(forum_cursor, "forum_list", sql_create_forum_table);
+        sh_cursor = setup_cursor(sh_cursor, "secondhand_list", sql_create_sh_table);
+        re_cursor = setup_cursor(re_cursor, "run_errands_list", sql_create_re_table);
+    }
+
+    public ReData read_run_errands_data() {
+        /*读取后自动下一条*/
+        ReData reData = new ReData();
         try {
-            forum_cursor = db.query("forum_list", null, null, null, null, null, null, null);
+            reData.setUserName(re_cursor.getString(0).trim());
+            reData.setUserAvatarUrl(re_cursor.getString(1).trim());
+            reData.setTitle(re_cursor.getString(2).trim());
+            reData.setText(re_cursor.getString(3));
+            reData.setPrice(re_cursor.getString(4));
+
         } catch (Exception e) {
-            Log.e("SQLite", "not found needy db,now create");
-            db.execSQL(sql_create_forum_table);
-            forum_cursor = db.query("forum_list", null, null, null, null, null, null, null);
-            forum_cursor.moveToFirst();
-            e.printStackTrace();
+            Log.e("SQLite", "read run_errands data error");
+            //e.printStackTrace();
         }
-        forum_cursor.moveToFirst();
+        try {
+            re_cursor.moveToNext();
+        } catch (Exception e) {
+            Log.e("SQLite", "next run_errands data error");
+        }
+        return reData;
     }
 
     public ShData read_secondhand_data() {
         /*读取后自动下一条*/
-        ShData ShData = new ShData();
-        Log.e("read_forum_data", forum_cursor.getPosition() + "");
+        ShData shData = new ShData();
         try {
-            String str = forum_cursor.getString(3);
-            ShData.setUserName(forum_cursor.getString(1));
-            ShData.setUserAvatarUrl(forum_cursor.getString(2));
-            ShData.setTitle(forum_cursor.getString(3).trim());
-            ShData.setText(forum_cursor.getString(4));
+            shData.setUserName(sh_cursor.getString(0).trim());
+            shData.setUserAvatarUrl(sh_cursor.getString(1).trim());
+            shData.setTitle(sh_cursor.getString(2).trim());
+            shData.setText(sh_cursor.getString(3));
+            shData.setPrice(sh_cursor.getString(4));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SQLite", "read secondhand data error");
+            //e.printStackTrace();
         }
-        forum_cursor.moveToNext();
-        return ShData;
+        try {
+            sh_cursor.moveToNext();
+        } catch (Exception e) {
+            Log.e("SQLite", "next secondhand data error");
+        }
+        return shData;
     }
 
     public ForumData read_forum_data() {
         /*读取后自动下一条*/
         ForumData forumData = new ForumData();
-        Log.e("read_forum_data", forum_cursor.getPosition() + "");
         try {
-            String str = forum_cursor.getString(3);
-            forumData.setUserName(forum_cursor.getString(1));
-            forumData.setUserAvatarUrl(forum_cursor.getString(2));
+            forumData.setUserName(forum_cursor.getString(1).trim());
+            forumData.setUserAvatarUrl(forum_cursor.getString(2).trim());
             forumData.setTitle(forum_cursor.getString(3).trim());
             forumData.setText(forum_cursor.getString(4));
             forumData.setLikes(Integer.valueOf(forum_cursor.getString(5)));
             forumData.setComments(Integer.valueOf(forum_cursor.getString(6)));
             forumData.setForwarding(Integer.valueOf(forum_cursor.getString(7)));
+
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SQLite", "read forum data error");
         }
-        forum_cursor.moveToNext();
+        try {
+            forum_cursor.moveToNext();
+        } catch (Exception e) {
+            Log.e("SQLite", "next forum data error");
+        }
+
         return forumData;
     }
 }

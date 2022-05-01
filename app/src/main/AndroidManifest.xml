@@ -30,6 +30,9 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.校园通.NoActionBar"/>
-
+        <activity
+            android:name=".ForumActivity"
+            android:exported="true"
+            android:theme="@style/Theme.校园通.NoActionBar"/>
     </application>
 </manifest>

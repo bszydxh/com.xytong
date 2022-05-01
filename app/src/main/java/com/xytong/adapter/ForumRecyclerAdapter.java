@@ -40,6 +40,8 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         private final TextView comments;
         private final TextView forwarding;
         private final LinearLayout forwardingLayout;
+        private final LinearLayout moreTouchLayout;
+
         private int liked = 0;
 
         public ViewHolder(View view) {
@@ -55,6 +57,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
             comments = view.findViewById(R.id.card_forum_comments);
             forwarding = view.findViewById(R.id.card_forum_forwarding);
             forwardingLayout = view.findViewById(R.id.card_forum_forwarding_layout);
+            moreTouchLayout = view.findViewById(R.id.card_forum_touch);
         }
 
         public TextView getUserName() {
@@ -99,6 +102,10 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
 
         public int getLiked() {
             return liked;
+        }
+
+        public LinearLayout getMoreTouchLayout() {
+            return moreTouchLayout;
         }
 
         public void setLiked(int liked) {
@@ -156,12 +163,17 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
                 onItemClickListener.onTitleClick(viewHolder.itemView, pos);
             }
         });
-        viewHolder.getTitle().setOnLongClickListener(v -> {
+        viewHolder.getMoreTouchLayout().setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleLongClick(viewHolder.itemView, pos);
+                onItemClickListener.onTitleClick(viewHolder.itemView, pos);
             }
-            return true;
+        });
+        viewHolder.getText().setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                int pos = viewHolder.getLayoutPosition();
+                onItemClickListener.onTitleClick(viewHolder.itemView, pos);
+            }
         });
         viewHolder.getLikesLayout().setOnClickListener(v -> {
             if (onItemClickListener != null) {
@@ -196,12 +208,12 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
             // 比如发送文本形式的数据内容
             // 指定发送的内容
             sendIntent.putExtra(Intent.EXTRA_TEXT, localDataSet.get(position).getTitle() + "\n"
-                    + localDataSet.get(position).getText() + "\n用户:"+
-                    localDataSet.get(position).getUserName()+
+                    + localDataSet.get(position).getText() + "\n用户:" +
+                    localDataSet.get(position).getUserName() +
                     "\n---来自校园通客户端");
             // 指定发送内容的类型
             sendIntent.setType("text/plain");
-            ContextCompat.startActivity(viewHolder.comments.getContext(),Intent.createChooser(sendIntent,"将内容分享至"),null);
+            ContextCompat.startActivity(viewHolder.comments.getContext(), Intent.createChooser(sendIntent, "将内容分享至"), null);
         });
     }
 

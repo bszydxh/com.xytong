@@ -15,7 +15,7 @@
     <string name="注册">立即注册</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="发单">发单</string>
+    <string name="发单">立即发单</string>
     <string name="接单">接单</string>
     <string name="username">username</string>
     <string name="title">标题</string>
@@ -28,4 +28,7 @@
     <string name="chat_image">评论</string>
     <string name="comments_num">分享数</string>
     <string name="forget_word">忘记密码?</string>
+    <string name="setting">设置</string>
+    <string name="about">关于</string>
+    <string name="price">¥0.00</string>
 </resources>

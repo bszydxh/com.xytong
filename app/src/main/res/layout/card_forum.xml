@@ -66,34 +66,42 @@
                             android:layout_weight="0.2" />
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:id="@+id/card_forum_user_name"
+                            android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:layout_weight="0.8"
-                            android:id="@+id/card_forum_user_name"
                             android:text="@string/username"
                             android:textColor="@color/black"
                             android:textSize="20sp" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/card_forum_touch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/card_forum_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/title"
                     android:textColor="@color/black"
                     android:textSize="23sp"
-                    android:id="@+id/card_forum_title"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/card_forum_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/text"
-                    android:id="@+id/card_forum_text"
                     android:textColor="@color/black"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="10dp"
                     android:textSize="18sp" />
             </LinearLayout>
             <!--凑数用-->

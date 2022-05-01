@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/back"
+            android:id="@+id/login_back"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/ic_baseline_arrow_back_24" />

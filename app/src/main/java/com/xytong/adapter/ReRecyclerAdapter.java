@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
 import com.xytong.data.ReData;
+import com.xytong.image.ImageDownloader;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
         private final ImageView userAvatar;
         private final TextView title;
         private final TextView text;
-
+        private final TextView price;
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
@@ -39,6 +40,7 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
             userAvatar = view.findViewById(R.id.card_re_user_avatar);
             title = view.findViewById(R.id.card_re_title);
             text = view.findViewById(R.id.card_re_text);
+            price = view.findViewById(R.id.card_re_price);
         }
 
         public TextView getUserName() {
@@ -55,6 +57,10 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
 
         public TextView getTitle() {
             return title;
+        }
+
+        public TextView getPrice() {
+            return price;
         }
     }
 
@@ -82,9 +88,11 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ReRecyclerAdapter.ViewHolder viewHolder, final int position) {
+        ImageDownloader.setBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());
+        viewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -13,7 +13,7 @@ import java.net.URLConnection;
 public class ImageCache {
     public static Bitmap getBitmap(String url_str) {
         Bitmap bitmap = null;
-            Log.e("ImageCache","get ok");
+
         try {
             URL url = new URL(url_str);
             URLConnection connection = url.openConnection();
@@ -25,9 +25,10 @@ public class ImageCache {
             bitmap= BitmapFactory.decodeStream(bufferedInputStream);
             bufferedInputStream.close();
             inputStream.close();
+            Log.i("ImageCache",url_str+ " get ok");
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("ImageCache","get error");
+            //e.printStackTrace();
+            Log.e("ImageCache",url_str+" get error");
         }
         if (true)//数据库查询有无图片bitmap资源
         {

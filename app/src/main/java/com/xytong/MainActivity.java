@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +31,7 @@ import com.xytong.adapter.ForumRecyclerAdapter;
 import com.xytong.adapter.ReRecyclerAdapter;
 import com.xytong.adapter.RootPagerAdapter;
 import com.xytong.adapter.ShRecyclerAdapter;
+import com.xytong.data.DataDownloader;
 import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
@@ -110,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
         List<ReData> reList = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             ReData reData = new ReData();
-            reData.setUserName("bszydxh");
-            reList.add(reData);
+            reList.add(sql.read_run_errands_data());
         }
         ReRecyclerAdapter reRecyclerAdapter = new ReRecyclerAdapter(reList);
         reRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -177,8 +175,7 @@ public class MainActivity extends AppCompatActivity {
         List<ShData> shList = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             ShData shData = new ShData();
-            shData.setUserName("bszydxh");
-            shList.add(shData);
+            shList.add(sql.read_secondhand_data());
         }
         ShRecyclerAdapter shRecyclerAdapter = new ShRecyclerAdapter(shList);
         shRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -203,11 +200,12 @@ public class MainActivity extends AppCompatActivity {
         /////////////////////////////////////////////////////////////////////
         //第四页
         /////////////////////////////////////////////////////////////////////
+        //DataDownloader.getForumData("newest",0,10);
         RefreshLayout forumRefreshLayout = aListView.get(3).findViewById(R.id.forumRefreshLayout);
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
-        List<ForumData> forumList = new ArrayList<>();
-        //ForumData forumData = new ForumData();
+        //List<ForumData> forumList = new ArrayList<>();
+        List<ForumData> forumList = DataDownloader.getForumData("newest",0,10);
         for (int i = 0; i < 5; i++) {
             forumList.add(sql.read_forum_data());
         }
@@ -233,7 +231,8 @@ public class MainActivity extends AppCompatActivity {
         forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onTitleClick(View view, int position) {
-                Toast.makeText(MainActivity.this, position+"",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ForumActivity.class);
+                startActivity(intent);
             }
 
             @Override
@@ -323,11 +322,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {//创建一个菜单
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {//创建一个菜单
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
 
 }
