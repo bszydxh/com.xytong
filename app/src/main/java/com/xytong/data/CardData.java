@@ -2,7 +2,7 @@ package com.xytong.data;
 
 public class CardData {
     private String userName = "null";
-    private String userAvatarUrl = "http://127.0.0.1";
+    private String userAvatarUrl = null;
     private String title = "null";
     private String text = "null";
 

@@ -1,5 +1,6 @@
 package com.xytong.sqlite;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -9,6 +10,8 @@ import com.xytong.data.ReData;
 import com.xytong.data.ShData;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class MySQL {
     private SQLiteDatabase db;
@@ -46,16 +49,26 @@ public class MySQL {
         return cursor;
     }
 
-    public MySQL(String address) {
-        db_file = new File(address);
+    public MySQL(Context context) throws RuntimeException{
+        db_file = new File(context.getApplicationContext().getExternalFilesDir("").getAbsolutePath() + "/mydb.db");
         if (db_file.exists()) {
             Log.d("SQLite", "ok");
         } else {
             Log.e("SQLite", "not found db,now setup");
             try {
-                db_file.createNewFile();
+                InputStream is  =  context.getAssets().open("mydb.db");
+                File newFile = new File(context.getApplicationContext().getExternalFilesDir("").getAbsolutePath() + "/mydb.db");
+                FileOutputStream fos = new FileOutputStream(newFile);
+                int len = -1;
+                byte[] buffer = new byte[1024];
+                while ((len = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                is.close();
             } catch (Exception e) {
                 Log.e("SQLite", "create file error");
+                throw new RuntimeException("create file error");
             }
         }
         db = SQLiteDatabase.openOrCreateDatabase(db_file, null);
@@ -68,11 +81,11 @@ public class MySQL {
         /*读取后自动下一条*/
         ReData reData = new ReData();
         try {
-            reData.setUserName(re_cursor.getString(0).trim());
-            reData.setUserAvatarUrl(re_cursor.getString(1).trim());
-            reData.setTitle(re_cursor.getString(2).trim());
-            reData.setText(re_cursor.getString(3));
-            reData.setPrice(re_cursor.getString(4));
+            reData.setUserName(re_cursor.getString(1).trim());
+            reData.setUserAvatarUrl(re_cursor.getString(2).trim());
+            reData.setTitle(re_cursor.getString(3).trim());
+            reData.setText(re_cursor.getString(4));
+            reData.setPrice(re_cursor.getString(5));
 
         } catch (Exception e) {
             Log.e("SQLite", "read run_errands data error");
@@ -90,11 +103,11 @@ public class MySQL {
         /*读取后自动下一条*/
         ShData shData = new ShData();
         try {
-            shData.setUserName(sh_cursor.getString(0).trim());
-            shData.setUserAvatarUrl(sh_cursor.getString(1).trim());
-            shData.setTitle(sh_cursor.getString(2).trim());
-            shData.setText(sh_cursor.getString(3));
-            shData.setPrice(sh_cursor.getString(4));
+            shData.setUserName(sh_cursor.getString(1).trim());
+            shData.setUserAvatarUrl(sh_cursor.getString(2).trim());
+            shData.setTitle(sh_cursor.getString(3).trim());
+            shData.setText(sh_cursor.getString(4));
+            shData.setPrice(sh_cursor.getString(5));
         } catch (Exception e) {
             Log.e("SQLite", "read secondhand data error");
             //e.printStackTrace();

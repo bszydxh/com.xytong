@@ -22,6 +22,7 @@ public class ForumActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     @Override

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
 import com.xytong.data.ReData;
-import com.xytong.image.ImageDownloader;
+import com.xytong.image.ImageGetter;
 
 import java.util.List;
 
@@ -35,7 +35,6 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
         private final TextView price;
         public ViewHolder(View view) {
             super(view);
-            // Define click listener for the ViewHolder's View
             userName = view.findViewById(R.id.card_re_user_name);
             userAvatar = view.findViewById(R.id.card_re_user_avatar);
             title = view.findViewById(R.id.card_re_title);
@@ -64,12 +63,6 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
         }
     }
 
-    /**
-     * Initialize the dataset of the Adapter.
-     *
-     * @param dataSet String[] containing the data to populate views to be used
-     *                by RecyclerView.
-     */
     public ReRecyclerAdapter(List<ReData> dataSet) {
         localDataSet = dataSet;
     }
@@ -88,7 +81,10 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ReRecyclerAdapter.ViewHolder viewHolder, final int position) {
-        ImageDownloader.setBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
+//        Glide.with(viewHolder.text.getContext())
+//                .load(localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl())
+//                .into(viewHolder.getUserAvatar());
+        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());//被弃用
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());

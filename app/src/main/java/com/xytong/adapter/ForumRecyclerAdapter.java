@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
 import com.xytong.data.ForumData;
-import com.xytong.image.ImageDownloader;
+import com.xytong.image.ImageGetter;
 
 import java.util.List;
 
@@ -147,7 +147,10 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        ImageDownloader.setBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
+        //Glide.with(viewHolder.text.getContext())
+        //        .load(localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl())
+        //        .into(viewHolder.getUserAvatar());
+        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());

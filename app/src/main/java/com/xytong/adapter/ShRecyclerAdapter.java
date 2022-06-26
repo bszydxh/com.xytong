@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
 import com.xytong.data.ShData;
-import com.xytong.image.ImageDownloader;
+import com.xytong.image.ImageGetter;
 
 import java.util.List;
 
@@ -33,6 +33,7 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
         private final TextView title;
         private final TextView text;
         private final TextView price;
+
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
@@ -88,7 +89,10 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ShRecyclerAdapter.ViewHolder viewHolder, final int position) {
-        ImageDownloader.setBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
+        //Glide.with(viewHolder.text.getContext())
+        //        .load(localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl())
+        //        .into(viewHolder.getUserAvatar());
+        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());
