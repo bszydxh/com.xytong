@@ -34,8 +34,7 @@ public class ForumFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentForumBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
 
     @Override
