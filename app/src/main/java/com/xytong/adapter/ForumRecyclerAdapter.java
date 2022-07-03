@@ -135,7 +135,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
     }
 
     public interface OnItemClickListener {
-        void onTitleClick(View view, int position);
+        void onTitleClick(View view, int position, ForumData forumData);
 
         void onTitleLongClick(View view, int position);
 
@@ -163,19 +163,20 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         viewHolder.getTitle().setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleClick(viewHolder.itemView, pos);
+                onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
+
             }
         });
         viewHolder.getMoreTouchLayout().setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleClick(viewHolder.itemView, pos);
+                onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
             }
         });
         viewHolder.getText().setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleClick(viewHolder.itemView, pos);
+                onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
             }
         });
         viewHolder.getLikesLayout().setOnClickListener(v -> {

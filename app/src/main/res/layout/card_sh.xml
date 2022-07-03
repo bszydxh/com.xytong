@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title"
                     android:textColor="@color/black"
-                    android:textSize="23sp"
+                    android:textSize="16sp"
                     android:id="@+id/card_sh_title"
                     android:textStyle="bold" />
 
@@ -119,9 +119,8 @@
                     android:text="@string/text"
                     android:id="@+id/card_sh_text"
                     android:textColor="@color/black"
-                    android:layout_marginTop="7dp"
                     android:layout_marginBottom="10dp"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
             <!--凑数用-->
             <LinearLayout

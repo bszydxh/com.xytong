@@ -1,6 +1,8 @@
 package com.xytong.data;
 
-public class ForumData extends CardData {
+import java.io.Serializable;
+
+public class ForumData extends CardData implements Serializable {
     private Integer likes = 0;
     private Integer comments = 0;
     private Integer forwarding = 0;

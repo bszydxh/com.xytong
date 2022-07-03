@@ -12,42 +12,13 @@
         android:layout_height="45dp"
         android:background="@drawable/ic_baseline_arrow_back_24" />
     <!--按钮下视图-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-
-        <ScrollView
+        <include
+            android:id="@+id/card_forum_index"
+            layout="@layout/card_forum"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/card_forum_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/app_name"
-                    android:textColor="@color/black"
-                    android:textSize="40sp" />
-                <TextView
-                    android:id="@+id/card_forum_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-            </LinearLayout>
-        </ScrollView>
-
-
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"/>
 </LinearLayout>

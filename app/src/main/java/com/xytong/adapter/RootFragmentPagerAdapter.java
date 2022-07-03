@@ -1,5 +1,7 @@
 package com.xytong.adapter;
 
+import android.util.SparseArray;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -8,7 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class RootFragmentPagerAdapter extends FragmentStateAdapter {
     FragmentManager fragmentManager;
-
+    private SparseArray<Fragment> fragmentList = new SparseArray<>();
     public RootFragmentPagerAdapter(@NonNull FragmentManager fm,
                                     @NonNull Lifecycle lifecycle) {
         super(fm, lifecycle);
@@ -18,11 +20,17 @@ public class RootFragmentPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return null;
+        return fragmentList.get(position);
     }
-
+    public Fragment getItem(int position) {
+        return fragmentList.get(position);
+    }
     @Override
     public int getItemCount() {
-        return 0;
+        return fragmentList.size();
+    }
+    public void addFragment(Fragment fragment)
+    {
+        fragmentList.put(fragmentList.size(),fragment);
     }
 }

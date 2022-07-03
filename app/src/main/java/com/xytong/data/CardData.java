@@ -1,6 +1,8 @@
 package com.xytong.data;
 
-public class CardData {
+import java.io.Serializable;
+
+public class CardData implements Serializable {
     private String userName = "null";
     private String userAvatarUrl = null;
     private String title = "null";

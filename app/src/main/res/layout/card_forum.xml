@@ -91,18 +91,17 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title"
                     android:textColor="@color/black"
-                    android:textSize="23sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/card_forum_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="7dp"
                     android:paddingBottom="10dp"
                     android:text="@string/text"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
             <!--凑数用-->
             <LinearLayout

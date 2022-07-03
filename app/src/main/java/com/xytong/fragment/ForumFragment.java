@@ -30,7 +30,7 @@ public class ForumFragment extends Fragment {
     FragmentForumBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentForumBinding.inflate(getLayoutInflater());
@@ -40,13 +40,13 @@ public class ForumFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         MySQL sql = null;
         try {
             sql = new MySQL(this.requireContext());
         } catch (RuntimeException e) {
             Toast.makeText(this.requireContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
         }
-        super.onActivityCreated(savedInstanceState);
         RefreshLayout forumRefreshLayout = binding.forumRefreshLayout;
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
@@ -81,8 +81,11 @@ public class ForumFragment extends Fragment {
         forumLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onTitleClick(View view, int position) {
+            public void onTitleClick(View view, int position,ForumData forumDataIndex) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("forumData",forumDataIndex);
                 Intent intent = new Intent(view.getContext(), ForumActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                 startActivity(intent);
             }
 
