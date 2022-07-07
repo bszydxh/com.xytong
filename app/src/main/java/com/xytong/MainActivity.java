@@ -82,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
         webView = findViewById(R.id.web_view);
         rootViewPager = binding.appBarMain.underBar.pager;
         rootViewPager.setAdapter(rootFragmentPagerAdapter);
+        rootViewPager.setUserInputEnabled(false);
         BottomNavigationView bottomNavigationView = binding.appBarMain.underBar.btmNav;
+        //导航栏绑定根ViewPager2适配器事件
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
+        //滑动适配器绑定根ViewPager2导航栏事件
         rootViewPager.registerOnPageChangeCallback(
                 new ViewPager2.OnPageChangeCallback() {
                     @Override
@@ -115,22 +117,18 @@ public class MainActivity extends AppCompatActivity {
                             case 0:
                                 bottomNavigationView.setSelectedItemId(R.id.run_errands);
                                 webViewIsFocused = false;
-                                rootViewPager.setUserInputEnabled(true);
                                 break;
                             case 1:
                                 bottomNavigationView.setSelectedItemId(R.id.moral);
                                 webViewIsFocused = true;
-                                rootViewPager.setUserInputEnabled(false);
                                 break;
                             case 2:
                                 bottomNavigationView.setSelectedItemId(R.id.secondhand);
                                 webViewIsFocused = false;
-                                rootViewPager.setUserInputEnabled(true);
                                 break;
                             case 3:
                                 bottomNavigationView.setSelectedItemId(R.id.forums);
                                 webViewIsFocused = false;
-                                rootViewPager.setUserInputEnabled(true);
                                 break;
                         }
                     }
@@ -155,16 +153,9 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
         } else if (webViewIsFocused) {
             MoralFragment moralFragment = (MoralFragment) rootFragmentPagerAdapter.getItem(1);
-            moralFragment.webViewBack();
+            moralFragment.webViewBack();//强转类型
         } else {
             super.onBackPressed();
         }
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {//创建一个菜单
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-
 }

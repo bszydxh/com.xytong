@@ -21,6 +21,7 @@ import com.xytong.ForumActivity;
 import com.xytong.adapter.ForumRecyclerAdapter;
 import com.xytong.data.ForumData;
 import com.xytong.databinding.FragmentForumBinding;
+import com.xytong.downloader.DataDownloader;
 import com.xytong.sqlite.MySQL;
 
 import java.util.ArrayList;
@@ -56,21 +57,35 @@ public class ForumFragment extends Fragment {
                 forumList.add(sql.read_forum_data());
             }
         }
+
         ForumRecyclerAdapter forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
         //forumList.addAll(DataDownloader.getForumDataList("newest", 10, 19));
         forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshlayout) {
-//                DataDownloader.getForumDataList("newest", forumList.size() - 1, forumList.size() + 9);
+                List<ForumData> forumList_add = DataDownloader.getForumDataList("newest", 0, 9);
+                if (forumList_add != null) {
+                    forumList.clear();
+                    forumList.addAll(forumList_add);
+                    forumRecyclerAdapter.notifyDataSetChanged();
+                }
                 refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+                Toast.makeText(refreshlayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
         });
         forumRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
-                //forumList.addAll(DataDownloader.getForumDataList("newest", 10, 19));
-                refreshlayout.finishLoadMore(10/*,false*/);//传入false表示加载失败
-                //Toast.makeText(MainActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
+                List<ForumData> forumList_add = DataDownloader.getForumDataList("newest", 0, 9);
+                if (forumList_add != null) {
+                    int size = forumList_add.size();
+                    for (int i = 0; i < size; i++) {
+                        ForumData forumData = forumList_add.get(i);
+                        forumList.add(forumList.size(), forumData);
+                    }
+                    forumRecyclerAdapter.notifyItemRangeInserted(forumList.size() - size, size);
+                }
+                refreshlayout.finishLoadMore(20/*,false*/);//传入false表示加载失败
             }
         });
         RecyclerView forumRecyclerView = binding.forumRecyclerView;
@@ -80,9 +95,9 @@ public class ForumFragment extends Fragment {
         forumLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onTitleClick(View view, int position,ForumData forumDataIndex) {
+            public void onTitleClick(View view, int position, ForumData forumDataIndex) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("forumData",forumDataIndex);
+                bundle.putSerializable("forumData", forumDataIndex);
                 Intent intent = new Intent(view.getContext(), ForumActivity.class);
                 intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                 startActivity(intent);

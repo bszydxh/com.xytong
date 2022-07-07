@@ -1,4 +1,4 @@
-package com.xytong.image;
+package com.xytong.downloader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
