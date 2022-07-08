@@ -6,6 +6,15 @@ public class ForumData extends CardData implements Serializable {
     private Integer likes = 0;
     private Integer comments = 0;
     private Integer forwarding = 0;
+    private boolean Liked = false;
+
+    public void setLiked(boolean liked) {
+        Liked = liked;
+    }
+
+    public boolean isLiked() {
+        return Liked;
+    }
 
     public Integer getComments() {
         return comments;

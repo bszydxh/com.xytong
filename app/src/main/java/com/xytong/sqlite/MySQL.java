@@ -20,19 +20,37 @@ public class MySQL {
     private Cursor sh_cursor;
     private Cursor re_cursor;
 
-    private final String sql_create_forum_table = "create table forum_list " +
-            "(id integer primary key autoincrement,user_name text," +
-            "user_avatar text,title text," +
-            "text text,likes text," +
-            "comments text,forwarding text);";
-    private final String sql_create_re_table = "create table run_errands_list(" +
-            "id integer primary key autoincrement,user_name text," +
-            "user_avatar text,title text," +
-            "text text,price text);";
-    private final String sql_create_sh_table = "create table secondhand_list (" +
-            "id integer primary key autoincrement,user_name text," +
-            "user_avatar text,title text," +
-            "text text,price text);";
+    private final String sql_create_forum_table = "CREATE TABLE 'forum_list' (\n" +
+            "  'id' INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+            "  'user_name' TEXT,\n" +
+            "  'user_avatar' TEXT,\n" +
+            "  'title' TEXT,\n" +
+            "  'text' TEXT,\n" +
+            "  'likes' TEXT,\n" +
+            "  'comments' TEXT,\n" +
+            "  'forwarding' TEXT,\n" +
+            "  'timestamp' integer\n" +
+            ");";
+    private final String sql_create_re_table = "CREATE TABLE 'run_errands_list' (\n" +
+            "  'id' INTEGER NOT NULL,\n" +
+            "  'user_name' TEXT,\n" +
+            "  'user_avater' TEXT,\n" +
+            "  'title' TEXT,\n" +
+            "  'text' TEXT,\n" +
+            "  'price' text,\n" +
+            "  'timestamp' integer,\n" +
+            "  PRIMARY KEY ('id')\n" +
+            ");";
+    private final String sql_create_sh_table = "CREATE TABLE 'secondhand_list' (\n" +
+            "  'id' INTEGER NOT NULL,\n" +
+            "  'user_name' TEXT,\n" +
+            "  'user_avater' TEXT,\n" +
+            "  'title' TEXT,\n" +
+            "  'text' TEXT,\n" +
+            "  'price' text,\n" +
+            "  'timestamp' integer,\n" +
+            "  PRIMARY KEY ('id')\n" +
+            ");";
 
     private Cursor setup_cursor(Cursor cursor, String table, String sql) {
         //db在内部隐式传递
@@ -86,7 +104,7 @@ public class MySQL {
             reData.setTitle(re_cursor.getString(3).trim());
             reData.setText(re_cursor.getString(4));
             reData.setPrice(re_cursor.getString(5));
-
+            reData.setTimestamp(re_cursor.getLong(6));
         } catch (Exception e) {
             Log.e("SQLite", "read run_errands data error");
             //e.printStackTrace();
@@ -108,6 +126,7 @@ public class MySQL {
             shData.setTitle(sh_cursor.getString(3).trim());
             shData.setText(sh_cursor.getString(4));
             shData.setPrice(sh_cursor.getString(5));
+            shData.setTimestamp(sh_cursor.getLong(6));
         } catch (Exception e) {
             Log.e("SQLite", "read secondhand data error");
             //e.printStackTrace();
@@ -131,7 +150,7 @@ public class MySQL {
             forumData.setLikes(Integer.valueOf(forum_cursor.getString(5)));
             forumData.setComments(Integer.valueOf(forum_cursor.getString(6)));
             forumData.setForwarding(Integer.valueOf(forum_cursor.getString(7)));
-
+            forumData.setTimestamp(forum_cursor.getLong(8));
         } catch (Exception e) {
             Log.e("SQLite", "read forum data error");
         }

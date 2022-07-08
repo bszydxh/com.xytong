@@ -19,13 +19,14 @@ public class DataDownloader {
         List<ForumData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
+                int need_num = end - start + 1;
                 String path = "http://rap2api.taobao.org/app/mock/data/2255088";
                 String text = "{\n" +
                         "  \"module\": \"forum\",\n" +
                         "  \"mode\": \"newest\",\n" +
-                        "  \"need_num\": 10,\n" +
-                        "  \"num_start\": 0,\n" +
-                        "  \"num_end\": 9,\n" +
+                        "  \"need_num\": " + need_num + ",\n" +
+                        "  \"num_start\": " + start + ",\n" +
+                        "  \"num_end\": " + end + ",\n" +
                         "  \"timestamp\": 1650098900\n" +
                         "}";
                 Poster<List<ForumData>> poster = new Poster<>(path, text);
@@ -42,6 +43,7 @@ public class DataDownloader {
                             forumData.setTitle(forum_data.getString("title"));
                             forumData.setText(forum_data.getString("text"));
                             forumData.setLikes(forum_data.getInt("likes"));
+                            forumData.setTimestamp(Long.valueOf(forum_data.getString("timestamp")));
                             forumData.setComments(forum_data.getInt("comments"));
                             forumData.setForwarding(forum_data.getInt("forwarding"));
                             data_init.add(forumData);

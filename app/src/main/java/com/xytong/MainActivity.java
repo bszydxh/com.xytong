@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -67,10 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(//应用侧栏配置
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)//三人行,home...
-                .setOpenableLayout(drawer)//显示三条横用的qwq
-                .build();// 构造AppBarConfiguration实例
         /////////////////////////////////////////////////////////////////////
         rootFragmentPagerAdapter = new RootFragmentPagerAdapter(
                 getSupportFragmentManager(), getLifecycle()

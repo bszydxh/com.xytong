@@ -1,5 +1,6 @@
 package com.xytong.adapter;
 
+//TODO
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,20 +29,26 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
      * (custom ViewHolder).
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         private final TextView userName;
         private final ImageView userAvatar;
         private final TextView title;
         private final TextView text;
         private final TextView price;
+        private final TextView date;
 
         public ViewHolder(View view) {
             super(view);
-            // Define click listener for the ViewHolder's View
+            date = view.findViewById(R.id.card_sh_date);
             userName = view.findViewById(R.id.card_sh_user_name);
             userAvatar = view.findViewById(R.id.card_sh_user_avatar);
             title = view.findViewById(R.id.card_sh_title);
             text = view.findViewById(R.id.card_sh_text);
             price = view.findViewById(R.id.card_sh_price);
+        }
+
+        public TextView getDate() {
+            return date;
         }
 
         public TextView getUserName() {
@@ -86,13 +93,10 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
         return new ShRecyclerAdapter.ViewHolder(view);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ShRecyclerAdapter.ViewHolder viewHolder, final int position) {
-        //Glide.with(viewHolder.text.getContext())
-        //        .load(localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl())
-        //        .into(viewHolder.getUserAvatar());
         ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
+        viewHolder.getDate().setText(localDataSet.get(position).getDate());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());

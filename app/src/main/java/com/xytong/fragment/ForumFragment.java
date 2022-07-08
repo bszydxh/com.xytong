@@ -19,6 +19,7 @@ import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xytong.ForumActivity;
 import com.xytong.adapter.ForumRecyclerAdapter;
+import com.xytong.data.DataKeeper;
 import com.xytong.data.ForumData;
 import com.xytong.databinding.FragmentForumBinding;
 import com.xytong.downloader.DataDownloader;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class ForumFragment extends Fragment {
     FragmentForumBinding binding;
-
+    ForumRecyclerAdapter forumRecyclerAdapter;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,15 +51,15 @@ public class ForumFragment extends Fragment {
         RefreshLayout forumRefreshLayout = binding.forumRefreshLayout;
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
-        //List<ForumData> forumList = new ArrayList<>();
         List<ForumData> forumList = new ArrayList<>();
+        DataKeeper<ForumData> dataKeeper = new DataKeeper<>();
         for (int i = 0; i < 5; i++) {
             if (sql != null) {
                 forumList.add(sql.read_forum_data());
             }
         }
 
-        ForumRecyclerAdapter forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
+        forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
         //forumList.addAll(DataDownloader.getForumDataList("newest", 10, 19));
         forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -69,7 +70,7 @@ public class ForumFragment extends Fragment {
                     forumList.addAll(forumList_add);
                     forumRecyclerAdapter.notifyDataSetChanged();
                 }
-                refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+                refreshlayout.finishRefresh();//传入false表示刷新失败
                 Toast.makeText(refreshlayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
         });
@@ -83,9 +84,10 @@ public class ForumFragment extends Fragment {
                         ForumData forumData = forumList_add.get(i);
                         forumList.add(forumList.size(), forumData);
                     }
-                    forumRecyclerAdapter.notifyItemRangeInserted(forumList.size() - size, size);
+                    forumRecyclerAdapter.notifyDataSetChanged();
+                    //forumRecyclerAdapter.notifyItemRangeInserted(forumList.size() - size, size);
                 }
-                refreshlayout.finishLoadMore(20/*,false*/);//传入false表示加载失败
+                refreshlayout.finishLoadMore();//传入false表示加载失败
             }
         });
         RecyclerView forumRecyclerView = binding.forumRecyclerView;
@@ -108,5 +110,10 @@ public class ForumFragment extends Fragment {
                 // TODO: 2022/4/29
             }
         });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+
     }
 }

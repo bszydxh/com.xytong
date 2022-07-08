@@ -14,44 +14,61 @@ import com.xytong.image.ImageGetter;
 
 public class ForumActivity extends AppCompatActivity {
     private ActivityForumBinding binding;
-    Integer Liked = 0;
+    ForumData forumData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityForumBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
-        ForumData forumData = (ForumData) bundle_back.getSerializable("forumData");
+        forumData = (ForumData) bundle_back.getSerializable("forumData");
         ImageGetter.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumData.getUserAvatarUrl());
         binding.cardForumIndex.cardForumUserName.setText(forumData.getUserName());
         binding.cardForumIndex.cardForumTitle.setText(forumData.getTitle());
         binding.cardForumIndex.cardForumText.setText(forumData.getText());
-        String likesNum = forumData.getLikes().toString();
+        if (forumData.isLiked()) {
+            int likes = forumData.getLikes() + 1;
+            String likesString = Integer.toString(likes);
+            binding.cardForumIndex.cardForumLikes.setText(likesString);
+            Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+            Drawable.ConstantState state = bmpDrawable.getConstantState();
+            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+            DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
+            binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+        } else {
+            int likes = forumData.getLikes();
+            String likesString = Integer.toString(likes);
+            binding.cardForumIndex.cardForumLikes.setText(likesString);
+            Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+            Drawable.ConstantState state = bmpDrawable.getConstantState();
+            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+            DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.dark_gray));
+            binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+        }
         String commentsNum = forumData.getComments().toString();
         String forwardingNum = forumData.getForwarding().toString();
-        binding.cardForumIndex.cardForumLikes.setText(likesNum);
         binding.cardForumIndex.cardForumComments.setText(commentsNum);
         binding.cardForumIndex.cardForumForwarding.setText(forwardingNum);
         binding.cardForumIndex.cardForumLikesLayout.setOnClickListener(v -> {
-                if (Liked == 0) {
-                    int likes = forumData.getLikes() + 1;
-                    String likesString = Integer.toString(likes);
-                    binding.cardForumIndex.cardForumLikes.setText(likesString);
-                    Liked = 1;
-                    Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
-                    Drawable.ConstantState state = bmpDrawable.getConstantState();
-                    Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                    DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
-                    binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
-                } else {
+                if (forumData.isLiked()) {
                     int likes = forumData.getLikes();
                     String likesString = Integer.toString(likes);
                     binding.cardForumIndex.cardForumLikes.setText(likesString);
-                    Liked = 0;
+                    forumData.setLiked(false);
                     Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
                     Drawable.ConstantState state = bmpDrawable.getConstantState();
                     Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
                     DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.dark_gray));
+                    binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+                } else {
+                    int likes = forumData.getLikes() + 1;
+                    String likesString = Integer.toString(likes);
+                    binding.cardForumIndex.cardForumLikes.setText(likesString);
+                    forumData.setLiked(true);
+                    Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+                    Drawable.ConstantState state = bmpDrawable.getConstantState();
+                    Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                    DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
                     binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
                 }
 

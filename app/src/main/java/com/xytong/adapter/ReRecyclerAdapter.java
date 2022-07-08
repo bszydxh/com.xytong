@@ -1,6 +1,6 @@
 package com.xytong.adapter;
 
-
+//TODO
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +18,6 @@ import java.util.List;
 
 public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.ViewHolder> {
 
-
-    //private String[] localDataSet;
-    //private List<String> localDataSet;
     private List<ReData> localDataSet;
 
     /**
@@ -33,13 +30,19 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
         private final TextView title;
         private final TextView text;
         private final TextView price;
+        private final TextView date;
         public ViewHolder(View view) {
             super(view);
             userName = view.findViewById(R.id.card_re_user_name);
             userAvatar = view.findViewById(R.id.card_re_user_avatar);
+            date = view.findViewById(R.id.card_re_date);
             title = view.findViewById(R.id.card_re_title);
             text = view.findViewById(R.id.card_re_text);
             price = view.findViewById(R.id.card_re_price);
+        }
+
+        public TextView getDate() {
+            return date;
         }
 
         public TextView getUserName() {
@@ -67,7 +70,6 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
         localDataSet = dataSet;
     }
 
-    // Create new views (invoked by the layout manager)
     @NonNull
     @Override
     public ReRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -81,14 +83,12 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ReRecyclerAdapter.ViewHolder viewHolder, final int position) {
-//        Glide.with(viewHolder.text.getContext())
-//                .load(localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl())
-//                .into(viewHolder.getUserAvatar());
         ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());//被弃用
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());
         viewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
+        viewHolder.getDate().setText(localDataSet.get(position).getDate());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
