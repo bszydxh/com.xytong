@@ -12,19 +12,14 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="1dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_forum_touch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
         android:paddingRight="@dimen/activity_horizontal_margin">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_forum_user_avatar_layout"
@@ -66,32 +61,42 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/card_forum_user_avatar_layout"
                 app:layout_constraintTop_toBottomOf="@+id/card_forum_user_name" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/card_forum_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:paddingTop="4dp"
             android:text="@string/title"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_forum_user_avatar_layout" />
 
         <TextView
             android:id="@+id/card_forum_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:paddingBottom="4dp"
             android:text="@string/text"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_forum_title" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_forum_text">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/card_forum_forwarding_layout"
@@ -201,7 +206,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </com.google.android.material.card.MaterialCardView>

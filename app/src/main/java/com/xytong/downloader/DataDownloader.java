@@ -48,14 +48,12 @@ public class DataDownloader {
                             forumData.setForwarding(forum_data.getInt("forwarding"));
                             data_init.add(forumData);
                             Log.e("DataDownloader:getForumData", "get ok");
-
                         }
-
                     } catch (Exception e) {
                         Log.e("DataDownloader:getForumData", "error");
                         e.printStackTrace();
                     }
-                    return data_init;
+                    return data_init;//异步完成数据传递
                 });
                 data = poster.post();
                 break;

@@ -18,9 +18,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="66dp"
-        android:background="@color/sky_blue"
         app:itemIconTint="@drawable/icon_change"
-        android:backgroundTint="@color/sky_blue"
+        android:backgroundTint="@color/white_gray"
         android:tint="@android:color/darker_gray"
         app:elevation="1dp"
         app:srcCompat="@drawable/ic_baseline_add_24" />

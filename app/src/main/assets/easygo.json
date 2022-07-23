@@ -1,0 +1,25 @@
+{
+  "easyGoVersion": "1.0",
+  "client": "com.xytong",
+  "logicEntities": [
+    {
+      "head": {
+        "function": "magicwindow",
+        "required": "true"
+      },
+      "body": {
+        "mode": "1",
+        "activityPairs": [
+          {
+            "from": "com.xytong.MainActivity",
+            "to": "*"
+          }
+        ],
+        "UX": {
+          "supportRotationUxCompat": "false",
+          "isDraggable": "false"
+        }
+      }
+    }
+  ]
+}

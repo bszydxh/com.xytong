@@ -2,6 +2,7 @@ package com.xytong;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -55,16 +56,29 @@ public class MainActivity extends AppCompatActivity {
         });
         //对右下方悬浮按键绑定监听事件
         binding.appBarMain.fab.setOnClickListener(view -> {//@override注释后对编译器会对重写的方法进行检查
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)//snackbar类似于toast,它们在移动设备的屏幕底部和较大设备的左下方显示一条简短消息
+            Snackbar.make(view, "todo", Snackbar.LENGTH_LONG)//snackbar类似于toast,它们在移动设备的屏幕底部和较大设备的左下方显示一条简短消息
                     .setAction("Action", null).show();//设置点击事件
         });
         View nav_header_view = binding.navView.getHeaderView(0);
-        nav_header_view.setOnClickListener(new View.OnClickListener() {//对右下方悬浮按键绑定监听事件
+        nav_header_view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {//@override注释后对编译器会对重写的方法进行检查
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
+        });
+        Menu navMenu = binding.navView.getMenu();
+        MenuItem settingItem =navMenu.findItem(R.id.nav_setting);
+        MenuItem aboutItem =navMenu.findItem(R.id.nav_about);
+        settingItem.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(intent);
+            return true;
+        });
+        aboutItem.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+            return true;
         });
         /////////////////////////////////////////////////////////////////////
         rootFragmentPagerAdapter = new RootFragmentPagerAdapter(

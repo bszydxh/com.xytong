@@ -9,28 +9,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xytong.ForumActivity;
 import com.xytong.adapter.ForumRecyclerAdapter;
-import com.xytong.data.DataKeeper;
 import com.xytong.data.ForumData;
+import com.xytong.data.viewModel.ForumDataViewModel;
 import com.xytong.databinding.FragmentForumBinding;
-import com.xytong.downloader.DataDownloader;
-import com.xytong.sqlite.MySQL;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ForumFragment extends Fragment {
     FragmentForumBinding binding;
     ForumRecyclerAdapter forumRecyclerAdapter;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,52 +37,34 @@ public class ForumFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MySQL sql = null;
-        try {
-            sql = new MySQL(this.requireContext());
-        } catch (RuntimeException e) {
-            Toast.makeText(this.requireContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
-        }
+        ForumDataViewModel forumDataViewModel = new ViewModelProvider(this).get(ForumDataViewModel.class);
+        forumDataViewModel.getDataList().observe(getViewLifecycleOwner(), dataList -> {
+        });
+
         RefreshLayout forumRefreshLayout = binding.forumRefreshLayout;
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
-        List<ForumData> forumList = new ArrayList<>();
-        DataKeeper<ForumData> dataKeeper = new DataKeeper<>();
-        for (int i = 0; i < 5; i++) {
-            if (sql != null) {
-                forumList.add(sql.read_forum_data());
+        forumRecyclerAdapter = new ForumRecyclerAdapter(forumDataViewModel.getDataList().getValue());
+        forumRefreshLayout.setOnRefreshListener(refreshLayout -> {
+            refreshLayout.finishRefresh(2000);
+            if (forumDataViewModel.refreshData()) {
+                refreshLayout.finishRefresh(true);
+                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
+                forumRecyclerAdapter.notifyDataSetChanged();
             }
-        }
-
-        forumRecyclerAdapter = new ForumRecyclerAdapter(forumList);
-        //forumList.addAll(DataDownloader.getForumDataList("newest", 10, 19));
-        forumRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
-                List<ForumData> forumList_add = DataDownloader.getForumDataList("newest", 0, 9);
-                if (forumList_add != null) {
-                    forumList.clear();
-                    forumList.addAll(forumList_add);
-                    forumRecyclerAdapter.notifyDataSetChanged();
-                }
-                refreshlayout.finishRefresh();//传入false表示刷新失败
-                Toast.makeText(refreshlayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
+            else{
+                refreshLayout.finishRefresh(false);
+                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
             }
         });
-        forumRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
-                List<ForumData> forumList_add = DataDownloader.getForumDataList("newest", 0, 9);
-                if (forumList_add != null) {
-                    int size = forumList_add.size();
-                    for (int i = 0; i < size; i++) {
-                        ForumData forumData = forumList_add.get(i);
-                        forumList.add(forumList.size(), forumData);
-                    }
-                    forumRecyclerAdapter.notifyDataSetChanged();
-                    //forumRecyclerAdapter.notifyItemRangeInserted(forumList.size() - size, size);
-                }
-                refreshlayout.finishLoadMore();//传入false表示加载失败
+        forumRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            refreshLayout.finishLoadMore(2000);
+            if (forumDataViewModel.loadMoreData()) {
+                forumRecyclerAdapter.notifyDataSetChanged();
+                refreshLayout.finishLoadMore(true);
+            }
+            else{
+                refreshLayout.finishLoadMore(false);
             }
         });
         RecyclerView forumRecyclerView = binding.forumRecyclerView;

@@ -11,6 +11,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 public class RootFragmentPagerAdapter extends FragmentStateAdapter {
     FragmentManager fragmentManager;
     private SparseArray<Fragment> fragmentList = new SparseArray<>();
+
     public RootFragmentPagerAdapter(@NonNull FragmentManager fm,
                                     @NonNull Lifecycle lifecycle) {
         super(fm, lifecycle);
@@ -22,15 +23,19 @@ public class RootFragmentPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         return fragmentList.get(position);
     }
+
     public Fragment getItem(int position) {
         return fragmentList.get(position);
     }
+
+
+
     @Override
     public int getItemCount() {
         return fragmentList.size();
     }
-    public void addFragment(Fragment fragment)
-    {
-        fragmentList.put(fragmentList.size(),fragment);
+
+    public void addFragment(Fragment fragment) {
+        fragmentList.put(fragmentList.size(), fragment);
     }
 }

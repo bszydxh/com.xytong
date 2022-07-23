@@ -32,4 +32,5 @@
     <string name="about">关于</string>
     <string name="price">¥0.00</string>
     <string name="date">刚刚</string>
+    <string name="showMode">演示模式</string>
 </resources>

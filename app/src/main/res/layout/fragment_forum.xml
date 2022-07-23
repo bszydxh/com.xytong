@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_gray"
     android:orientation="vertical">
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -17,7 +18,7 @@
             android:id="@+id/forumRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff"
+            android:background="@color/white_gray"
             android:overScrollMode="never" />
 
         <com.scwang.smart.refresh.footer.ClassicsFooter

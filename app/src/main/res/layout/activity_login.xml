@@ -39,6 +39,7 @@
             android:layout_height="50dp"
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
+            app:tabSelectedTextColor="@color/black"
             android:background="@color/white">
 
         </com.google.android.material.tabs.TabLayout>
