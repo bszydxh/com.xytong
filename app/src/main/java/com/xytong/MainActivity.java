@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.ImageView;
+import android.view.Window;
+import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 rootViewPager;
     private RootFragmentPagerAdapter rootFragmentPagerAdapter;
-    private WebView webView;
     private DrawerLayout drawer;
     private boolean webViewIsFocused = false;
 
@@ -43,33 +41,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         setSupportActionBar(binding.appBarMain.underBar.toolbar);//设置toolbar
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
         NavigationView navigationView = binding.navView;
-        ImageGetter.setAvatarViewBitmap(
-                (ImageView) navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
+        ImageGetter.setAvatarViewBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
                 "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
         ImageGetter.setAvatarViewBitmap(
-                (ImageView) binding.appBarMain.underBar.toolbarUserAvatar,
+                binding.appBarMain.underBar.toolbarUserAvatar,
                 "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
-        binding.appBarMain.underBar.toolbarUserAvatar.setOnClickListener(view -> {
-            drawer.openDrawer(GravityCompat.START);
-        });
+        binding.appBarMain.underBar.toolbarUserAvatar.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
         //对右下方悬浮按键绑定监听事件
         binding.appBarMain.fab.setOnClickListener(view -> {//@override注释后对编译器会对重写的方法进行检查
-            Snackbar.make(view, "todo", Snackbar.LENGTH_LONG)//snackbar类似于toast,它们在移动设备的屏幕底部和较大设备的左下方显示一条简短消息
+            Snackbar.make(view, "todo", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();//设置点击事件
         });
         View nav_header_view = binding.navView.getHeaderView(0);
-        nav_header_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
+        nav_header_view.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
         });
         Menu navMenu = binding.navView.getMenu();
-        MenuItem settingItem =navMenu.findItem(R.id.nav_setting);
-        MenuItem aboutItem =navMenu.findItem(R.id.nav_about);
+        MenuItem settingItem = navMenu.findItem(R.id.nav_setting);
+        MenuItem aboutItem = navMenu.findItem(R.id.nav_about);
         settingItem.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
@@ -88,35 +84,29 @@ public class MainActivity extends AppCompatActivity {
         rootFragmentPagerAdapter.addFragment(new MoralFragment());
         rootFragmentPagerAdapter.addFragment(new SecondhandFragment());
         rootFragmentPagerAdapter.addFragment(new ForumFragment());
-        webView = findViewById(R.id.web_view);
         rootViewPager = binding.appBarMain.underBar.pager;
         rootViewPager.setAdapter(rootFragmentPagerAdapter);
         rootViewPager.setUserInputEnabled(false);
         BottomNavigationView bottomNavigationView = binding.appBarMain.underBar.btmNav;
         //导航栏绑定根ViewPager2适配器事件
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        String nav_name = item.getTitle().toString();
-                        switch (nav_name) {
-                            case "跑腿":
-                                rootViewPager.setCurrentItem(0, false);
-                                break;
-                            case "德育":
-                                rootViewPager.setCurrentItem(1, false);
-                                break;
-                            case "二手":
-                                rootViewPager.setCurrentItem(2, false);
-                                break;
-                            case "论坛":
-                                rootViewPager.setCurrentItem(3, false);
-                                break;
-                        }
-                        return true;
-                    }
-                }
-        );
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            String nav_name = item.getTitle().toString();
+            switch (nav_name) {
+                case "跑腿":
+                    rootViewPager.setCurrentItem(0, false);
+                    break;
+                case "德育":
+                    rootViewPager.setCurrentItem(1, false);
+                    break;
+                case "二手":
+                    rootViewPager.setCurrentItem(2, false);
+                    break;
+                case "论坛":
+                    rootViewPager.setCurrentItem(3, false);
+                    break;
+            }
+            return true;
+        });
         //滑动适配器绑定根ViewPager2导航栏事件
         rootViewPager.registerOnPageChangeCallback(
                 new ViewPager2.OnPageChangeCallback() {

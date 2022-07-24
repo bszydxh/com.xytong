@@ -25,12 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
-        binding.loginBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        binding.loginBack.setOnClickListener(v -> finish());
         ViewPager viewPager = binding.loginPager;
         ArrayList<View> loginListView = new ArrayList<>();
         LayoutInflater layoutInflater = getLayoutInflater();

@@ -17,10 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="66dp"
-        app:itemIconTint="@drawable/icon_change"
-        android:backgroundTint="@color/white_gray"
-        android:tint="@android:color/darker_gray"
-        app:elevation="1dp"
+        android:layout_marginBottom="64dp"
         app:srcCompat="@drawable/ic_baseline_add_24" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

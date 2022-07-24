@@ -1,6 +1,7 @@
 package com.xytong.adapter;
 
 //TODO
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +17,23 @@ import com.xytong.image.ImageGetter;
 
 import java.util.List;
 
-public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.ViewHolder> {
+public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ReData> localDataSet;
+    private final List<ReData> localDataSet;
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ReCardViewHolder extends RecyclerView.ViewHolder {
         private final TextView userName;
         private final ImageView userAvatar;
         private final TextView title;
         private final TextView text;
         private final TextView price;
         private final TextView date;
-        public ViewHolder(View view) {
+
+        public ReCardViewHolder(View view) {
             super(view);
             userName = view.findViewById(R.id.card_re_user_name);
             userAvatar = view.findViewById(R.id.card_re_user_avatar);
@@ -66,29 +68,72 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<ReRecyclerAdapter.Vi
         }
     }
 
+    public static class ImageCardViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView banner;
+
+        public ImageCardViewHolder(@NonNull View itemView) {
+            super(itemView);
+            banner = itemView.findViewById(R.id.banner);
+        }
+
+        public ImageView getBanner() {
+            return banner;
+        }
+    }
+
     public ReRecyclerAdapter(List<ReData> dataSet) {
         localDataSet = dataSet;
     }
 
-    @NonNull
     @Override
-    public ReRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view, which defines the UI of the list item
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.card_re, viewGroup, false);
-
-        return new ReRecyclerAdapter.ViewHolder(view);
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    @NonNull
     @Override
-    public void onBindViewHolder(ReRecyclerAdapter.ViewHolder viewHolder, final int position) {
-        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());//被弃用
-        viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
-        viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
-        viewHolder.getText().setText(localDataSet.get(position).getText());
-        viewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
-        viewHolder.getDate().setText(localDataSet.get(position).getDate());
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        RecyclerView.ViewHolder viewHolder = null;
+        switch (viewType) {
+            case 0: {
+                View view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.card_re, viewGroup, false);
+                viewHolder = new ReCardViewHolder(view);
+                break;
+            }
+            case 1: {
+                View view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.card_image, viewGroup, false);
+                viewHolder = new ImageCardViewHolder(view);
+                break;
+            }
+        }
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        position = position - 1;
+        switch (viewHolder.getItemViewType()) {
+            case 0: {
+                ReCardViewHolder reCardViewHolder = (ReCardViewHolder) viewHolder;
+                ImageGetter.setAvatarViewBitmap(reCardViewHolder.getUserAvatar(), localDataSet.get(reCardViewHolder.getAdapterPosition()).getUserAvatarUrl());//被弃用
+                reCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());
+                reCardViewHolder.getTitle().setText(localDataSet.get(position).getTitle());
+                reCardViewHolder.getText().setText(localDataSet.get(position).getText());
+                reCardViewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
+                reCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
+                break;
+            }
+            case 1: {
+                break;
+            }
+        }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -3,6 +3,7 @@ package com.xytong;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,7 @@ import com.xytong.image.ImageGetter;
 public class ForumActivity extends AppCompatActivity {
     private ActivityForumBinding binding;
     ForumData forumData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);//进入渐变动画
@@ -30,11 +32,16 @@ public class ForumActivity extends AppCompatActivity {
             int likes = forumData.getLikes() + 1;
             String likesString = Integer.toString(likes);
             binding.cardForumIndex.cardForumLikes.setText(likesString);
-            Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
-            Drawable.ConstantState state = bmpDrawable.getConstantState();
-            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-            DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
-            binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+            try {
+                Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+                Drawable.ConstantState state = bmpDrawable.getConstantState();
+                Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
+                binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+            } catch (NullPointerException e) {
+                Log.e(this.getClass().getName(), "change image error");
+            }
+
         } else {
             int likes = forumData.getLikes();
             String likesString = Integer.toString(likes);
@@ -50,27 +57,27 @@ public class ForumActivity extends AppCompatActivity {
         binding.cardForumIndex.cardForumComments.setText(commentsNum);
         binding.cardForumIndex.cardForumForwarding.setText(forwardingNum);
         binding.cardForumIndex.cardForumLikesLayout.setOnClickListener(v -> {
-                if (forumData.isLiked()) {
-                    int likes = forumData.getLikes();
-                    String likesString = Integer.toString(likes);
-                    binding.cardForumIndex.cardForumLikes.setText(likesString);
-                    forumData.setLiked(false);
-                    Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
-                    Drawable.ConstantState state = bmpDrawable.getConstantState();
-                    Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                    DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.dark_gray));
-                    binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
-                } else {
-                    int likes = forumData.getLikes() + 1;
-                    String likesString = Integer.toString(likes);
-                    binding.cardForumIndex.cardForumLikes.setText(likesString);
-                    forumData.setLiked(true);
-                    Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
-                    Drawable.ConstantState state = bmpDrawable.getConstantState();
-                    Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                    DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
-                    binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
-                }
+            if (forumData.isLiked()) {
+                int likes = forumData.getLikes();
+                String likesString = Integer.toString(likes);
+                binding.cardForumIndex.cardForumLikes.setText(likesString);
+                forumData.setLiked(false);
+                Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+                Drawable.ConstantState state = bmpDrawable.getConstantState();
+                Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.dark_gray));
+                binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+            } else {
+                int likes = forumData.getLikes() + 1;
+                String likesString = Integer.toString(likes);
+                binding.cardForumIndex.cardForumLikes.setText(likesString);
+                forumData.setLiked(true);
+                Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+                Drawable.ConstantState state = bmpDrawable.getConstantState();
+                Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
+                binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+            }
 
 
         });

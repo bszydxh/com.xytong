@@ -17,12 +17,9 @@ import com.xytong.image.ImageGetter;
 
 import java.util.List;
 
-public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.ViewHolder> {
+public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
-    //private String[] localDataSet;
-    //private List<String> localDataSet;
-    private List<ShData> localDataSet;
+    private final List<ShData> localDataSet;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -94,13 +91,14 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<ShRecyclerAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ShRecyclerAdapter.ViewHolder viewHolder, final int position) {
-        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
-        viewHolder.getDate().setText(localDataSet.get(position).getDate());
-        viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
-        viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
-        viewHolder.getText().setText(localDataSet.get(position).getText());
-        viewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
+       ShRecyclerAdapter.ViewHolder shCardViewHolder = (ViewHolder) viewHolder;
+        ImageGetter.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getUserAvatarUrl());
+        shCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
+        shCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());
+        shCardViewHolder.getTitle().setText(localDataSet.get(position).getTitle());
+        shCardViewHolder.getText().setText(localDataSet.get(position).getText());
+        shCardViewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
