@@ -94,45 +94,27 @@ public class MainActivity extends AppCompatActivity {
             switch (nav_name) {
                 case "跑腿":
                     rootViewPager.setCurrentItem(0, false);
+                    binding.appBarMain.fab.setVisibility(View.VISIBLE);
+                    webViewIsFocused = false;
                     break;
                 case "德育":
                     rootViewPager.setCurrentItem(1, false);
+                    binding.appBarMain.fab.setVisibility(View.INVISIBLE);
+                    webViewIsFocused = true;
                     break;
                 case "二手":
                     rootViewPager.setCurrentItem(2, false);
+                    binding.appBarMain.fab.setVisibility(View.VISIBLE);
+                    webViewIsFocused = false;
                     break;
                 case "论坛":
                     rootViewPager.setCurrentItem(3, false);
+                    binding.appBarMain.fab.setVisibility(View.VISIBLE);
+                    webViewIsFocused = false;
                     break;
             }
             return true;
         });
-        //滑动适配器绑定根ViewPager2导航栏事件
-        rootViewPager.registerOnPageChangeCallback(
-                new ViewPager2.OnPageChangeCallback() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        switch (position) {
-                            case 0:
-                                bottomNavigationView.setSelectedItemId(R.id.run_errands);
-                                webViewIsFocused = false;
-                                break;
-                            case 1:
-                                bottomNavigationView.setSelectedItemId(R.id.moral);
-                                webViewIsFocused = true;
-                                break;
-                            case 2:
-                                bottomNavigationView.setSelectedItemId(R.id.secondhand);
-                                webViewIsFocused = false;
-                                break;
-                            case 3:
-                                bottomNavigationView.setSelectedItemId(R.id.forums);
-                                webViewIsFocused = false;
-                                break;
-                        }
-                    }
-                }
-        );
 
     }
 

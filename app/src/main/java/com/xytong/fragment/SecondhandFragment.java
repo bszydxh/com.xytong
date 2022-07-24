@@ -8,21 +8,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xytong.adapter.ShRecyclerAdapter;
-import com.xytong.data.ShData;
+import com.xytong.data.viewModel.ShDataViewModel;
 import com.xytong.databinding.FragmentSecondhandBinding;
-import com.xytong.sqlite.MySQL;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SecondhandFragment extends Fragment {
     FragmentSecondhandBinding binding;
@@ -38,31 +33,34 @@ public class SecondhandFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MySQL sql = null;
-        try {
-            sql = new MySQL(this.requireContext());
-        } catch (RuntimeException e) {
-            Toast.makeText(this.requireContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
-        }
+
+        ShDataViewModel model = new ViewModelProvider(this).get(ShDataViewModel.class);
+        model.getDataList().observe(getViewLifecycleOwner(), dataList -> {
+        });
         RefreshLayout shRefreshLayout = binding.shRefreshLayout;
         shRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         shRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
-        List<ShData> shList = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            ShData shData = new ShData();
-            shList.add(sql.read_secondhand_data());
-        }
-        ShRecyclerAdapter shRecyclerAdapter = new ShRecyclerAdapter(shList);
-        shRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+        ShRecyclerAdapter shRecyclerAdapter = new ShRecyclerAdapter(model.getDataList().getValue());
+        shRefreshLayout.setOnRefreshListener(refreshLayout -> {
+            refreshLayout.finishRefresh(2000);
+            if (model.refreshData()) {
+                refreshLayout.finishRefresh(true);
+                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
+                shRecyclerAdapter.notifyDataSetChanged();
+            }
+            else{
+                refreshLayout.finishRefresh(false);
+                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
             }
         });
-        shRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+        shRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            refreshLayout.finishLoadMore(2000);
+            if (model.loadMoreData()) {
+                shRecyclerAdapter.notifyDataSetChanged();
+                refreshLayout.finishLoadMore(true);
+            }
+            else{
+                refreshLayout.finishLoadMore(false);
             }
         });
         RecyclerView shRecyclerView = binding.shRecyclerView;

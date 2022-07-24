@@ -1,36 +1,77 @@
 package com.xytong.data.viewModel;
 
+import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.xytong.data.ReData;
+import com.xytong.downloader.DataDownloader;
+import com.xytong.sqlite.MySQL;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ReDataViewModel extends ViewModel {
-    ReDataGetter ReDataGetter;
-
-    public interface ReDataGetter {
-        List<ReData> onGet();
-    }
-
-    public void setReDataGetter(ReDataGetter ReDataGetter) {
-        this.ReDataGetter = ReDataGetter;
-    }
-
+public class ReDataViewModel extends AndroidViewModel {
     private MutableLiveData<List<ReData>> dataList;
+
+    public ReDataViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public LiveData<List<ReData>> getDataList() {
         if (dataList == null) {
-            dataList = new MutableLiveData<List<ReData>>();
-            loaDataList();
+            Log.e(this.getClass().getName(), "get data");
+            MySQL sql = null;
+            try {
+                sql = new MySQL(getApplication().getApplicationContext());
+            } catch (RuntimeException e) {
+                Toast.makeText(getApplication().getApplicationContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
+            }
+            List<ReData> reList = new ArrayList<>();
+            reList.add(new ReData());
+            for (int i = 0; i < 5; i++) {
+                if (sql != null) {
+                    reList.add(sql.read_run_errands_data());
+                }
+            }
+            dataList = new MutableLiveData<>();
+            List<ReData> obtainedDataList = DataDownloader.getReDataList("newest", 0, 10);
+            if (obtainedDataList != null) {
+                reList.addAll(obtainedDataList);
+            }
+            dataList.setValue(reList);
         }
         return dataList;
     }
 
-    private void loaDataList() {
-        MutableLiveData<List<ReData>> newDataList = new MutableLiveData<>();
-        newDataList.setValue(ReDataGetter.onGet());
+    public boolean loadMoreData() {
+        List<ReData> reList = dataList.getValue();
+        List<ReData> obtainedDataList = DataDownloader.getReDataList("newest", 0, 10);
+        if (reList != null && obtainedDataList != null) {
+            reList.addAll(obtainedDataList);
+            dataList.setValue(reList);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean refreshData() {
+        List<ReData> reList = dataList.getValue();
+        List<ReData> obtainedDataList = DataDownloader.getReDataList("newest", 0, 10);
+        if (reList != null && obtainedDataList != null) {
+            reList.clear();
+            reList.add(new ReData());
+            reList.addAll(obtainedDataList);
+            dataList.setValue(reList);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

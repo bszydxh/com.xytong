@@ -37,33 +37,31 @@ public class ForumFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ForumDataViewModel forumDataViewModel = new ViewModelProvider(this).get(ForumDataViewModel.class);
-        forumDataViewModel.getDataList().observe(getViewLifecycleOwner(), dataList -> {
+        ForumDataViewModel model = new ViewModelProvider(this).get(ForumDataViewModel.class);
+        model.getDataList().observe(getViewLifecycleOwner(), dataList -> {
         });
 
         RefreshLayout forumRefreshLayout = binding.forumRefreshLayout;
         forumRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
-        forumRecyclerAdapter = new ForumRecyclerAdapter(forumDataViewModel.getDataList().getValue());
+        forumRecyclerAdapter = new ForumRecyclerAdapter(model.getDataList().getValue());
         forumRefreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.finishRefresh(2000);
-            if (forumDataViewModel.refreshData()) {
+            if (model.refreshData()) {
                 refreshLayout.finishRefresh(true);
                 Toast.makeText(refreshLayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
                 forumRecyclerAdapter.notifyDataSetChanged();
-            }
-            else{
+            } else {
                 refreshLayout.finishRefresh(false);
                 Toast.makeText(refreshLayout.getLayout().getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
             }
         });
         forumRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.finishLoadMore(2000);
-            if (forumDataViewModel.loadMoreData()) {
+            if (model.loadMoreData()) {
                 forumRecyclerAdapter.notifyDataSetChanged();
                 refreshLayout.finishLoadMore(true);
-            }
-            else{
+            } else {
                 refreshLayout.finishLoadMore(false);
             }
         });

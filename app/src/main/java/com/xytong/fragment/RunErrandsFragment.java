@@ -8,24 +8,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xytong.adapter.ReRecyclerAdapter;
-import com.xytong.data.ReData;
+import com.xytong.data.viewModel.ReDataViewModel;
 import com.xytong.databinding.FragmentRunErrandsBinding;
-import com.xytong.sqlite.MySQL;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RunErrandsFragment extends Fragment {
     FragmentRunErrandsBinding binding;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,33 +32,29 @@ public class RunErrandsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MySQL sql = null;
-        try {
-            sql = new MySQL(this.requireContext());
-        } catch (RuntimeException e) {
-            Toast.makeText(this.requireContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
-        }
+        ReDataViewModel model = new ViewModelProvider(this).get(ReDataViewModel.class);
+        model.getDataList().observe(getViewLifecycleOwner(), dataList -> {
+        });
         RefreshLayout reRefreshLayout = binding.reRefreshLayout;
         reRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         reRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
-        List<ReData> reList = new ArrayList<>();
-
-        for (int i = 0; i < 15; i++) {
-            ReData reData = new ReData();
-            reList.add(sql.read_run_errands_data());
-        }
-
-        ReRecyclerAdapter reRecyclerAdapter = new ReRecyclerAdapter(reList);
-        reRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(2000);//传入false表示刷新失败
+        ReRecyclerAdapter reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
+        reRefreshLayout.setOnRefreshListener(refreshLayout -> {
+            if (model.refreshData()) {
+                refreshLayout.finishRefresh(true);
+                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
+                reRecyclerAdapter.notifyDataSetChanged();
+            } else {
+                refreshLayout.finishRefresh(false);
+                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
             }
         });
-        reRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+        reRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            if (model.loadMoreData()) {
+                reRecyclerAdapter.notifyDataSetChanged();
+                refreshLayout.finishLoadMore(true);
+            } else {
+                refreshLayout.finishLoadMore(false);
             }
         });
         RecyclerView reRecyclerView = binding.reRecyclerView;

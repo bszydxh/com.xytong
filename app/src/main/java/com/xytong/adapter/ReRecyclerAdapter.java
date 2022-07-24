@@ -117,7 +117,6 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        position = position - 1;
         switch (viewHolder.getItemViewType()) {
             case 0: {
                 ReCardViewHolder reCardViewHolder = (ReCardViewHolder) viewHolder;
@@ -136,7 +135,6 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return localDataSet.size();

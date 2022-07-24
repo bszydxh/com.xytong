@@ -1,36 +1,75 @@
 package com.xytong.data.viewModel;
 
+import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.xytong.data.ShData;
+import com.xytong.downloader.DataDownloader;
+import com.xytong.sqlite.MySQL;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ShDataViewModel extends ViewModel {
-    ShDataGetter ShDataGetter;
-
-    public interface ShDataGetter {
-        List<ShData> onGet();
-    }
-
-    public void setShDataGetter(ShDataGetter ShDataGetter) {
-        this.ShDataGetter = ShDataGetter;
-    }
-
+public class ShDataViewModel extends AndroidViewModel {
     private MutableLiveData<List<ShData>> dataList;
+
+    public ShDataViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public LiveData<List<ShData>> getDataList() {
         if (dataList == null) {
-            dataList = new MutableLiveData<List<ShData>>();
-            loaDataList();
+            Log.e(this.getClass().getName(), "get data");
+            MySQL sql = null;
+            try {
+                sql = new MySQL(getApplication().getApplicationContext());
+            } catch (RuntimeException e) {
+                Toast.makeText(getApplication().getApplicationContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
+            }
+            List<ShData> shList = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                if (sql != null) {
+                    shList.add(sql.read_secondhand_data());
+                }
+            }
+            dataList = new MutableLiveData<>();
+            List<ShData> obtainedDataList = DataDownloader.getShDataList("newest", 0, 10);
+            if (obtainedDataList != null) {
+                shList.addAll(obtainedDataList);
+            }
+            dataList.setValue(shList);
         }
         return dataList;
     }
 
-    private void loaDataList() {
-        MutableLiveData<List<ShData>> newDataList = new MutableLiveData<>();
-        newDataList.setValue(ShDataGetter.onGet());
+    public boolean loadMoreData() {
+        List<ShData> shList = dataList.getValue();
+        List<ShData> obtainedDataList = DataDownloader.getShDataList("newest", 0, 10);
+        if (shList != null && obtainedDataList != null) {
+            shList.addAll(obtainedDataList);
+            dataList.setValue(shList);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean refreshData() {
+        List<ShData> shList = dataList.getValue();
+        List<ShData> obtainedDataList = DataDownloader.getShDataList("newest", 0, 10);
+        if (shList != null && obtainedDataList != null) {
+            shList.clear();
+            shList.addAll(obtainedDataList);
+            dataList.setValue(shList);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
