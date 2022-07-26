@@ -9,29 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/login_back"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/ic_baseline_arrow_back_24" />
 
-        <LinearLayout
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/sky_blue"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="70sp" />
-
-        </LinearLayout>
+            android:layout_height="160dp"
+            app:srcCompat="@mipmap/icon"
+            />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/login_tab"

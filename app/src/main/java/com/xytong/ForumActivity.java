@@ -1,5 +1,6 @@
 package com.xytong;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,13 +17,16 @@ import com.xytong.image.ImageGetter;
 public class ForumActivity extends AppCompatActivity {
     private ActivityForumBinding binding;
     ForumData forumData;
+    int position;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);//进入渐变动画
+        overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityForumBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
+        position = bundle_back.getInt("pos");
         forumData = (ForumData) bundle_back.getSerializable("forumData");
         ImageGetter.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumData.getUserAvatarUrl());
         binding.cardForumIndex.cardForumUserName.setText(forumData.getUserName());
@@ -62,24 +66,19 @@ public class ForumActivity extends AppCompatActivity {
                 String likesString = Integer.toString(likes);
                 binding.cardForumIndex.cardForumLikes.setText(likesString);
                 forumData.setLiked(false);
-                Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
-                Drawable.ConstantState state = bmpDrawable.getConstantState();
-                Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.dark_gray));
-                binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
+
             } else {
                 int likes = forumData.getLikes() + 1;
                 String likesString = Integer.toString(likes);
                 binding.cardForumIndex.cardForumLikes.setText(likesString);
                 forumData.setLiked(true);
-                Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
-                Drawable.ConstantState state = bmpDrawable.getConstantState();
-                Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                DrawableCompat.setTint(wrap, ContextCompat.getColor(this, R.color.sky_blue));
-                binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
             }
-
-
+            Drawable bmpDrawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_thumb_up_24);
+            Drawable.ConstantState state = bmpDrawable.getConstantState();
+            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+            DrawableCompat.setTint(wrap, ContextCompat.getColor(this,
+                    forumData.isLiked() ? R.color.sky_blue : R.color.dark_gray));
+            binding.cardForumIndex.cardForumLikesImage.setImageDrawable(wrap);
         });
         binding.cardForumIndex.cardForumForwardingLayout.setOnClickListener(v -> {
             Intent sendIntent = new Intent();
@@ -101,7 +100,14 @@ public class ForumActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("forumData", forumData);
+        bundle.putInt("pos", position);
+        Intent intent = new Intent();
+        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+        setResult(Activity.RESULT_OK, intent);
         super.finish();
-        overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);//退出渐变动画
+        overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//退出渐变动画
     }
+
 }

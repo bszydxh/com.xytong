@@ -29,22 +29,36 @@
                 android:layout_weight="0.8"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/login_username"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="8dp"
-                    android:hint="请输入用户名"
-                    android:inputType="text"
-                    tools:style="" />
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/logon_password"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="请输入用户名"
+                        android:inputType="text"
+                        tools:style="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:endIconMode="password_toggle"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="16"
-                    android:hint="请输入密码(6-16位)"
-                    android:inputType="textPassword" />
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/logon_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="16"
+                        android:hint="请输入密码(6-16位)"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:id="@+id/forget_password"
                     android:layout_width="wrap_content"
@@ -68,7 +82,7 @@
             android:layout_gravity="center">
 
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/sign_up"
                 android:layout_width="200dp"
                 android:layout_height="50dp"

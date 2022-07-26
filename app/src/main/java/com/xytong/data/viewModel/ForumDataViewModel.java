@@ -24,6 +24,10 @@ public class ForumDataViewModel extends AndroidViewModel {
         super(application);
     }
 
+    public void setDataList(List<ForumData> dataListIndex) {
+        dataList.setValue(dataListIndex);
+    }
+
     public LiveData<List<ForumData>> getDataList() {
         if (dataList == null) {
             Log.e(this.getClass().getName(), "get data");

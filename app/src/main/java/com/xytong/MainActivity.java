@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private RootFragmentPagerAdapter rootFragmentPagerAdapter;
     private DrawerLayout drawer;
     private boolean webViewIsFocused = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态

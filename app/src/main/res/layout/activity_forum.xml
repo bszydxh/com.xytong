@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/forum_back"
         android:layout_width="45dp"
         android:layout_height="45dp"
