@@ -3,6 +3,7 @@ package com.xytong.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ public class ForumFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("forumData", forumDataIndex);
                 bundle.putInt("pos", position);
+                Log.e("fa",""+forumDataIndex.getUserName());
                 Intent intent = new Intent(view.getContext(), ForumActivity.class);
                 intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                 //startActivity(intent);

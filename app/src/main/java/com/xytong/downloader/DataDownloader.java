@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.xytong.data.CommentData;
 import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
@@ -48,10 +49,10 @@ public class DataDownloader {
                             forumData.setComments(forum_data.getInt("comments"));
                             forumData.setForwarding(forum_data.getInt("forwarding"));
                             data_init.add(forumData);
-                            Log.e("DataDownloader:getForumData", "get ok");
+                            Log.e("DataDownloader.getForumData()", "get ok");
                         }
                     } catch (Exception e) {
-                        Log.e("DataDownloader:getForumData", "error");
+                        Log.e("DataDownloader.getForumData()", "error");
                         e.printStackTrace();
                     }
                     return data_init;//异步完成数据传递
@@ -142,6 +143,50 @@ public class DataDownloader {
                         }
                     } catch (Exception e) {
                         Log.e("DataDownloader:getForumData", "error");
+                        e.printStackTrace();
+                    }
+                    return data_init;//异步完成数据传递
+                });
+                data = poster.post();
+                break;
+            }
+        }
+        return data;
+    }
+
+    public static List<CommentData> getCommentDataList(@NonNull String mode, int start, int end) {
+        List<CommentData> data = new ArrayList<>();
+        switch (mode) {
+            case "newest": {
+                int need_num = end - start + 1;
+                String path = "http://rap2api.taobao.org/app/mock/data/2255088";
+                String text = "{\n" +
+                        "  \"module\": \"forum\",\n" +
+                        "  \"mode\": \"newest\",\n" +
+                        "  \"need_num\": " + need_num + ",\n" +
+                        "  \"num_start\": " + start + ",\n" +
+                        "  \"num_end\": " + end + ",\n" +
+                        "  \"timestamp\": 1650098900\n" +
+                        "}";
+                Poster<List<CommentData>> poster = new Poster<>(path, text);
+                poster.setHttpListener(result -> {
+                    List<CommentData> data_init = new ArrayList<>();
+                    try {
+                        JSONObject root = new JSONObject(result);
+                        JSONArray comment_data_array = root.getJSONArray("forum_data");
+                        for (int i = 0; i < comment_data_array.length(); i++) {
+                            CommentData commentData = new CommentData();
+                            JSONObject comment_data = comment_data_array.getJSONObject(i);
+                            commentData.setUserAvatarUrl(comment_data.getString("user_avatar"));
+                            commentData.setUserName(comment_data.getString("user_name"));
+                            commentData.setText(comment_data.getString("text"));
+                            commentData.setLikes(comment_data.getInt("likes"));
+                            commentData.setTimestamp(Long.valueOf(comment_data.getString("timestamp")));
+                            data_init.add(commentData);
+                            Log.e("DataDownloader.getCommentData()", "get ok");
+                        }
+                    } catch (Exception e) {
+                        Log.e("DataDownloader.getCommentData()", "error");
                         e.printStackTrace();
                     }
                     return data_init;//异步完成数据传递

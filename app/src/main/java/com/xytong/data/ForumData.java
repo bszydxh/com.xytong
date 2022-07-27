@@ -1,20 +1,14 @@
 package com.xytong.data;
 
+import com.xytong.ui.LikeThump;
+
 import java.io.Serializable;
 
-public class ForumData extends CardData implements Serializable {
+public class ForumData extends CardData implements Serializable, LikeThump {
     private Integer likes = 0;
     private Integer comments = 0;
     private Integer forwarding = 0;
-    private boolean Liked = false;
-
-    public void setLiked(boolean liked) {
-        Liked = liked;
-    }
-
-    public boolean isLiked() {
-        return Liked;
-    }
+    private Boolean liked = false;
 
     public Integer getComments() {
         return comments;
@@ -24,6 +18,7 @@ public class ForumData extends CardData implements Serializable {
         return forwarding;
     }
 
+    @Override
     public Integer getLikes() {
         return likes;
     }
@@ -36,9 +31,18 @@ public class ForumData extends CardData implements Serializable {
         this.forwarding = forwarding;
     }
 
+    @Override
     public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
+    @Override
+    public boolean isLiked() {
+        return liked;
+    }
 
+    @Override
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
 }

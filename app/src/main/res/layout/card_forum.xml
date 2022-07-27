@@ -16,51 +16,51 @@
         android:id="@+id/card_forum_touch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="8dp"
-        android:background="?android:attr/selectableItemBackground"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_forum_user_avatar_layout"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_forum_user_avatar_layout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/card_forum_user_avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:contentDescription="@string/user_avatar"
+                app:srcCompat="@mipmap/default_user_avatar" />
+        </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:id="@+id/card_forum_user_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="@string/user_avatar"
-                    app:srcCompat="@mipmap/default_user_avatar" />
-            </com.google.android.material.card.MaterialCardView>
+        <TextView
+            android:id="@+id/card_forum_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/username"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/card_forum_user_avatar_layout"
+            app:layout_constraintTop_toTopOf="@+id/card_forum_user_avatar_layout" />
 
-            <TextView
-                android:id="@+id/card_forum_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="@string/username"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/card_forum_user_avatar_layout"
-                app:layout_constraintTop_toTopOf="@+id/card_forum_user_avatar_layout" />
-
-            <TextView
-                android:id="@+id/card_forum_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="@string/date"
-                android:textColor="@color/dark_gray"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/card_forum_user_avatar_layout"
-                app:layout_constraintTop_toBottomOf="@+id/card_forum_user_name" />
+        <TextView
+            android:id="@+id/card_forum_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/date"
+            android:textColor="@color/dark_gray"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/card_forum_user_avatar_layout"
+            app:layout_constraintTop_toBottomOf="@+id/card_forum_user_name" />
 
 
         <TextView
