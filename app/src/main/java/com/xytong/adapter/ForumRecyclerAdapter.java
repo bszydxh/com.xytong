@@ -2,6 +2,7 @@ package com.xytong.adapter;
 //TODO
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.card_forum, viewGroup, false);
-
+        Log.e("adapter", "onCreateViewHolder");
         return new ViewHolder(view);
     }
 
@@ -173,9 +174,9 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
             }
         });
         viewHolder.getLikesLayout().setOnClickListener(v -> {
-                int pos = viewHolder.getLayoutPosition();
-                thump.changeThump(localDataSet.get(pos),
-                        viewHolder.getLikesImage(), viewHolder.getLikes());
+            int pos = viewHolder.getLayoutPosition();
+            thump.changeThump(localDataSet.get(pos),
+                    viewHolder.getLikesImage(), viewHolder.getLikes());
 
 
         });
@@ -196,7 +197,11 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
 
     @Override
     public int getItemCount() {
-        return localDataSet.size();
+        if (localDataSet != null) {
+            return localDataSet.size();
+        } else {
+            return 0;
+        }
     }
 }
 

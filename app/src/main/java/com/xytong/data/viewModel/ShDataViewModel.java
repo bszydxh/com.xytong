@@ -38,12 +38,15 @@ public class ShDataViewModel extends AndroidViewModel {
                     shList.add(sql.read_secondhand_data());
                 }
             }
+            if (sql != null) {
+                sql.closeDatabase();
+            }
             dataList = new MutableLiveData<>();
             List<ShData> obtainedDataList = DataDownloader.getShDataList("newest", 0, 10);
             if (obtainedDataList != null) {
                 shList.addAll(obtainedDataList);
             }
-            dataList.setValue(shList);
+            dataList.postValue(shList);
         }
         return dataList;
     }
@@ -53,7 +56,7 @@ public class ShDataViewModel extends AndroidViewModel {
         List<ShData> obtainedDataList = DataDownloader.getShDataList("newest", 0, 10);
         if (shList != null && obtainedDataList != null) {
             shList.addAll(obtainedDataList);
-            dataList.setValue(shList);
+            dataList.postValue(shList);
             return true;
         } else {
             return false;
@@ -66,7 +69,7 @@ public class ShDataViewModel extends AndroidViewModel {
         if (shList != null && obtainedDataList != null) {
             shList.clear();
             shList.addAll(obtainedDataList);
-            dataList.setValue(shList);
+            dataList.postValue(shList);
             return true;
         } else {
             return false;

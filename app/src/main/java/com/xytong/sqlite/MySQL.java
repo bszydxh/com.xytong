@@ -67,14 +67,14 @@ public class MySQL {
         return cursor;
     }
 
-    public MySQL(Context context) throws RuntimeException{
+    public MySQL(Context context) throws RuntimeException {
         db_file = new File(context.getApplicationContext().getExternalFilesDir("").getAbsolutePath() + "/mydb.db");
         if (db_file.exists()) {
             Log.d("SQLite", "ok");
         } else {
             Log.e("SQLite", "not found db,now setup");
             try {
-                InputStream is  =  context.getAssets().open("mydb.db");
+                InputStream is = context.getAssets().open("mydb.db");
                 File newFile = new File(context.getApplicationContext().getExternalFilesDir("").getAbsolutePath() + "/mydb.db");
                 FileOutputStream fos = new FileOutputStream(newFile);
                 int len = -1;
@@ -161,5 +161,11 @@ public class MySQL {
         }
 
         return forumData;
+    }
+
+    public void closeDatabase() {
+        if (db != null) {
+            db.close();
+        }
     }
 }

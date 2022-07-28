@@ -1,6 +1,5 @@
 package com.xytong.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -27,13 +26,6 @@ public class MoralFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentMoralBinding.inflate(getLayoutInflater());
-        return binding.getRoot();
-    }
-
-    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         webView = binding.webView;
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);//设置支持js
@@ -73,7 +65,9 @@ public class MoralFragment extends Fragment {
 
             }
         });
+        return binding.getRoot();
     }
+
     public void webViewBack()
     {
         webView.goBack();

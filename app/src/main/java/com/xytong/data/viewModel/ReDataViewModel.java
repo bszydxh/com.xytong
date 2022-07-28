@@ -39,12 +39,15 @@ public class ReDataViewModel extends AndroidViewModel {
                     reList.add(sql.read_run_errands_data());
                 }
             }
+            if (sql != null) {
+                sql.closeDatabase();
+            }
             dataList = new MutableLiveData<>();
             List<ReData> obtainedDataList = DataDownloader.getReDataList("newest", 0, 10);
             if (obtainedDataList != null) {
                 reList.addAll(obtainedDataList);
             }
-            dataList.setValue(reList);
+            dataList.postValue(reList);
         }
         return dataList;
     }
@@ -54,7 +57,7 @@ public class ReDataViewModel extends AndroidViewModel {
         List<ReData> obtainedDataList = DataDownloader.getReDataList("newest", 0, 10);
         if (reList != null && obtainedDataList != null) {
             reList.addAll(obtainedDataList);
-            dataList.setValue(reList);
+            dataList.postValue(reList);
             return true;
         } else {
             return false;
@@ -68,7 +71,7 @@ public class ReDataViewModel extends AndroidViewModel {
             reList.clear();
             reList.add(new ReData());
             reList.addAll(obtainedDataList);
-            dataList.setValue(reList);
+            dataList.postValue(reList);
             return true;
         } else {
             return false;

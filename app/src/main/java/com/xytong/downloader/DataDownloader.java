@@ -21,6 +21,7 @@ public class DataDownloader {
         List<ForumData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
+
                 int need_num = end - start + 1;
                 String path = "http://rap2api.taobao.org/app/mock/data/2255088";
                 String text = "{\n" +
@@ -49,8 +50,8 @@ public class DataDownloader {
                             forumData.setComments(forum_data.getInt("comments"));
                             forumData.setForwarding(forum_data.getInt("forwarding"));
                             data_init.add(forumData);
-                            Log.e("DataDownloader.getForumData()", "get ok");
                         }
+                        Log.e("DataDownloader.getForumData()", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader.getForumData()", "error");
                         e.printStackTrace();
@@ -71,7 +72,7 @@ public class DataDownloader {
                 int need_num = end - start + 1;
                 String path = "http://rap2api.taobao.org/app/mock/data/2307037";
                 String text = "{\n" +
-                        "  \"module\": \"secondhand\",\n" +
+                        "  \"module\": \"run_errands\",\n" +
                         "  \"mode\": \"newest\",\n" +
                         "  \"need_num\": " + need_num + ",\n" +
                         "  \"num_start\": " + start + ",\n" +
@@ -94,13 +95,13 @@ public class DataDownloader {
                             reData.setPrice(re_data.getString("price"));
                             reData.setTimestamp(Long.valueOf(re_data.getString("timestamp")));
                             data_init.add(reData);
-                            Log.e("DataDownloader:getForumData", "get ok");
                         }
+                        Log.e("DataDownloader:getForumData", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader:getForumData", "error");
                         e.printStackTrace();
                     }
-                    return data_init;//异步完成数据传递
+                    return data_init;
                 });
                 data = poster.post();
                 break;
@@ -139,13 +140,13 @@ public class DataDownloader {
                             shData.setPrice(sh_data.getString("price"));
                             shData.setTimestamp(Long.valueOf(sh_data.getString("timestamp")));
                             data_init.add(shData);
-                            Log.e("DataDownloader:getForumData", "get ok");
                         }
+                        Log.e("DataDownloader:getForumData", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader:getForumData", "error");
                         e.printStackTrace();
                     }
-                    return data_init;//异步完成数据传递
+                    return data_init;
                 });
                 data = poster.post();
                 break;
@@ -183,13 +184,13 @@ public class DataDownloader {
                             commentData.setLikes(comment_data.getInt("likes"));
                             commentData.setTimestamp(Long.valueOf(comment_data.getString("timestamp")));
                             data_init.add(commentData);
-                            Log.e("DataDownloader.getCommentData()", "get ok");
                         }
+                        Log.e("DataDownloader.getCommentData()", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader.getCommentData()", "error");
                         e.printStackTrace();
                     }
-                    return data_init;//异步完成数据传递
+                    return data_init;//www,我错了，主线程在等你！宝贝回家！
                 });
                 data = poster.post();
                 break;

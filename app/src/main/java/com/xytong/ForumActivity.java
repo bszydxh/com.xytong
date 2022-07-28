@@ -3,24 +3,32 @@ package com.xytong;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.adapter.CommentRecyclerAdapter;
+import com.xytong.data.CommentData;
 import com.xytong.data.ForumData;
 import com.xytong.data.viewModel.CommentDataViewModel;
 import com.xytong.databinding.ActivityForumBinding;
 import com.xytong.image.ImageGetter;
 import com.xytong.ui.Thump;
+
+import java.util.List;
 
 public class ForumActivity extends AppCompatActivity {
     private ActivityForumBinding binding;
@@ -28,7 +36,7 @@ public class ForumActivity extends AppCompatActivity {
     CommentRecyclerAdapter commentRecyclerAdapter;
     CommentDataViewModel model;
     int position;
-
+    CircularProgressIndicator circularProgressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,35 +74,54 @@ public class ForumActivity extends AppCompatActivity {
         });
         setContentView(binding.getRoot());//binding中cardForumRoot()方法是对binding根视图的引用,也相当于创建视图
         binding.forumBack.setOnClickListener(v -> finish());
-        model = new ViewModelProvider(this).get(CommentDataViewModel.class);
-        model.getDataList().observe(this, dataList -> {
-            commentRecyclerAdapter.notifyDataSetChanged();
-        });
-
+        circularProgressIndicator = binding.commentProgress;
         RefreshLayout commentRefreshLayout = binding.commentRefreshLayout;
         commentRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         commentRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
-        commentRecyclerAdapter = new CommentRecyclerAdapter(model.getDataList().getValue());
         commentRefreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.finishRefresh(2000);
-            if (model.refreshData()) {
-                refreshLayout.finishRefresh(true);
-                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
-            } else {
-                refreshLayout.finishRefresh(false);
-                Toast.makeText(refreshLayout.getLayout().getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
-            }
+            new Thread(() -> {
+                if (model.refreshData()) {
+                    refreshLayout.finishRefresh(true);
+                } else {
+                    refreshLayout.finishRefresh(false);
+                }
+            }).start();
         });
         commentRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.finishLoadMore(2000);
-            refreshLayout.finishLoadMore(model.loadMoreData());
+            new Thread(() -> {
+                if (model.loadMoreData()) {
+                    refreshLayout.finishLoadMore(true);
+                } else {
+                    refreshLayout.finishLoadMore(false);
+                }
+            }).start();
         });
         RecyclerView commentRecyclerView = binding.commentRecyclerView;
-        commentRecyclerView.setAdapter(commentRecyclerAdapter);
         commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         LinearLayoutManager commentLinearLayoutManager = new LinearLayoutManager(this);
         commentRecyclerView.setLayoutManager(commentLinearLayoutManager);
         commentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        new Thread(() -> {
+            model = new ViewModelProvider(this).get(CommentDataViewModel.class);
+            LiveData<List<CommentData>> liveData = model.getDataList();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> {
+                liveData.observe(this, dataList -> {
+                    if (commentRecyclerView.getAdapter() == null) {
+                        Log.e("setAdapter", "ok");
+                        circularProgressIndicator.setVisibility(View.GONE);
+                        commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
+                        commentRecyclerView.setAdapter(commentRecyclerAdapter);
+                    } else {
+                        Log.e("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
+                        commentRecyclerAdapter.notifyDataSetChanged();
+                    }
+                });
+            });
+
+        }).start();
     }
 
     @Override

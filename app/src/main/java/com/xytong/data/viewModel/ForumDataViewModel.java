@@ -25,7 +25,7 @@ public class ForumDataViewModel extends AndroidViewModel {
     }
 
     public void setDataList(List<ForumData> dataListIndex) {
-        dataList.setValue(dataListIndex);
+        dataList.postValue(dataListIndex);
     }
 
     public LiveData<List<ForumData>> getDataList() {
@@ -43,12 +43,15 @@ public class ForumDataViewModel extends AndroidViewModel {
                     forumList.add(sql.read_forum_data());
                 }
             }
+            if (sql != null) {
+                sql.closeDatabase();
+            }
             dataList = new MutableLiveData<>();
             List<ForumData> obtainedDataList = DataDownloader.getForumDataList("newest", 0, 10);
             if (obtainedDataList != null) {
                 forumList.addAll(obtainedDataList);
             }
-            dataList.setValue(forumList);
+            dataList.postValue(forumList);
         }
         return dataList;
     }
@@ -58,7 +61,7 @@ public class ForumDataViewModel extends AndroidViewModel {
         List<ForumData> obtainedDataList = DataDownloader.getForumDataList("newest", 0, 10);
         if (forumList != null && obtainedDataList != null) {
             forumList.addAll(obtainedDataList);
-            dataList.setValue(forumList);
+            dataList.postValue(forumList);
             return true;
         } else {
             return false;
@@ -71,7 +74,7 @@ public class ForumDataViewModel extends AndroidViewModel {
         if (forumList != null && obtainedDataList != null) {
             forumList.clear();
             forumList.addAll(obtainedDataList);
-            dataList.setValue(forumList);
+            dataList.postValue(forumList);
             return true;
         } else {
             return false;

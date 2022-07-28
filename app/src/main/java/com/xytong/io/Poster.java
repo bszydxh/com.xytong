@@ -1,6 +1,8 @@
 package com.xytong.io;
 
 
+import static java.lang.Thread.sleep;
+
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -75,7 +77,8 @@ public class Poster<T> implements Callable<T> {
         new Thread(task).start();
         T data = null;
         try {
-            data = task.get();
+            sleep(1);//交钱优化
+            data = task.get();//这个方法阻塞主线程
         } catch (Exception e) {
             e.printStackTrace();
         }

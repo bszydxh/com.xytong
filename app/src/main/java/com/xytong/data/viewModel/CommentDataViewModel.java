@@ -23,7 +23,7 @@ public class CommentDataViewModel extends AndroidViewModel {
     }
 
     public void setDataList(List<CommentData> dataListIndex) {
-        dataList.setValue(dataListIndex);
+        dataList.postValue(dataListIndex);
     }
 
     public LiveData<List<CommentData>> getDataList() {
@@ -35,7 +35,7 @@ public class CommentDataViewModel extends AndroidViewModel {
             if (obtainedDataList != null) {
                 commentList.addAll(obtainedDataList);
             }
-            dataList.setValue(commentList);
+            dataList.postValue(commentList);
         }
         return dataList;
     }
@@ -45,7 +45,7 @@ public class CommentDataViewModel extends AndroidViewModel {
         List<CommentData> obtainedDataList = DataDownloader.getCommentDataList("newest", 0, 10);
         if (commentList != null && obtainedDataList != null) {
             commentList.addAll(obtainedDataList);
-            dataList.setValue(commentList);
+            dataList.postValue(commentList);
             return true;
         } else {
             return false;
@@ -58,7 +58,7 @@ public class CommentDataViewModel extends AndroidViewModel {
         if (commentList != null && obtainedDataList != null) {
             commentList.clear();
             commentList.addAll(obtainedDataList);
-            dataList.setValue(commentList);
+            dataList.postValue(commentList);
             return true;
         } else {
             return false;
