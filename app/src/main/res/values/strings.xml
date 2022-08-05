@@ -34,4 +34,5 @@
     <string name="date">刚刚</string>
     <string name="showMode">演示模式</string>
     <string name="comment">全部评论</string>
+    <string name="userText">usertext</string>
 </resources>

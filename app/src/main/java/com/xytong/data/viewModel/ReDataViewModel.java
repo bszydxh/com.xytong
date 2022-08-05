@@ -22,7 +22,9 @@ public class ReDataViewModel extends AndroidViewModel {
     public ReDataViewModel(@NonNull Application application) {
         super(application);
     }
-
+    public void setDataList(List<ReData> dataListIndex) {
+        dataList.postValue(dataListIndex);
+    }
     public LiveData<List<ReData>> getDataList() {
         if (dataList == null) {
             Log.e(this.getClass().getName(), "get data");

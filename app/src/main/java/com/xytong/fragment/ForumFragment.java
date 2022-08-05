@@ -36,8 +36,6 @@ public class ForumFragment extends Fragment {
     ForumRecyclerAdapter forumRecyclerAdapter;
     ForumDataViewModel model;
     CircularProgressIndicator circularProgressIndicator;
-    // GetContent creates an ActivityResultLauncher<String> to allow you to pass
-// in the mime type you'd like to allow the user to select
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
@@ -112,7 +110,7 @@ public class ForumFragment extends Fragment {
 
                             @Override
                             public void onTitleLongClick(View view, int position) {
-                                // TODO: 2022/4/29
+                                // TODO
                             }
                         });
                         forumRecyclerView.setAdapter(forumRecyclerAdapter);

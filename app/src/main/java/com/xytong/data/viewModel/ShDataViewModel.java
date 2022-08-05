@@ -22,7 +22,9 @@ public class ShDataViewModel extends AndroidViewModel {
     public ShDataViewModel(@NonNull Application application) {
         super(application);
     }
-
+    public void setDataList(List<ShData> dataListIndex) {
+        dataList.postValue(dataListIndex);
+    }
     public LiveData<List<ShData>> getDataList() {
         if (dataList == null) {
             Log.e(this.getClass().getName(), "get data");

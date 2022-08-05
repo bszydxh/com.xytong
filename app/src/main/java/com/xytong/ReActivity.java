@@ -11,7 +11,6 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,17 +23,16 @@ import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.adapter.CommentRecyclerAdapter;
 import com.xytong.data.CommentData;
-import com.xytong.data.ForumData;
+import com.xytong.data.ReData;
 import com.xytong.data.viewModel.CommentDataViewModel;
-import com.xytong.databinding.ActivityForumBinding;
+import com.xytong.databinding.ActivityReBinding;
 import com.xytong.image.ImageGetter;
-import com.xytong.ui.Thump;
 
 import java.util.List;
 
-public class ForumActivity extends AppCompatActivity {
-    private ActivityForumBinding binding;
-    ForumData forumData;
+public class ReActivity extends AppCompatActivity {
+    private ActivityReBinding binding;
+    ReData reData;
     CommentRecyclerAdapter commentRecyclerAdapter;
     CommentDataViewModel model;
     int position;
@@ -48,64 +46,35 @@ public class ForumActivity extends AppCompatActivity {
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
-        binding = ActivityForumBinding.inflate(getLayoutInflater());
+        binding = ActivityReBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
-        forumData = (ForumData) bundle_back.getSerializable("forumData");
-        ImageGetter.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumData.getUserAvatarUrl());
-        binding.cardForumIndex.cardForumUserName.setText(forumData.getUserName());
-        binding.cardForumIndex.cardForumTitle.setText(forumData.getTitle());
-        binding.cardForumIndex.cardForumText.setText(forumData.getText());
-        Thump<ForumData> thump = new Thump<>();
-        thump.setupThump(forumData,binding.cardForumIndex.cardForumLikesImage,binding.cardForumIndex.cardForumLikes);
-        String commentsNum = forumData.getComments().toString();
-        String forwardingNum = forumData.getForwarding().toString();
-        binding.cardForumIndex.cardForumComments.setText(commentsNum);
-        binding.cardForumIndex.cardForumForwarding.setText(forwardingNum);
-        binding.cardForumIndex.cardForumLikesLayout.setOnClickListener(v -> {
-            thump.changeThump(forumData,binding.cardForumIndex.cardForumLikesImage,binding.cardForumIndex.cardForumLikes);
-        });
-        binding.cardForumIndex.cardForumForwardingLayout.setOnClickListener(v -> {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            // 比如发送文本形式的数据内容
-            // 指定发送的内容
-            sendIntent.putExtra(Intent.EXTRA_TEXT, forumData.getTitle() + "\n"
-                    + forumData.getText() + "\n用户:" +
-                    forumData.getUserName() +
-                    "\n---来自校园通客户端");
-            // 指定发送内容的类型
-            sendIntent.setType("text/plain");
-            ContextCompat.startActivity(this, Intent.createChooser(sendIntent, "将内容分享至"), null);
-        });
-        setContentView(binding.getRoot());//binding中cardForumRoot()方法是对binding根视图的引用,也相当于创建视图
-        binding.forumBack.setOnClickListener(v -> finish());
-        circularProgressIndicator = binding.forumCommentProgress;
-        RefreshLayout commentRefreshLayout = binding.forumCommentRefreshLayout;
+        reData = (ReData) bundle_back.getSerializable("reData");
+        ImageGetter.setAvatarViewBitmap(binding.cardReIndex.cardReUserAvatar, reData.getUserAvatarUrl());
+        binding.cardReIndex.cardReUserName.setText(reData.getUserName());
+        binding.cardReIndex.cardReTitle.setText(reData.getTitle());
+        binding.cardReIndex.cardReText.setText(reData.getText());
+        binding.cardReIndex.cardRePrice.setText(String.format("¥%s", reData.getPrice()));
+        setContentView(binding.getRoot());//binding中cardReRoot()方法是对binding根视图的引用,也相当于创建视图
+        binding.reBack.setOnClickListener(v -> finish());
+        circularProgressIndicator = binding.reCommentProgress;
+        RefreshLayout commentRefreshLayout = binding.reCommentRefreshLayout;
         commentRefreshLayout.setRefreshHeader(new MaterialHeader(this));
         commentRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
         commentRefreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.finishRefresh(2000);
             new Thread(() -> {
-                if (model.refreshData()) {
-                    refreshLayout.finishRefresh(true);
-                } else {
-                    refreshLayout.finishRefresh(false);
-                }
+                refreshLayout.finishRefresh(model.refreshData());
             }).start();
         });
         commentRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.finishLoadMore(2000);
             new Thread(() -> {
-                if (model.loadMoreData()) {
-                    refreshLayout.finishLoadMore(true);
-                } else {
-                    refreshLayout.finishLoadMore(false);
-                }
+                refreshLayout.finishLoadMore(model.loadMoreData());
             }).start();
         });
-        RecyclerView commentRecyclerView = binding.forumCommentRecyclerView;
-        commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        RecyclerView commentRecyclerView = binding.reCommentRecyclerView;
+        commentRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         LinearLayoutManager commentLinearLayoutManager = new LinearLayoutManager(this);
         commentRecyclerView.setLayoutManager(commentLinearLayoutManager);
         commentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -128,12 +97,19 @@ public class ForumActivity extends AppCompatActivity {
             });
 
         }).start();
+        binding.cardReCommentEdit.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.cardReCommentButton.setVisibility(View.INVISIBLE);
+            } else {
+                binding.cardReCommentButton.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
     public void finish() {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("forumData", forumData);
+        bundle.putSerializable("reData", reData);
         bundle.putInt("pos", position);
         Intent intent = new Intent();
         intent.putExtras(bundle); // 将Bundle对象嵌入Intent中

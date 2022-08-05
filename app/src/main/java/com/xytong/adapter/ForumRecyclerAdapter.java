@@ -154,20 +154,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         String forwardingNum = localDataSet.get(position).getForwarding().toString();
         viewHolder.getComments().setText(commentsNum);
         viewHolder.getForwarding().setText(forwardingNum);
-        viewHolder.getTitle().setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
-
-            }
-        });
         viewHolder.getRootTouchLayout().setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
-            }
-        });
-        viewHolder.getText().setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 int pos = viewHolder.getLayoutPosition();
                 onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));

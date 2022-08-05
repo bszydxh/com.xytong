@@ -1,13 +1,10 @@
 package com.xytong.fragment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -28,8 +25,8 @@ public class MoralFragment extends Fragment {
         binding = FragmentMoralBinding.inflate(getLayoutInflater());
         webView = binding.webView;
         WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);//设置支持js
         //设置自适应屏幕
+        webSettings.setJavaScriptEnabled(true);//设置支持js
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
         ///////
@@ -40,7 +37,8 @@ public class MoralFragment extends Fragment {
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webView.loadUrl("http://m.people.cn/");
-        webView.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClient()
+        {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -49,20 +47,6 @@ public class MoralFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                super.shouldOverrideUrlLoading(view, url);
-                if (URLUtil.isNetworkUrl(url)) {
-                    return false;
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                }
-                return true;
-                //view.loadUrl(url);
-
             }
         });
         return binding.getRoot();

@@ -1,5 +1,7 @@
 package com.xytong.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -7,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,6 +24,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.ReActivity;
 import com.xytong.adapter.ReRecyclerAdapter;
 import com.xytong.data.ReData;
 import com.xytong.data.viewModel.ReDataViewModel;
@@ -26,11 +32,17 @@ import com.xytong.databinding.FragmentRunErrandsBinding;
 
 import java.util.List;
 
-public class RunErrandsFragment extends Fragment {
+public class ReFragment extends Fragment {
     FragmentRunErrandsBinding binding;
     ReDataViewModel model;
     ReRecyclerAdapter reRecyclerAdapter;
     CircularProgressIndicator circularProgressIndicator;
+    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Log.i("ActivityResultLauncher","reActivity back");
+                }
+            });
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,21 +54,13 @@ public class RunErrandsFragment extends Fragment {
         reRefreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.finishRefresh(2000);
             new Thread(() -> {
-                if (model.refreshData()) {
-                    refreshLayout.finishRefresh(true);
-                } else {
-                    refreshLayout.finishRefresh(false);
-                }
+                refreshLayout.finishRefresh(model.refreshData());
             }).start();
         });
         reRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.finishLoadMore(2000);
             new Thread(() -> {
-                if (model.loadMoreData()) {
-                    refreshLayout.finishLoadMore(true);
-                } else {
-                    refreshLayout.finishLoadMore(false);
-                }
+                refreshLayout.finishLoadMore(model.loadMoreData());
             }).start();
         });
         reRefreshLayout.setEnableAutoLoadMore(true);
@@ -74,6 +78,27 @@ public class RunErrandsFragment extends Fragment {
                         Log.e("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
+                        reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onBannerClick(View view) {
+                                Toast.makeText(view.getContext(), "banner click!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onTitleClick(View view, int position, ReData reDataIndex) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("reData", reDataIndex);
+                                bundle.putInt("pos", position);
+                                Intent intent = new Intent(view.getContext(), ReActivity.class);
+                                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                                mStartForResult.launch(intent);
+                            }
+
+                            @Override
+                            public void onTitleLongClick(View view, int position) {
+                                // TODO
+                            }
+                        });
                         reRecyclerView.setAdapter(reRecyclerAdapter);
                     } else {
                         Log.e("dataChange", "data num:" + reRecyclerAdapter.getItemCount());

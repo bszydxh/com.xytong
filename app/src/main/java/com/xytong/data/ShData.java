@@ -1,6 +1,8 @@
 package com.xytong.data;
 
-public class ShData extends CardData{
+import java.io.Serializable;
+
+public class ShData extends CardData implements Serializable {
     private String price= "0.00";
 
     public String getPrice() {

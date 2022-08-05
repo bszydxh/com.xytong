@@ -20,8 +20,8 @@ import com.xytong.adapter.RootFragmentPagerAdapter;
 import com.xytong.databinding.ActivityMainBinding;
 import com.xytong.fragment.ForumFragment;
 import com.xytong.fragment.MoralFragment;
-import com.xytong.fragment.RunErrandsFragment;
-import com.xytong.fragment.SecondhandFragment;
+import com.xytong.fragment.ReFragment;
+import com.xytong.fragment.ShFragment;
 import com.xytong.image.ImageGetter;
 
 import java.util.Objects;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RootFragmentPagerAdapter rootFragmentPagerAdapter;
     private DrawerLayout drawer;
     private boolean webViewIsFocused = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
@@ -79,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
         rootFragmentPagerAdapter = new RootFragmentPagerAdapter(
                 getSupportFragmentManager(), getLifecycle()
         );
-        rootFragmentPagerAdapter.addFragment(new RunErrandsFragment());
+        rootFragmentPagerAdapter.addFragment(new ReFragment());
         rootFragmentPagerAdapter.addFragment(new MoralFragment());
-        rootFragmentPagerAdapter.addFragment(new SecondhandFragment());
+        rootFragmentPagerAdapter.addFragment(new ShFragment());
         rootFragmentPagerAdapter.addFragment(new ForumFragment());
         rootViewPager = binding.appBarMain.underBar.pager;
         rootViewPager.setAdapter(rootFragmentPagerAdapter);
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     webViewIsFocused = false;
                     break;
             }
+
             return true;
         });
 

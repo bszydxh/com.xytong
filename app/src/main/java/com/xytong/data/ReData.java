@@ -1,6 +1,8 @@
 package com.xytong.data;
 
-public class ReData extends CardData{
+import java.io.Serializable;
+
+public class ReData extends CardData implements Serializable {
     private String price = "0.00";
 
     public void setPrice(String price) {

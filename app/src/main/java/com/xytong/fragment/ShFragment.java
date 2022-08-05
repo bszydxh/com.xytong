@@ -26,7 +26,7 @@ import com.xytong.databinding.FragmentSecondhandBinding;
 
 import java.util.List;
 
-public class SecondhandFragment extends Fragment {
+public class ShFragment extends Fragment {
     FragmentSecondhandBinding binding;
     ShRecyclerAdapter shRecyclerAdapter;
     ShDataViewModel model;

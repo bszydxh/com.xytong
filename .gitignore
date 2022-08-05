@@ -15,3 +15,8 @@
 local.properties
 *.md
 test*.json
+*.apk
+/mydb.db-journal
+/mydb-test.db
+/app/release/output-metadata.json
+/test.sql

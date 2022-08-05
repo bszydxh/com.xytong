@@ -7,11 +7,12 @@
     android:orientation="vertical">
 
 
-    <Button
+    <ImageButton
         android:id="@+id/about_back"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="@drawable/ic_baseline_arrow_back_24" />
+        android:backgroundTint="@color/black"
+        android:background="@drawable/ic_baseline_navigate_before_24" />
 
     <ScrollView
         android:layout_width="match_parent"

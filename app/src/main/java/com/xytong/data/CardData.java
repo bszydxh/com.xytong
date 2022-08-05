@@ -4,11 +4,21 @@ package com.xytong.data;
 import java.io.Serializable;
 
 public class CardData implements Serializable {
+    private String userId;
+    private String cardId;
     private String userName = "null";
     private String userAvatarUrl = null;
     private String title = "null";
     private String text = "null";
     private Long timestamp = 0L;
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
 
     public String getText() {
         return text;
@@ -66,6 +76,14 @@ public class CardData implements Serializable {
             }
         }
 
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setTimestamp(Long timestamp) {
