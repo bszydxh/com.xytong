@@ -1,14 +1,18 @@
 package com.xytong;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -40,6 +44,7 @@ public class ForumActivity extends AppCompatActivity {
     int position;
     CircularProgressIndicator circularProgressIndicator;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Window window = getWindow();
@@ -128,6 +133,20 @@ public class ForumActivity extends AppCompatActivity {
             });
 
         }).start();
+        binding.cardForumComment.setOnTouchListener((v, event) -> {
+            return true;
+        });
+        binding.getRoot().setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    binding.cardForumCommentEdit.clearFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                default:
+                    break;
+            }
+            return true;
+        });
     }
 
     @Override

@@ -1,14 +1,18 @@
 package com.xytong;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -30,6 +34,7 @@ import com.xytong.image.ImageGetter;
 
 import java.util.List;
 
+@SuppressLint("ClickableViewAccessibility")
 public class ReActivity extends AppCompatActivity {
     private ActivityReBinding binding;
     ReData reData;
@@ -97,11 +102,28 @@ public class ReActivity extends AppCompatActivity {
             });
 
         }).start();
+        binding.getRoot().setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    binding.cardReCommentEdit.clearFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                default:
+                    break;
+            }
+            return true;
+        });
+        binding.cardReCommentSend.setVisibility(View.INVISIBLE);
+        binding.cardReComment.setOnTouchListener((v, event) -> {
+            return true;
+        });
         binding.cardReCommentEdit.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 binding.cardReCommentButton.setVisibility(View.INVISIBLE);
+                binding.cardReCommentSend.setVisibility(View.VISIBLE);
             } else {
                 binding.cardReCommentButton.setVisibility(View.VISIBLE);
+                binding.cardReCommentSend.setVisibility(View.INVISIBLE);
             }
         });
     }

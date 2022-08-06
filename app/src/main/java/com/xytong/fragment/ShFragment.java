@@ -1,5 +1,7 @@
 package com.xytong.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,6 +23,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.ShActivity;
 import com.xytong.adapter.ShRecyclerAdapter;
 import com.xytong.data.ShData;
 import com.xytong.data.viewModel.ShDataViewModel;
@@ -31,7 +36,12 @@ public class ShFragment extends Fragment {
     ShRecyclerAdapter shRecyclerAdapter;
     ShDataViewModel model;
     CircularProgressIndicator circularProgressIndicator;
-
+    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Log.i("ActivityResultLauncher","shActivity back");
+                }
+            });
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,6 +85,22 @@ public class ShFragment extends Fragment {
                         Log.e("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         shRecyclerAdapter = new ShRecyclerAdapter(dataList);
+                        shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onTitleClick(View view, int position, ShData reDataIndex) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("shData", reDataIndex);
+                                bundle.putInt("pos", position);
+                                Intent intent = new Intent(view.getContext(), ShActivity.class);
+                                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                                mStartForResult.launch(intent);
+                            }
+
+                            @Override
+                            public void onTitleLongClick(View view, int position) {
+                                // TODO
+                            }
+                        });
                         shRecyclerView.setAdapter(shRecyclerAdapter);
                     } else {
                         Log.e("dataChange", "data num:" + shRecyclerAdapter.getItemCount());
