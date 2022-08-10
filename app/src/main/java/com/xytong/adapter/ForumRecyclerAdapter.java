@@ -2,7 +2,7 @@ package com.xytong.adapter;
 //TODO
 
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
+import com.xytong.UserActivity;
 import com.xytong.data.ForumData;
+import com.xytong.data.UserData;
 import com.xytong.image.ImageGetter;
 import com.xytong.ui.Thump;
 
@@ -125,11 +127,11 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.card_forum, viewGroup, false);
-        Log.e("adapter", "onCreateViewHolder");
         return new ViewHolder(view);
     }
 
     public interface OnItemClickListener {
+
         void onTitleClick(View view, int position, ForumData forumData);
 
         void onTitleLongClick(View view, int position);
@@ -180,6 +182,19 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
             sendIntent.setType("text/plain");
             ContextCompat.startActivity(viewHolder.comments.getContext(), Intent.createChooser(sendIntent, "将内容分享至"), null);
         });
+        View.OnClickListener imageClickListener = (v->{
+            UserData userData = new UserData();
+            userData.setName(localDataSet.get(position).getUserName());
+            userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userData",userData);
+            Intent intent = new Intent(v.getContext(), UserActivity.class);
+            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+            v.getContext().startActivity(intent);
+        });
+        viewHolder.getUserAvatar().setOnClickListener(imageClickListener);
+        viewHolder.getUserName().setOnClickListener(imageClickListener);
+        viewHolder.getDate().setOnClickListener(imageClickListener);
     }
 
     @Override

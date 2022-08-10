@@ -2,6 +2,7 @@ package com.xytong.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,16 +27,17 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.R;
 import com.xytong.ReActivity;
 import com.xytong.adapter.ReRecyclerAdapter;
 import com.xytong.data.ReData;
 import com.xytong.data.viewModel.ReDataViewModel;
-import com.xytong.databinding.FragmentRunErrandsBinding;
+import com.xytong.databinding.FragmentReBinding;
 
 import java.util.List;
 
 public class ReFragment extends Fragment {
-    FragmentRunErrandsBinding binding;
+    FragmentReBinding binding;
     ReDataViewModel model;
     ReRecyclerAdapter reRecyclerAdapter;
     CircularProgressIndicator circularProgressIndicator;
@@ -43,10 +47,11 @@ public class ReFragment extends Fragment {
                     Log.i("ActivityResultLauncher","reActivity back");
                 }
             });
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentRunErrandsBinding.inflate(getLayoutInflater());
+        binding = FragmentReBinding.inflate(getLayoutInflater());
         circularProgressIndicator = binding.reProgress;
         RefreshLayout reRefreshLayout = binding.reRefreshLayout;
         reRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
@@ -75,7 +80,7 @@ public class ReFragment extends Fragment {
             handler.post(() -> {
                 liveData.observe(getViewLifecycleOwner(), dataList -> {
                     if (reRecyclerView.getAdapter() == null) {
-                        Log.e("setAdapter", "ok");
+                        Log.i("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
                         reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
@@ -101,13 +106,39 @@ public class ReFragment extends Fragment {
                         });
                         reRecyclerView.setAdapter(reRecyclerAdapter);
                     } else {
-                        Log.e("dataChange", "data num:" + reRecyclerAdapter.getItemCount());
+                        Log.i("dataChange", "data num:" + reRecyclerAdapter.getItemCount());
                         reRecyclerAdapter.notifyDataSetChanged();
                     }
                 });
             });
 
         }).start();
+        reRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // 获取当前滚动到的条目位置
+                    int index = reLinearLayoutManager.findFirstVisibleItemPosition();
+                    if (index == 0) {
+                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_24);
+                        Drawable.ConstantState state = bmpDrawable.getConstantState();
+                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
+                        binding.reFab.setImageDrawable(wrap);
+                    } else {
+                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_vertical_align_top_24);
+                        Drawable.ConstantState state = bmpDrawable.getConstantState();
+                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
+                        binding.reFab.setImageDrawable(wrap);
+                    }
+                }
+            }
+        });
+        binding.reFab.setOnClickListener(v -> {
+            reRecyclerView.smoothScrollToPosition(0);
+        });
         return binding.getRoot();
     }
 }

@@ -28,6 +28,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.adapter.CommentRecyclerAdapter;
 import com.xytong.data.CommentData;
 import com.xytong.data.ReData;
+import com.xytong.data.UserData;
 import com.xytong.data.viewModel.CommentDataViewModel;
 import com.xytong.databinding.ActivityReBinding;
 import com.xytong.image.ImageGetter;
@@ -45,12 +46,12 @@ public class ReActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
-        super.onCreate(savedInstanceState);
         binding = ActivityReBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
@@ -60,6 +61,19 @@ public class ReActivity extends AppCompatActivity {
         binding.cardReIndex.cardReTitle.setText(reData.getTitle());
         binding.cardReIndex.cardReText.setText(reData.getText());
         binding.cardReIndex.cardRePrice.setText(String.format("¥%s", reData.getPrice()));
+        View.OnClickListener imageClickListener = (v->{
+            UserData userData = new UserData();
+            userData.setName(reData.getUserName());
+            userData.setUserAvatarUrl(reData.getUserAvatarUrl());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userData",userData);
+            Intent intent = new Intent(v.getContext(), UserActivity.class);
+            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+            v.getContext().startActivity(intent);
+        });
+        binding.cardReIndex.cardReUserAvatar.setOnClickListener(imageClickListener);
+        binding.cardReIndex.cardReUserName.setOnClickListener(imageClickListener);
+        binding.cardReIndex.cardReDate.setOnClickListener(imageClickListener);
         setContentView(binding.getRoot());//binding中cardReRoot()方法是对binding根视图的引用,也相当于创建视图
         binding.reBack.setOnClickListener(v -> finish());
         circularProgressIndicator = binding.reCommentProgress;
@@ -90,12 +104,12 @@ public class ReActivity extends AppCompatActivity {
             handler.post(() -> {
                 liveData.observe(this, dataList -> {
                     if (commentRecyclerView.getAdapter() == null) {
-                        Log.e("setAdapter", "ok");
+                        Log.i("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
                         commentRecyclerView.setAdapter(commentRecyclerAdapter);
                     } else {
-                        Log.e("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
+                        Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
                         commentRecyclerAdapter.notifyDataSetChanged();
                     }
                 });
@@ -114,9 +128,7 @@ public class ReActivity extends AppCompatActivity {
             return true;
         });
         binding.cardReCommentSend.setVisibility(View.INVISIBLE);
-        binding.cardReComment.setOnTouchListener((v, event) -> {
-            return true;
-        });
+        binding.cardReComment.setOnTouchListener((v, event) -> true);
         binding.cardReCommentEdit.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 binding.cardReCommentButton.setVisibility(View.INVISIBLE);

@@ -2,6 +2,8 @@ package com.xytong.adapter;
 
 //TODO
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
+import com.xytong.UserActivity;
 import com.xytong.data.ReData;
+import com.xytong.data.UserData;
 import com.xytong.image.ImageGetter;
 
 import java.util.List;
@@ -91,6 +95,7 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public interface OnItemClickListener {
         void onBannerClick(View view);
 
+
         void onTitleClick(View view, int position, ReData reData);
 
         void onTitleLongClick(View view, int position);
@@ -152,6 +157,20 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
                     }
                 });
+
+                View.OnClickListener imageClickListener = (v -> {
+                    UserData userData = new UserData();
+                    userData.setName(localDataSet.get(position).getUserName());
+                    userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("userData", userData);
+                    Intent intent = new Intent(v.getContext(), UserActivity.class);
+                    intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                    v.getContext().startActivity(intent);
+                });
+                reCardViewHolder.getUserAvatar().setOnClickListener(imageClickListener);
+                reCardViewHolder.getUserName().setOnClickListener(imageClickListener);
+                reCardViewHolder.getDate().setOnClickListener(imageClickListener);
                 break;
             }
             case 1: {

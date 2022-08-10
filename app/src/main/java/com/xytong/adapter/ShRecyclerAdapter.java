@@ -2,6 +2,8 @@ package com.xytong.adapter;
 
 //TODO
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
+import com.xytong.UserActivity;
 import com.xytong.data.ShData;
+import com.xytong.data.UserData;
 import com.xytong.image.ImageGetter;
 
 import java.util.List;
@@ -78,6 +82,7 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnItemClickListener {
+
         void onTitleClick(View view, int position, ShData shData);
 
         void onTitleLongClick(View view, int position);
@@ -111,12 +116,26 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         shCardViewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         shCardViewHolder.getText().setText(localDataSet.get(position).getText());
         shCardViewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
+
         shCardViewHolder.getRootTouchLayout().setOnClickListener(v->{
             if (onItemClickListener != null) {
                 int pos = viewHolder.getLayoutPosition();
                 onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
             }
         });
+        View.OnClickListener imageClickListener = (v->{
+            UserData userData = new UserData();
+            userData.setName(localDataSet.get(position).getUserName());
+            userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userData",userData);
+            Intent intent = new Intent(v.getContext(), UserActivity.class);
+            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+            v.getContext().startActivity(intent);
+        });
+        shCardViewHolder.getUserAvatar().setOnClickListener(imageClickListener);
+        shCardViewHolder.getUserName().setOnClickListener(imageClickListener);
+        shCardViewHolder.getDate().setOnClickListener(imageClickListener);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

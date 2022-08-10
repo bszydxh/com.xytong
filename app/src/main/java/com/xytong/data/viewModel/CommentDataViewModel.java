@@ -28,7 +28,7 @@ public class CommentDataViewModel extends AndroidViewModel {
 
     public LiveData<List<CommentData>> getDataList() {
         if (dataList == null) {
-            Log.e(this.getClass().getName()+".getDataList()", "get data");
+            Log.i(this.getClass().getName()+".getDataList()", "get data");
             List<CommentData> commentList = new ArrayList<>();
             dataList = new MutableLiveData<>();
             List<CommentData> obtainedDataList = DataDownloader.getCommentDataList("newest", 0, 10);

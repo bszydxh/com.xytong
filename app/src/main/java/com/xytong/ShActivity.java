@@ -28,6 +28,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.adapter.CommentRecyclerAdapter;
 import com.xytong.data.CommentData;
 import com.xytong.data.ShData;
+import com.xytong.data.UserData;
 import com.xytong.data.viewModel.CommentDataViewModel;
 import com.xytong.databinding.ActivityShBinding;
 import com.xytong.image.ImageGetter;
@@ -60,6 +61,19 @@ public class ShActivity extends AppCompatActivity {
         binding.cardShIndex.cardShTitle.setText(shData.getTitle());
         binding.cardShIndex.cardShText.setText(shData.getText());
         binding.cardShIndex.cardShPrice.setText(String.format("¥%s", shData.getPrice()));
+        View.OnClickListener imageClickListener = (v->{
+            UserData userData = new UserData();
+            userData.setName(shData.getUserName());
+            userData.setUserAvatarUrl(shData.getUserAvatarUrl());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userData",userData);
+            Intent intent = new Intent(v.getContext(), UserActivity.class);
+            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+            v.getContext().startActivity(intent);
+        });
+        binding.cardShIndex.cardShUserAvatar.setOnClickListener(imageClickListener);
+        binding.cardShIndex.cardShUserName.setOnClickListener(imageClickListener);
+        binding.cardShIndex.cardShDate.setOnClickListener(imageClickListener);
         setContentView(binding.getRoot());//binding中cardShRoot()方法是对binding根视图的引用,也相当于创建视图
         binding.shBack.setOnClickListener(v -> finish());
         circularProgressIndicator = binding.shCommentProgress;
@@ -90,12 +104,12 @@ public class ShActivity extends AppCompatActivity {
             handler.post(() -> {
                 liveData.observe(this, dataList -> {
                     if (commentRecyclerView.getAdapter() == null) {
-                        Log.e("setAdapter", "ok");
+                        Log.i("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
                         commentRecyclerView.setAdapter(commentRecyclerAdapter);
                     } else {
-                        Log.e("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
+                        Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
                         commentRecyclerAdapter.notifyDataSetChanged();
                     }
                 });
@@ -113,9 +127,7 @@ public class ShActivity extends AppCompatActivity {
             }
             return true;
         });
-        binding.cardShComment.setOnTouchListener((v, event) -> {
-            return true;
-        });
+        binding.cardShComment.setOnTouchListener((v, event) -> true);
         binding.cardShCommentSend.setVisibility(View.INVISIBLE);
         binding.cardShCommentEdit.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {

@@ -11,6 +11,7 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.1435" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_baseline_navigate_before_24.xml" value="0.1435" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_baseline_thumb_up_24.xml" value="0.1555" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_baseline_vertical_align_top_24.xml" value="0.2125" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_books.xml" value="0.169" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1655" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1655" />
@@ -43,12 +44,14 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/forum.xml" value="0.22" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/forum_card.xml" value="0.109375" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/forums.xml" value="0.1" />
-        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_forum.xml" value="0.13489583333333333" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_forum.xml" value="0.3" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_home.xml" value="0.225" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_moral.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_re.xml" value="0.1" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_run_errands.xml" value="0.19947916666666668" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_secondhand.xml" value="0.27415966386554624" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_sh.xml" value="0.1265625" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_slideshow.xml" value="0.13489583333333333" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/login.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/logon.xml" value="0.14375" />

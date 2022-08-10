@@ -2,6 +2,7 @@ package com.xytong.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,16 +26,17 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.R;
 import com.xytong.ShActivity;
 import com.xytong.adapter.ShRecyclerAdapter;
 import com.xytong.data.ShData;
 import com.xytong.data.viewModel.ShDataViewModel;
-import com.xytong.databinding.FragmentSecondhandBinding;
+import com.xytong.databinding.FragmentShBinding;
 
 import java.util.List;
 
 public class ShFragment extends Fragment {
-    FragmentSecondhandBinding binding;
+    FragmentShBinding binding;
     ShRecyclerAdapter shRecyclerAdapter;
     ShDataViewModel model;
     CircularProgressIndicator circularProgressIndicator;
@@ -45,7 +49,7 @@ public class ShFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSecondhandBinding.inflate(getLayoutInflater());
+        binding = FragmentShBinding.inflate(getLayoutInflater());
         circularProgressIndicator = binding.shProgress;
         RefreshLayout shRefreshLayout = binding.shRefreshLayout;
         shRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
@@ -82,7 +86,7 @@ public class ShFragment extends Fragment {
             handler.post(() -> {
                 liveData.observe(getViewLifecycleOwner(), dataList -> {
                     if (shRecyclerView.getAdapter() == null) {
-                        Log.e("setAdapter", "ok");
+                        Log.i("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         shRecyclerAdapter = new ShRecyclerAdapter(dataList);
                         shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
@@ -103,13 +107,39 @@ public class ShFragment extends Fragment {
                         });
                         shRecyclerView.setAdapter(shRecyclerAdapter);
                     } else {
-                        Log.e("dataChange", "data num:" + shRecyclerAdapter.getItemCount());
+                        Log.i("dataChange", "data num:" + shRecyclerAdapter.getItemCount());
                         shRecyclerAdapter.notifyDataSetChanged();
                     }
                 });
             });
 
         }).start();
+        shRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // 获取当前滚动到的条目位置
+                    int index = shLinearLayoutManager.findFirstVisibleItemPosition();
+                    if (index == 0) {
+                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_24);
+                        Drawable.ConstantState state = bmpDrawable.getConstantState();
+                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
+                        binding.shFab.setImageDrawable(wrap);
+                    } else {
+                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_vertical_align_top_24);
+                        Drawable.ConstantState state = bmpDrawable.getConstantState();
+                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
+                        binding.shFab.setImageDrawable(wrap);
+                    }
+                }
+            }
+        });
+        binding.shFab.setOnClickListener(v -> {
+            shRecyclerView.smoothScrollToPosition(0);
+        });
         return binding.getRoot();
     }
 

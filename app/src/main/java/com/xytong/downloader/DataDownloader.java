@@ -51,7 +51,7 @@ public class DataDownloader {
                             forumData.setForwarding(forum_data.getInt("forwarding"));
                             data_init.add(forumData);
                         }
-                        Log.e("DataDownloader.getForumData()", "get ok");
+                        Log.i("DataDownloader.getForumData()", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader.getForumData()", "error");
                         e.printStackTrace();
@@ -96,7 +96,7 @@ public class DataDownloader {
                             reData.setTimestamp(Long.valueOf(re_data.getString("timestamp")));
                             data_init.add(reData);
                         }
-                        Log.e("DataDownloader:getForumData", "get ok");
+                        Log.i("DataDownloader:getForumData", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader:getForumData", "error");
                         e.printStackTrace();
@@ -141,7 +141,7 @@ public class DataDownloader {
                             shData.setTimestamp(Long.valueOf(sh_data.getString("timestamp")));
                             data_init.add(shData);
                         }
-                        Log.e("DataDownloader:getForumData", "get ok");
+                        Log.i("DataDownloader:getForumData", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader:getForumData", "error");
                         e.printStackTrace();
@@ -185,7 +185,7 @@ public class DataDownloader {
                             commentData.setTimestamp(Long.valueOf(comment_data.getString("timestamp")));
                             data_init.add(commentData);
                         }
-                        Log.e("DataDownloader.getCommentData()", "get ok");
+                        Log.i("DataDownloader.getCommentData()", "get ok");
                     } catch (Exception e) {
                         Log.e("DataDownloader.getCommentData()", "error");
                         e.printStackTrace();

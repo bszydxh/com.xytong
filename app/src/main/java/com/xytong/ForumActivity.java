@@ -29,6 +29,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.adapter.CommentRecyclerAdapter;
 import com.xytong.data.CommentData;
 import com.xytong.data.ForumData;
+import com.xytong.data.UserData;
 import com.xytong.data.viewModel.CommentDataViewModel;
 import com.xytong.databinding.ActivityForumBinding;
 import com.xytong.image.ImageGetter;
@@ -83,6 +84,19 @@ public class ForumActivity extends AppCompatActivity {
             sendIntent.setType("text/plain");
             ContextCompat.startActivity(this, Intent.createChooser(sendIntent, "将内容分享至"), null);
         });
+        View.OnClickListener imageClickListener = (v->{
+            UserData userData = new UserData();
+            userData.setName(forumData.getUserName());
+            userData.setUserAvatarUrl(forumData.getUserAvatarUrl());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userData",userData);
+            Intent intent = new Intent(v.getContext(), UserActivity.class);
+            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+            v.getContext().startActivity(intent);
+        });
+        binding.cardForumIndex.cardForumUserAvatar.setOnClickListener(imageClickListener);
+        binding.cardForumIndex.cardForumUserName.setOnClickListener(imageClickListener);
+        binding.cardForumIndex.cardForumDate.setOnClickListener(imageClickListener);
         setContentView(binding.getRoot());//binding中cardForumRoot()方法是对binding根视图的引用,也相当于创建视图
         binding.forumBack.setOnClickListener(v -> finish());
         circularProgressIndicator = binding.forumCommentProgress;
@@ -121,12 +135,12 @@ public class ForumActivity extends AppCompatActivity {
             handler.post(() -> {
                 liveData.observe(this, dataList -> {
                     if (commentRecyclerView.getAdapter() == null) {
-                        Log.e("setAdapter", "ok");
+                        Log.i("setAdapter", "ok");
                         circularProgressIndicator.setVisibility(View.GONE);
                         commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
                         commentRecyclerView.setAdapter(commentRecyclerAdapter);
                     } else {
-                        Log.e("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
+                        Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
                         commentRecyclerAdapter.notifyDataSetChanged();
                     }
                 });

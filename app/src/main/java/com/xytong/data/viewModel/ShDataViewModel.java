@@ -27,7 +27,7 @@ public class ShDataViewModel extends AndroidViewModel {
     }
     public LiveData<List<ShData>> getDataList() {
         if (dataList == null) {
-            Log.e(this.getClass().getName(), "get data");
+            Log.i(this.getClass().getName(), "get data");
             MySQL sql = null;
             try {
                 sql = new MySQL(getApplication().getApplicationContext());

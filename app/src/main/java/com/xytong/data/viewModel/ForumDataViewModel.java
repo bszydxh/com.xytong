@@ -30,7 +30,7 @@ public class ForumDataViewModel extends AndroidViewModel {
 
     public LiveData<List<ForumData>> getDataList() {
         if (dataList == null) {
-            Log.e(this.getClass().getName()+".getDataList()", "get data");
+            Log.i(this.getClass().getName()+".getDataList()", "get data");
             MySQL sql = null;
             try {
                 sql = new MySQL(getApplication().getApplicationContext());

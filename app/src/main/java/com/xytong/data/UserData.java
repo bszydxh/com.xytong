@@ -3,13 +3,23 @@ package com.xytong.data;
 import java.io.Serializable;
 
 public class UserData implements Serializable {
-    String name = "null";
-    String id = "null";
-    String phoneNumber = "null";
-    String sex = "null";
-    Long birthday = -1L;
-    String email = "null";
-    String password = "null";
+    enum SEX {
+        female,
+        male
+    }
+
+    private String name = "null";
+    private String id = "null";
+    private String phoneNumber = "null";
+    private int sex = -1;
+    private Long birthday = -1L;
+    private String email = "null";
+    private String password = "null";
+    private String userAvatarUrl = null;
+
+    public String getUserAvatarUrl() {
+        return userAvatarUrl;
+    }
 
     public Long getBirthday() {
         return birthday;
@@ -35,8 +45,24 @@ public class UserData implements Serializable {
         return phoneNumber;
     }
 
-    public String getSex() {
+    public int getSex() {
         return sex;
+    }
+
+    public String getSexString() {
+        String str = "未知";
+        switch (sex) {
+            case -1:
+                str = "未知";
+                break;
+            case 0:
+                str = "女";
+                break;
+            case 1:
+                str = "男";
+                break;
+        }
+        return str;
     }
 
     public void setId(String id) {
@@ -55,6 +81,10 @@ public class UserData implements Serializable {
         this.name = name;
     }
 
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -63,7 +93,7 @@ public class UserData implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setSex(String sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 }

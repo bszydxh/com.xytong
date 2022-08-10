@@ -1,5 +1,7 @@
 package com.xytong.adapter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
+import com.xytong.UserActivity;
 import com.xytong.data.CommentData;
+import com.xytong.data.UserData;
 import com.xytong.image.ImageGetter;
 import com.xytong.ui.Thump;
 
@@ -104,6 +108,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     }
 
     public interface OnItemClickListener {
+
         void onTitleClick(View view, int position, CommentData commentData);
 
         void onTitleLongClick(View view, int position);
@@ -140,6 +145,19 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
             thump.changeThump(localDataSet.get(pos),
                     viewHolder.getLikesImage(), viewHolder.getLikes());
         });
+        View.OnClickListener imageClickListener = (v->{
+            UserData userData = new UserData();
+            userData.setName(localDataSet.get(position).getUserName());
+            userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userData",userData);
+            Intent intent = new Intent(v.getContext(), UserActivity.class);
+            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+            v.getContext().startActivity(intent);
+        });
+        viewHolder.getUserAvatar().setOnClickListener(imageClickListener);
+        viewHolder.getUserName().setOnClickListener(imageClickListener);
+        viewHolder.getDate().setOnClickListener(imageClickListener);
     }
 
     @Override
