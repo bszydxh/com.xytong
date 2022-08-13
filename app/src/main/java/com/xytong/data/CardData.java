@@ -1,31 +1,61 @@
 package com.xytong.data;
 
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity
 public class CardData implements Serializable {
-    private String userId;
-    private String cardId;
+    @PrimaryKey(autoGenerate = true)
+    private int id = -1;//主键
+    @Ignore
+    private String uid;//用户id，TODO
+    @Ignore
+    private String cid;//卡片消息id，TODO
+    @ColumnInfo(name = "user_name")
     private String userName = "null";
+    @ColumnInfo(name = "user_avatar")
     private String userAvatarUrl = null;
+    @ColumnInfo
     private String title = "null";
+    @ColumnInfo
     private String text = "null";
+    @ColumnInfo
     private Long timestamp = 0L;
+    ////////////////////////////////////////////////////////
 
-    public String getCardId() {
-        return cardId;
+    public int getId() {
+        return id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
+    @Deprecated
+    public String getCid() {
+        return cid;
+    }//TODO
+
+    @Deprecated
+    public String getUid() {
+        return uid;
+    }//TODO
 
     public String getText() {
-        return text;
+        if (text == null) {
+            return null;
+        } else {
+            return text.trim();
+        }
     }
 
     public String getTitle() {
-        return title;
+        if (title == null) {
+            return null;
+        } else {
+            return title.trim();
+        }
     }
 
     public String getUserAvatarUrl() {
@@ -78,12 +108,16 @@ public class CardData implements Serializable {
 
     }
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public void setTimestamp(Long timestamp) {

@@ -2,7 +2,6 @@ package com.xytong.data.viewModel;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,9 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.xytong.data.ShData;
 import com.xytong.downloader.DataDownloader;
-import com.xytong.sqlite.MySQL;
+import com.xytong.sql.MySQL;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShDataViewModel extends AndroidViewModel {
@@ -28,21 +26,11 @@ public class ShDataViewModel extends AndroidViewModel {
     public LiveData<List<ShData>> getDataList() {
         if (dataList == null) {
             Log.i(this.getClass().getName(), "get data");
-            MySQL sql = null;
-            try {
-                sql = new MySQL(getApplication().getApplicationContext());
-            } catch (RuntimeException e) {
-                Toast.makeText(getApplication().getApplicationContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
-            }
-            List<ShData> shList = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                if (sql != null) {
-                    shList.add(sql.read_secondhand_data());
-                }
-            }
-            if (sql != null) {
-                sql.closeDatabase();
-            }
+            List<ShData> shList =
+                    MySQL.getInstance(getApplication().getApplicationContext())
+                            .getCoreDataBase()
+                            .getShDataDao()
+                            .getAllSh();
             dataList = new MutableLiveData<>();
             List<ShData> obtainedDataList = DataDownloader.getShDataList("newest", 0, 10);
             if (obtainedDataList != null) {

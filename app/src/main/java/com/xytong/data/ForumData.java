@@ -1,13 +1,22 @@
 package com.xytong.data;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import com.xytong.ui.LikeThump;
 
 import java.io.Serializable;
-
+@Entity(tableName = "forum_list")
 public class ForumData extends CardData implements Serializable, LikeThump {
+    @ColumnInfo
     private Integer likes = 0;
+    @ColumnInfo
     private Integer comments = 0;
+    @ColumnInfo
     private Integer forwarding = 0;
+    ////////////////////////////////////////////////////////
+    @Ignore
     private Boolean liked = false;
 
     public Integer getComments() {

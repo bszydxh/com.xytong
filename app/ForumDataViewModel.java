@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.xytong.data.ForumData;
 import com.xytong.downloader.DataDownloader;
-import com.xytong.sqlite.MySQL;
+import com.xytong.sql.MySQL;
 
 import java.util.ArrayList;
 import java.util.List;

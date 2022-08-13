@@ -28,6 +28,7 @@ import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.ForumActivity;
+import com.xytong.PublishActivity;
 import com.xytong.R;
 import com.xytong.adapter.ForumRecyclerAdapter;
 import com.xytong.data.ForumData;
@@ -108,7 +109,12 @@ public class ForumFragment extends Fragment {
             }
         });
         binding.forumFab.setOnClickListener(v -> {
-            forumRecyclerView.smoothScrollToPosition(0);
+            int index = forumLinearLayoutManager.findFirstVisibleItemPosition();
+            if(index == 0) {
+                v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
+            }else {
+                forumRecyclerView.smoothScrollToPosition(0);
+            }
         });
         new Thread(() -> {
             model = new ViewModelProvider(this).get(ForumDataViewModel.class);

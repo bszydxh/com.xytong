@@ -26,6 +26,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.PublishActivity;
 import com.xytong.R;
 import com.xytong.ShActivity;
 import com.xytong.adapter.ShRecyclerAdapter;
@@ -138,7 +139,12 @@ public class ShFragment extends Fragment {
             }
         });
         binding.shFab.setOnClickListener(v -> {
-            shRecyclerView.smoothScrollToPosition(0);
+            int index = shLinearLayoutManager.findFirstVisibleItemPosition();
+            if(index == 0) {
+                v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
+            }else {
+                shRecyclerView.smoothScrollToPosition(0);
+            }
         });
         return binding.getRoot();
     }

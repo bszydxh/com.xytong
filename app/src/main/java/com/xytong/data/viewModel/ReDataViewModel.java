@@ -2,7 +2,6 @@ package com.xytong.data.viewModel;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.xytong.data.ReData;
 import com.xytong.downloader.DataDownloader;
-import com.xytong.sqlite.MySQL;
+import com.xytong.sql.MySQL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,28 +21,20 @@ public class ReDataViewModel extends AndroidViewModel {
     public ReDataViewModel(@NonNull Application application) {
         super(application);
     }
+
     public void setDataList(List<ReData> dataListIndex) {
         dataList.postValue(dataListIndex);
     }
+
     public LiveData<List<ReData>> getDataList() {
         if (dataList == null) {
             Log.i(this.getClass().getName(), "get data");
-            MySQL sql = null;
-            try {
-                sql = new MySQL(getApplication().getApplicationContext());
-            } catch (RuntimeException e) {
-                Toast.makeText(getApplication().getApplicationContext(), "file error,check the log!", Toast.LENGTH_SHORT).show();
-            }
             List<ReData> reList = new ArrayList<>();
             reList.add(new ReData());
-            for (int i = 0; i < 5; i++) {
-                if (sql != null) {
-                    reList.add(sql.read_run_errands_data());
-                }
-            }
-            if (sql != null) {
-                sql.closeDatabase();
-            }
+            reList.addAll(MySQL.getInstance(getApplication().getApplicationContext())
+                    .getCoreDataBase()
+                    .getReDataDao()
+                    .getAllRe());
             dataList = new MutableLiveData<>();
             List<ReData> obtainedDataList = DataDownloader.getReDataList("newest", 0, 10);
             if (obtainedDataList != null) {

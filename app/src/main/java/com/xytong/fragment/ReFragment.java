@@ -27,6 +27,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.PublishActivity;
 import com.xytong.R;
 import com.xytong.ReActivity;
 import com.xytong.adapter.ReRecyclerAdapter;
@@ -137,7 +138,12 @@ public class ReFragment extends Fragment {
             }
         });
         binding.reFab.setOnClickListener(v -> {
+            int index = reLinearLayoutManager.findFirstVisibleItemPosition();
+            if(index == 0) {
+                v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
+            }else {
             reRecyclerView.smoothScrollToPosition(0);
+            }
         });
         return binding.getRoot();
     }

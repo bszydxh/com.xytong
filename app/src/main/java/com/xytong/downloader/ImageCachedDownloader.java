@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+@Deprecated
 public class ImageCachedDownloader {//该类被废弃，使用谷歌推荐的图片库Glide
     @Deprecated
     public static Bitmap getBitmap(String url_str) {
