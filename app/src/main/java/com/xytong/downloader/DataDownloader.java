@@ -1,5 +1,6 @@
 package com.xytong.downloader;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import com.xytong.data.CommentData;
 import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
+import com.xytong.data.SharedPreferences.SettingSP;
 import com.xytong.io.Poster;
 
 import org.json.JSONArray;
@@ -17,13 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataDownloader {
-    public static List<ForumData> getForumDataList(@NonNull String mode, int start, int end) {
+    public static List<ForumData> getForumDataList(Context context, @NonNull String mode, int start, int end) {
         List<ForumData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
 
                 int need_num = end - start + 1;
-                String path = "http://rap2api.taobao.org/app/mock/data/2255088";
                 String text = "{\n" +
                         "  \"module\": \"forum\",\n" +
                         "  \"mode\": \"newest\",\n" +
@@ -32,7 +33,7 @@ public class DataDownloader {
                         "  \"num_end\": " + end + ",\n" +
                         "  \"timestamp\": 1650098900\n" +
                         "}";
-                Poster<List<ForumData>> poster = new Poster<>(path, text);
+                Poster<List<ForumData>> poster = new Poster<>(SettingSP.getForumUrl(context), text);
                 poster.setHttpListener(result -> {
                     List<ForumData> data_init = new ArrayList<>();
                     try {
@@ -65,12 +66,11 @@ public class DataDownloader {
         return data;
     }
 
-    public static List<ReData> getReDataList(@NonNull String mode, int start, int end) {
+    public static List<ReData> getReDataList(Context context, @NonNull String mode, int start, int end) {
         List<ReData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
                 int need_num = end - start + 1;
-                String path = "http://rap2api.taobao.org/app/mock/data/2307037";
                 String text = "{\n" +
                         "  \"module\": \"run_errands\",\n" +
                         "  \"mode\": \"newest\",\n" +
@@ -79,7 +79,7 @@ public class DataDownloader {
                         "  \"num_end\": " + end + ",\n" +
                         "  \"timestamp\": 1650098900\n" +
                         "}";
-                Poster<List<ReData>> poster = new Poster<>(path, text);
+                Poster<List<ReData>> poster = new Poster<>(SettingSP.getReUrl(context), text);
                 poster.setHttpListener(result -> {
                     List<ReData> data_init = new ArrayList<>();
                     try {
@@ -110,12 +110,11 @@ public class DataDownloader {
         return data;
     }
 
-    public static List<ShData> getShDataList(@NonNull String mode, int start, int end) {
+    public static List<ShData> getShDataList(Context context, @NonNull String mode, int start, int end) {
         List<ShData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
                 int need_num = end - start + 1;
-                String path = "http://rap2api.taobao.org/app/mock/data/2307034";
                 String text = "{\n" +
                         "  \"module\": \"secondhand\",\n" +
                         "  \"mode\": \"newest\",\n" +
@@ -124,7 +123,7 @@ public class DataDownloader {
                         "  \"num_end\": " + end + ",\n" +
                         "  \"timestamp\": 1650098900\n" +
                         "}";
-                Poster<List<ShData>> poster = new Poster<>(path, text);
+                Poster<List<ShData>> poster = new Poster<>(SettingSP.getShUrl(context), text);
                 poster.setHttpListener(result -> {
                     List<ShData> data_init = new ArrayList<>();
                     try {
@@ -155,12 +154,11 @@ public class DataDownloader {
         return data;
     }
 
-    public static List<CommentData> getCommentDataList(@NonNull String mode, int start, int end) {
+    public static List<CommentData> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
         List<CommentData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
                 int need_num = end - start + 1;
-                String path = "http://rap2api.taobao.org/app/mock/data/2255088";
                 String text = "{\n" +
                         "  \"module\": \"forum\",\n" +
                         "  \"mode\": \"newest\",\n" +
@@ -169,7 +167,7 @@ public class DataDownloader {
                         "  \"num_end\": " + end + ",\n" +
                         "  \"timestamp\": 1650098900\n" +
                         "}";
-                Poster<List<CommentData>> poster = new Poster<>(path, text);
+                Poster<List<CommentData>> poster = new Poster<>(SettingSP.getCommentUrl(context), text);
                 poster.setHttpListener(result -> {
                     List<CommentData> data_init = new ArrayList<>();
                     try {

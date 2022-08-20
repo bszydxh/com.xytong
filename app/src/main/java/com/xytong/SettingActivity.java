@@ -7,7 +7,9 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.xytong.data.SharedPreferences.SettingSP;
 import com.xytong.databinding.ActivitySettingBinding;
+import com.xytong.view.UrlCreateDialog;
 
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
@@ -22,11 +24,13 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
-        binding.settingBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        binding.settingBack.setOnClickListener(v -> finish());
+        binding.demonstrateModeSwitch.setChecked(SettingSP.isDemonstrateMode(this));
+        binding.demonstrateModeSwitch.setOnCheckedChangeListener((v, checked)
+                -> SettingSP.setDemonstrateMode(this, checked));
+        binding.changeUrl.setOnClickListener(v->{
+            UrlCreateDialog dialog= new UrlCreateDialog();
+            dialog.show(getSupportFragmentManager(),"urlChangeDialog");
         });
     }
 

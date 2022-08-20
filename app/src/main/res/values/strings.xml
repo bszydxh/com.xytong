@@ -35,4 +35,5 @@
     <string name="showMode">演示模式</string>
     <string name="comment">全部评论</string>
     <string name="userText">usertext</string>
+    <string name="change_url">数据获取链接更改</string>
 </resources>

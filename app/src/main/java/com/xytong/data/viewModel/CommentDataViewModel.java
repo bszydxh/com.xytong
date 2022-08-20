@@ -28,10 +28,10 @@ public class CommentDataViewModel extends AndroidViewModel {
 
     public LiveData<List<CommentData>> getDataList() {
         if (dataList == null) {
-            Log.i(this.getClass().getName()+".getDataList()", "get data");
+            Log.i(this.getClass().getName() + ".getDataList()", "get data");
             List<CommentData> commentList = new ArrayList<>();
             dataList = new MutableLiveData<>();
-            List<CommentData> obtainedDataList = DataDownloader.getCommentDataList("newest", 0, 10);
+            List<CommentData> obtainedDataList = DataDownloader.getCommentDataList(getApplication().getApplicationContext(),"newest", 0, 10);
             if (obtainedDataList != null) {
                 commentList.addAll(obtainedDataList);
             }
@@ -42,7 +42,7 @@ public class CommentDataViewModel extends AndroidViewModel {
 
     public boolean loadMoreData() {
         List<CommentData> commentList = dataList.getValue();
-        List<CommentData> obtainedDataList = DataDownloader.getCommentDataList("newest", 0, 10);
+        List<CommentData> obtainedDataList = DataDownloader.getCommentDataList(getApplication().getApplicationContext(),"newest", 0, 10);
         if (commentList != null && obtainedDataList != null) {
             commentList.addAll(obtainedDataList);
             dataList.postValue(commentList);
@@ -54,7 +54,7 @@ public class CommentDataViewModel extends AndroidViewModel {
 
     public boolean refreshData() {
         List<CommentData> commentList = dataList.getValue();
-        List<CommentData> obtainedDataList = DataDownloader.getCommentDataList("newest", 0, 10);
+        List<CommentData> obtainedDataList = DataDownloader.getCommentDataList(getApplication().getApplicationContext(),"newest", 0, 10);
         if (commentList != null && obtainedDataList != null) {
             commentList.clear();
             commentList.addAll(obtainedDataList);

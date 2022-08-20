@@ -21,9 +21,9 @@ public class CardData implements Serializable {
     @ColumnInfo(name = "user_avatar")
     private String userAvatarUrl = null;
     @ColumnInfo
-    private String title = "null";
+    private String title = "(没有标题)";
     @ColumnInfo
-    private String text = "null";
+    private String text = "";
     @ColumnInfo
     private Long timestamp = 0L;
     ////////////////////////////////////////////////////////
@@ -63,7 +63,11 @@ public class CardData implements Serializable {
     }
 
     public String getUserName() {
-        return userName;
+        if (userName == null) {
+            return null;
+        } else {
+            return userName.trim();
+        }
     }
 
     public Long getTimestamp() {

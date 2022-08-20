@@ -35,15 +35,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
-        //为activity_main.xml绑定视图,先定义一个类,之后赋值
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());//赋值阶段,inflate为调用生成的绑定类中包含的静态方法。这将为要使用的活动创建一个绑定类的实例。
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         setSupportActionBar(binding.underBar.toolbar);//设置toolbar
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        //数据初始化
+
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
         NavigationView navigationView = binding.navView;
         ImageGetter.setAvatarViewBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         ImageGetter.setAvatarViewBitmap(
                 binding.underBar.toolbarUserAvatar,
                 "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
-        binding.underBar.toolbarUserAvatar.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
+        binding.underBar.toolbar.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
         //对右下方悬浮按键绑定监听事件
 
         View nav_header_view = binding.navView.getHeaderView(0);
@@ -105,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                     webViewIsFocused = false;
                     break;
             }
-
             return true;
         });
 

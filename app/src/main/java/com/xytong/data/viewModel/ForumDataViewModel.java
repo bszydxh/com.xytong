@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.xytong.data.ForumData;
+import com.xytong.data.SharedPreferences.SettingSP;
 import com.xytong.downloader.DataDownloader;
 import com.xytong.sql.MySQL;
 
@@ -29,16 +30,17 @@ public class ForumDataViewModel extends AndroidViewModel {
     public LiveData<List<ForumData>> getDataList() {
         if (dataList == null) {
             Log.i(this.getClass().getName() + ".getDataList()", "get data");
-            List<ForumData> forumList =
-                    MySQL.getInstance(getApplication().getApplicationContext())
-                            .getCoreDataBase()
-                            .getForumDataDao()
-                            .getAllForum();
-            dataList = new MutableLiveData<>();
-            List<ForumData> obtainedDataList = DataDownloader.getForumDataList("newest", 0, 10);
-            if (obtainedDataList != null) {
-                forumList.addAll(obtainedDataList);
+            List<ForumData> forumList;
+            if (SettingSP.isDemonstrateMode(getApplication())) {//是否打开演示模式
+                forumList =
+                        MySQL.getInstance(getApplication().getApplicationContext())
+                                .getCoreDataBase()
+                                .getForumDataDao()
+                                .getAllForum();
+            } else {
+                forumList = DataDownloader.getForumDataList(getApplication().getApplicationContext(),"newest", 0, 10);
             }
+            dataList = new MutableLiveData<>();
             dataList.postValue(forumList);
         }
         return dataList;
@@ -46,7 +48,16 @@ public class ForumDataViewModel extends AndroidViewModel {
 
     public boolean loadMoreData() {
         List<ForumData> forumList = dataList.getValue();
-        List<ForumData> obtainedDataList = DataDownloader.getForumDataList("newest", 0, 10);
+        List<ForumData> obtainedDataList;
+        if (SettingSP.isDemonstrateMode(getApplication())) {
+            obtainedDataList =
+                    MySQL.getInstance(getApplication().getApplicationContext())
+                            .getCoreDataBase()
+                            .getForumDataDao()
+                            .getAllForum();
+        } else {
+            obtainedDataList = DataDownloader.getForumDataList(getApplication().getApplicationContext(),"newest", 0, 10);
+        }
         if (forumList != null && obtainedDataList != null) {
             forumList.addAll(obtainedDataList);
             dataList.postValue(forumList);
@@ -58,7 +69,16 @@ public class ForumDataViewModel extends AndroidViewModel {
 
     public boolean refreshData() {
         List<ForumData> forumList = dataList.getValue();
-        List<ForumData> obtainedDataList = DataDownloader.getForumDataList("newest", 0, 10);
+        List<ForumData> obtainedDataList;
+        if (SettingSP.isDemonstrateMode(getApplication())) {
+            obtainedDataList =
+                    MySQL.getInstance(getApplication().getApplicationContext())
+                            .getCoreDataBase()
+                            .getForumDataDao()
+                            .getAllForum();
+        } else {
+            obtainedDataList = DataDownloader.getForumDataList(getApplication().getApplicationContext(),"newest", 0, 10);
+        }
         if (forumList != null && obtainedDataList != null) {
             forumList.clear();
             forumList.addAll(obtainedDataList);

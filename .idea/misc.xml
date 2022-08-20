@@ -28,7 +28,7 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_publish.xml" value="0.21352313167259787" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_re.xml" value="0.132" />
-        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_setting.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_setting.xml" value="0.33" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_sh.xml" value="0.4" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/activity_user.xml" value="0.268" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/app_bar_main.xml" value="0.176" />
@@ -42,6 +42,7 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/card_sh.xml" value="0.31993006993006995" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/card_test.xml" value="0.7771345875542692" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/content_main.xml" value="0.25" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/dialog_chage_url.xml" value="0.33" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/forum.xml" value="0.22" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/forum_card.xml" value="0.109375" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/forums.xml" value="0.1" />
@@ -55,7 +56,7 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_sh.xml" value="0.1265625" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/fragment_slideshow.xml" value="0.13489583333333333" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/login.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/logon.xml" value="0.14375" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/logon.xml" value="0.5" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/moral.xml" value="0.1" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/nav_header_main.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/pager_null.xml" value="0.25104166666666666" />
