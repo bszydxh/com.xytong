@@ -51,15 +51,26 @@ public class Poster<T> implements Callable<T> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 //请求成功 获得返回的流
+                String result_back = "";
                 InputStream inputStream = connection.getInputStream();
                 int length = connection.getContentLength();
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, length);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                for (int result = bufferedInputStream.read(); result != -1; result = bufferedInputStream.read()) {
-                    byteArrayOutputStream.write((byte) result);
+                if (length >= 0) {
+                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, length);
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    for (int result = bufferedInputStream.read(); result != -1; result = bufferedInputStream.read()) {
+                        byteArrayOutputStream.write((byte) result);
+                    }
+                    result_back = byteArrayOutputStream.toString();
                 }
-                String result = byteArrayOutputStream.toString();
-                data_init= httpListener.onResultBack(result);
+                else
+                {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    for (int result = inputStream.read(); result != -1; result = inputStream.read()) {
+                        byteArrayOutputStream.write((byte) result);
+                    }
+                    result_back = byteArrayOutputStream.toString();
+                }
+                data_init = httpListener.onResultBack(result_back);
             } else {
                 //请求失败
                 Log.e("Poster", "http error");

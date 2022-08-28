@@ -160,7 +160,7 @@ public class DataDownloader {
             case "newest": {
                 int need_num = end - start + 1;
                 String text = "{\n" +
-                        "  \"module\": \"forum\",\n" +
+                        "  \"module\": \"comment\",\n" +
                         "  \"mode\": \"newest\",\n" +
                         "  \"need_num\": " + need_num + ",\n" +
                         "  \"num_start\": " + start + ",\n" +
@@ -172,7 +172,7 @@ public class DataDownloader {
                     List<CommentData> data_init = new ArrayList<>();
                     try {
                         JSONObject root = new JSONObject(result);
-                        JSONArray comment_data_array = root.getJSONArray("forum_data");
+                        JSONArray comment_data_array = root.getJSONArray("comment_data");
                         for (int i = 0; i < comment_data_array.length(); i++) {
                             CommentData commentData = new CommentData();
                             JSONObject comment_data = comment_data_array.getJSONObject(i);

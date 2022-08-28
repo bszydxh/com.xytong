@@ -60,6 +60,7 @@ public class ReActivity extends AppCompatActivity {
         binding.cardReIndex.cardReUserName.setText(reData.getUserName());
         binding.cardReIndex.cardReTitle.setText(reData.getTitle());
         binding.cardReIndex.cardReText.setText(reData.getText());
+        binding.cardReIndex.cardReDate.setText(reData.getDate());
         binding.cardReIndex.cardRePrice.setText(String.format("¥%s", reData.getPrice()));
         View.OnClickListener imageClickListener = (v->{
             UserData userData = new UserData();
@@ -108,6 +109,19 @@ public class ReActivity extends AppCompatActivity {
                         circularProgressIndicator.setVisibility(View.GONE);
                         commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
                         commentRecyclerView.setAdapter(commentRecyclerAdapter);
+                        commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onTitleClick(View view, int position, CommentData commentData) {
+                                binding.cardReCommentEdit.clearFocus();
+                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                            }
+
+                            @Override
+                            public void onTitleLongClick(View view, int position) {
+                                //TODO
+                            }
+                        });
                     } else {
                         Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
                         commentRecyclerAdapter.notifyDataSetChanged();

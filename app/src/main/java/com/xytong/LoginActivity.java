@@ -35,12 +35,13 @@ public class LoginActivity extends AppCompatActivity {
         ViewPager viewPager = binding.loginPager;
         ArrayList<View> loginListView = new ArrayList<>();
         LayoutInflater layoutInflater = getLayoutInflater();
-        loginListView.add(layoutInflater.inflate(R.layout.login, null, false));
-        loginListView.add(layoutInflater.inflate(R.layout.logon, null, false));
+        loginListView.add(layoutInflater.inflate(R.layout.page_login, null, false));
+        loginListView.add(layoutInflater.inflate(R.layout.page_logon, null, false));
         LoginPagerAdapter loginPagerAdapter = new LoginPagerAdapter(loginListView);
         viewPager.setAdapter(loginPagerAdapter);
         TabLayout tabLayout = binding.loginTab;
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
     @Override

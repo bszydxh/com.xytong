@@ -62,14 +62,15 @@ public class ForumActivity extends AppCompatActivity {
         binding.cardForumIndex.cardForumUserName.setText(forumData.getUserName());
         binding.cardForumIndex.cardForumTitle.setText(forumData.getTitle());
         binding.cardForumIndex.cardForumText.setText(forumData.getText());
+        binding.cardForumIndex.cardForumDate.setText(forumData.getDate());
         Thump<ForumData> thump = new Thump<>();
-        thump.setupThump(forumData,binding.cardForumIndex.cardForumLikesImage,binding.cardForumIndex.cardForumLikes);
+        thump.setupThump(forumData, binding.cardForumIndex.cardForumLikesImage, binding.cardForumIndex.cardForumLikes);
         String commentsNum = forumData.getComments().toString();
         String forwardingNum = forumData.getForwarding().toString();
         binding.cardForumIndex.cardForumComments.setText(commentsNum);
         binding.cardForumIndex.cardForumForwarding.setText(forwardingNum);
         binding.cardForumIndex.cardForumLikesLayout.setOnClickListener(v -> {
-            thump.changeThump(forumData,binding.cardForumIndex.cardForumLikesImage,binding.cardForumIndex.cardForumLikes);
+            thump.changeThump(forumData, binding.cardForumIndex.cardForumLikesImage, binding.cardForumIndex.cardForumLikes);
         });
         binding.cardForumIndex.cardForumForwardingLayout.setOnClickListener(v -> {
             Intent sendIntent = new Intent();
@@ -84,12 +85,12 @@ public class ForumActivity extends AppCompatActivity {
             sendIntent.setType("text/plain");
             ContextCompat.startActivity(this, Intent.createChooser(sendIntent, "将内容分享至"), null);
         });
-        View.OnClickListener imageClickListener = (v->{
+        View.OnClickListener imageClickListener = (v -> {
             UserData userData = new UserData();
             userData.setName(forumData.getUserName());
             userData.setUserAvatarUrl(forumData.getUserAvatarUrl());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("userData",userData);
+            bundle.putSerializable("userData", userData);
             Intent intent = new Intent(v.getContext(), UserActivity.class);
             intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
             v.getContext().startActivity(intent);
@@ -124,7 +125,7 @@ public class ForumActivity extends AppCompatActivity {
             }).start();
         });
         RecyclerView commentRecyclerView = binding.forumCommentRecyclerView;
-        commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        commentRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         LinearLayoutManager commentLinearLayoutManager = new LinearLayoutManager(this);
         commentRecyclerView.setLayoutManager(commentLinearLayoutManager);
         commentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -139,6 +140,19 @@ public class ForumActivity extends AppCompatActivity {
                         circularProgressIndicator.setVisibility(View.GONE);
                         commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
                         commentRecyclerView.setAdapter(commentRecyclerAdapter);
+                        commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onTitleClick(View view, int position, CommentData commentData) {
+                                binding.cardForumCommentEdit.clearFocus();
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
+
+                            @Override
+                            public void onTitleLongClick(View view, int position) {
+                                //TODO
+                            }
+                        });
                     } else {
                         Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
                         commentRecyclerAdapter.notifyDataSetChanged();
@@ -154,8 +168,8 @@ public class ForumActivity extends AppCompatActivity {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     binding.cardForumCommentEdit.clearFocus();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 default:
                     break;
             }

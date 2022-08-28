@@ -59,6 +59,7 @@ public class ShActivity extends AppCompatActivity {
         ImageGetter.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shData.getUserAvatarUrl());
         binding.cardShIndex.cardShUserName.setText(shData.getUserName());
         binding.cardShIndex.cardShTitle.setText(shData.getTitle());
+        binding.cardShIndex.cardShDate.setText(shData.getDate());
         binding.cardShIndex.cardShText.setText(shData.getText());
         binding.cardShIndex.cardShPrice.setText(String.format("¥%s", shData.getPrice()));
         View.OnClickListener imageClickListener = (v->{
@@ -108,6 +109,19 @@ public class ShActivity extends AppCompatActivity {
                         circularProgressIndicator.setVisibility(View.GONE);
                         commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
                         commentRecyclerView.setAdapter(commentRecyclerAdapter);
+                        commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onTitleClick(View view, int position, CommentData commentData) {
+                                binding.cardShCommentEdit.clearFocus();
+                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                            }
+
+                            @Override
+                            public void onTitleLongClick(View view, int position) {
+                                //TODO
+                            }
+                        });
                     } else {
                         Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
                         commentRecyclerAdapter.notifyDataSetChanged();

@@ -43,7 +43,6 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         private final TextView forwarding;
         private final ViewGroup forwardingLayout;
         private final ViewGroup rootTouchLayout;
-
         public ViewHolder(View view) {
             super(view);
             userName = view.findViewById(R.id.card_forum_user_name);

@@ -42,7 +42,7 @@ public class SettingSP {
                 context.getSharedPreferences("comment_url", Context.MODE_PRIVATE);
         String comment_url = sharedPreferences.getString("comment_url", "");
         if (Objects.equals(comment_url, "")) {
-            setCommentUrl(context, "http://rap2api.taobao.org/app/mock/data/2255088");
+            setCommentUrl(context, "http://rap2api.taobao.org/app/mock/data/2324413");
         }
         return sharedPreferences.getString("comment_url", "127.0.0.1");
     }

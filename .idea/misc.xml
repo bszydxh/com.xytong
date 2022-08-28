@@ -59,6 +59,8 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/logon.xml" value="0.5" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/moral.xml" value="0.1" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/nav_header_main.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/page_login.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/page_webview.xml" value="0.33" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/pager_null.xml" value="0.25104166666666666" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/run_errands.xml" value="0.4" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/layout/secondhand.xml" value="0.15625" />
@@ -69,6 +71,13 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/menu/main.xml" value="0.2351851851851852" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1205" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.255" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_login.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_comment.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/content_main.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/fragment_forum.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/fragment_moral.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/page_logon.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/page_webview.xml" value="0.3619791666666667" />
       </map>
     </option>
   </component>

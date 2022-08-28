@@ -42,28 +42,28 @@ public class ForumFragment extends Fragment {
     ForumRecyclerAdapter forumRecyclerAdapter;
     ForumDataViewModel model;
     CircularProgressIndicator circularProgressIndicator;
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent intent = result.getData();
-                    if (intent != null) {
-                        ForumData data = (ForumData) intent.getExtras().getSerializable("forumData");
-                        List<ForumData> dataList = model.getDataList().getValue();
-                        int pos = intent.getExtras().getInt("pos");
-                        if (dataList != null) {
-                            dataList.remove(pos);
-                            dataList.add(pos, data);
-                        }
-                        model.setDataList(dataList);
-                    }
-                }
-            });
+
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+                        if (intent != null) {
+                            ForumData data = (ForumData) intent.getExtras().getSerializable("forumData");
+                            List<ForumData> dataList = model.getDataList().getValue();
+                            int pos = intent.getExtras().getInt("pos");
+                            if (dataList != null) {
+                                dataList.remove(pos);
+                                dataList.add(pos, data);
+                            }
+                            model.setDataList(dataList);
+                        }
+                    }
+                });
         binding = FragmentForumBinding.inflate(getLayoutInflater());
         circularProgressIndicator = binding.forumProgress;
         RecyclerView forumRecyclerView = binding.forumRecyclerView;

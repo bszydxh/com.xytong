@@ -42,16 +42,17 @@ public class ReFragment extends Fragment {
     ReDataViewModel model;
     ReRecyclerAdapter reRecyclerAdapter;
     CircularProgressIndicator circularProgressIndicator;
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Log.i("ActivityResultLauncher","reActivity back");
-                }
-            });
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Log.i("ActivityResultLauncher", "reActivity back");
+                    }
+                });
         binding = FragmentReBinding.inflate(getLayoutInflater());
         circularProgressIndicator = binding.reProgress;
         RefreshLayout reRefreshLayout = binding.reRefreshLayout;
@@ -139,10 +140,10 @@ public class ReFragment extends Fragment {
         });
         binding.reFab.setOnClickListener(v -> {
             int index = reLinearLayoutManager.findFirstVisibleItemPosition();
-            if(index == 0) {
+            if (index == 0) {
                 v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
-            }else {
-            reRecyclerView.smoothScrollToPosition(0);
+            } else {
+                reRecyclerView.smoothScrollToPosition(0);
             }
         });
         return binding.getRoot();

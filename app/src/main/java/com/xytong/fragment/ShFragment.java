@@ -35,21 +35,23 @@ import com.xytong.data.viewModel.ShDataViewModel;
 import com.xytong.databinding.FragmentShBinding;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ShFragment extends Fragment {
     FragmentShBinding binding;
     ShRecyclerAdapter shRecyclerAdapter;
     ShDataViewModel model;
     CircularProgressIndicator circularProgressIndicator;
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Log.i("ActivityResultLauncher","shActivity back");
-                }
-            });
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Log.i("ActivityResultLauncher", "shActivity back");
+                    }
+                });
         binding = FragmentShBinding.inflate(getLayoutInflater());
         circularProgressIndicator = binding.shProgress;
         RefreshLayout shRefreshLayout = binding.shRefreshLayout;
@@ -117,22 +119,22 @@ public class ShFragment extends Fragment {
         }).start();
         shRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // 获取当前滚动到的条目位置
                     int index = shLinearLayoutManager.findFirstVisibleItemPosition();
                     if (index == 0) {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_24);
-                        Drawable.ConstantState state = bmpDrawable.getConstantState();
+                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_add_24);
+                        Drawable.ConstantState state = Objects.requireNonNull(bmpDrawable).getConstantState();
                         Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
+                        DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
                         binding.shFab.setImageDrawable(wrap);
                     } else {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_vertical_align_top_24);
-                        Drawable.ConstantState state = bmpDrawable.getConstantState();
+                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_vertical_align_top_24);
+                        Drawable.ConstantState state = Objects.requireNonNull(bmpDrawable).getConstantState();
                         Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
+                        DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
                         binding.shFab.setImageDrawable(wrap);
                     }
                 }
@@ -140,9 +142,9 @@ public class ShFragment extends Fragment {
         });
         binding.shFab.setOnClickListener(v -> {
             int index = shLinearLayoutManager.findFirstVisibleItemPosition();
-            if(index == 0) {
+            if (index == 0) {
                 v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
-            }else {
+            } else {
                 shRecyclerView.smoothScrollToPosition(0);
             }
         });

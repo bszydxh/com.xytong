@@ -128,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
         } else if (webViewIsFocused) {
             MoralFragment moralFragment = (MoralFragment) rootFragmentPagerAdapter.getItem(1);
-            moralFragment.webViewBack();//强转类型
+            if (!moralFragment.webViewBack()) {//返回不了就退出
+                super.onBackPressed();
+            }
         } else {
             super.onBackPressed();
         }
