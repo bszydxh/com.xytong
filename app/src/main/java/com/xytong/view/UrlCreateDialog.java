@@ -20,7 +20,6 @@ public class UrlCreateDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         binding = DialogChageUrlBinding.inflate(getLayoutInflater());
-        // Use the Builder class for convenient dialog construction
         binding.urlRe.setText(SettingSP.getReUrl(requireContext()));
         binding.urlSh.setText(SettingSP.getShUrl(requireContext()));
         binding.urlComment.setText(SettingSP.getCommentUrl(requireContext()));

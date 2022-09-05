@@ -27,9 +27,16 @@ public class Poster<T> implements Callable<T> {
     }
 
     public interface HttpListener<T> {
+        /**
+         * http监听器唯一接口
+         * @return 返回需要监听的数据
+         */
         T onResultBack(String result);
     }
-
+    /**
+     * 设置http ok回调
+     * @param httpListener http监听器
+     */
     public void setHttpListener(HttpListener<T> httpListener) {
         this.httpListener = httpListener;
     }
@@ -83,6 +90,10 @@ public class Poster<T> implements Callable<T> {
         return data_init;
     }
 
+    /**
+     * 实时返回需要的数据，警告：会造成线程阻塞
+     * @return 可返回任意数据
+     */
     public T post() {
         FutureTask<T> task = new FutureTask<>(this);
         new Thread(task).start();

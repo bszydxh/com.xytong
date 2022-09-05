@@ -23,7 +23,6 @@ public class DataDownloader {
         List<ForumData> data = new ArrayList<>();
         switch (mode) {
             case "newest": {
-
                 int need_num = end - start + 1;
                 String text = "{\n" +
                         "  \"module\": \"forum\",\n" +
@@ -31,7 +30,7 @@ public class DataDownloader {
                         "  \"need_num\": " + need_num + ",\n" +
                         "  \"num_start\": " + start + ",\n" +
                         "  \"num_end\": " + end + ",\n" +
-                        "  \"timestamp\": 1650098900\n" +
+                        "  \"timestamp\": "+System.currentTimeMillis()+"\n" +
                         "}";
                 Poster<List<ForumData>> poster = new Poster<>(SettingSP.getForumUrl(context), text);
                 poster.setHttpListener(result -> {
@@ -59,7 +58,7 @@ public class DataDownloader {
                     }
                     return data_init;//异步完成数据传递
                 });
-                data = poster.post();
+                data = poster.post();//由于该方法被包裹在新线程进行，该线程会等待网络进程
                 break;
             }
         }

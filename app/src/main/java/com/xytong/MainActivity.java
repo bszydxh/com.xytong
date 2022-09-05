@@ -109,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+        //此处进行异步用户鉴权，确保用户登录状态（过期没）
+        {
+
+        }
 
     }
 

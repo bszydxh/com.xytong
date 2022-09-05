@@ -75,7 +75,12 @@ public class CardData implements Serializable {
     }
 
     public String getDate() {
-        long startTime = timestamp * 1000;
+        long startTime;
+        if (timestamp < 1000000000000L) {
+            startTime = timestamp * 1000;//判断时间戳类型
+        } else {
+            startTime = timestamp;
+        }
         long endTime = System.currentTimeMillis();  //获取毫秒数
         long timeDifference = endTime - startTime;
         long second = timeDifference / 1000;    //计算秒
