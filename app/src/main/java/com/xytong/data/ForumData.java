@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import com.xytong.ui.LikeThump;
 
 import java.io.Serializable;
+
 @Entity(tableName = "forum_list")
 public class ForumData extends CardData implements Serializable, LikeThump {
     @ColumnInfo

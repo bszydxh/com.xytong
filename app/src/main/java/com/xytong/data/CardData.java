@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 @Entity
@@ -17,7 +19,9 @@ public class CardData implements Serializable {
     @Ignore
     private String cid;//卡片消息id，TODO
     @ColumnInfo(name = "user_name")
+    @JsonProperty(value = "user_name")
     private String userName = "null";
+    @JsonProperty(value = "user_avatar")
     @ColumnInfo(name = "user_avatar")
     private String userAvatarUrl = null;
     @ColumnInfo

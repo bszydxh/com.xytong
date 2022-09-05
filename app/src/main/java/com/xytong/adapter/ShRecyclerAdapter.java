@@ -141,7 +141,11 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return localDataSet.size();
+        if (localDataSet != null) {
+            return localDataSet.size();
+        } else {
+            return 0;
+        }
     }
 }
 

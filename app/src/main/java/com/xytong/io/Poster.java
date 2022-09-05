@@ -20,21 +20,29 @@ public class Poster<T> implements Callable<T> {
     private HttpListener<T> httpListener;
     private String path;
     private String text;
+    private OutputStream outputStream;
 
     public Poster(String path, String text) {
-        this.path = path;
-        this.text = text;
+        if (path != null) {
+            this.path = path;
+        }
+        if (text != null) {
+            this.text = text;
+        }
     }
 
     public interface HttpListener<T> {
         /**
          * http监听器唯一接口
+         *
          * @return 返回需要监听的数据
          */
         T onResultBack(String result);
     }
+
     /**
      * 设置http ok回调
+     *
      * @param httpListener http监听器
      */
     public void setHttpListener(HttpListener<T> httpListener) {
@@ -68,9 +76,7 @@ public class Poster<T> implements Callable<T> {
                         byteArrayOutputStream.write((byte) result);
                     }
                     result_back = byteArrayOutputStream.toString();
-                }
-                else
-                {
+                } else {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     for (int result = inputStream.read(); result != -1; result = inputStream.read()) {
                         byteArrayOutputStream.write((byte) result);
@@ -92,6 +98,7 @@ public class Poster<T> implements Callable<T> {
 
     /**
      * 实时返回需要的数据，警告：会造成线程阻塞
+     *
      * @return 可返回任意数据
      */
     public T post() {

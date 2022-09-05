@@ -44,19 +44,7 @@ public class UrlCreateDialog extends DialogFragment {
                     binding.urlComment.setText(SettingSP.getCommentUrl(requireContext()));
                     binding.urlForum.setText(SettingSP.getForumUrl(requireContext()));
                 })
-                .setPositiveButton("保存", (dialog, id) -> {
-                    SettingSP.setCommentUrl(requireContext(), String.valueOf(binding.urlComment.getText()));
-                    SettingSP.setReUrl(requireContext(), String.valueOf(binding.urlRe.getText()));
-                    SettingSP.setForumUrl(requireContext(), String.valueOf(binding.urlForum.getText()));
-                    SettingSP.setShUrl(requireContext(), String.valueOf(binding.urlSh.getText()));
-                    try {
-                        Field field = Objects.requireNonNull(dialog.getClass().getSuperclass()).getDeclaredField("mShowing");
-                        field.setAccessible(true);
-                        field.set(dialog, true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                })
+
                 .setNegativeButton("取消", (dialog, id) -> {
                     try {
                         Field field = Objects.requireNonNull(dialog.getClass().getSuperclass()).getDeclaredField("mShowing");
