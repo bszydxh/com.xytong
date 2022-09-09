@@ -1,45 +1,22 @@
 package com.xytong.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
+import lombok.Data;
+
+@Data
 public class UserData implements Serializable {
     private String name = "null";
     private Integer id = -1;
     private String phoneNumber = "null";
+    private String signature = "null";
     private int gender = -1;
     private Long birthday = -1L;
     private String email = "null";
-    private String userAvatarUrl = null;
-
-    public String getUserAvatarUrl() {
-        return userAvatarUrl;
-    }
-
-    public Long getBirthday() {
-        return birthday;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public int getGender() {
-        return gender;
-    }
-
+    private String userAvatarUrl = "";
+    @JsonIgnore
     public String getSexString() {
         String str = "未知";
         switch (gender) {
@@ -56,31 +33,4 @@ public class UserData implements Serializable {
         return str;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setBirthday(Long birthday) {
-        this.birthday = birthday;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUserAvatarUrl(String userAvatarUrl) {
-        this.userAvatarUrl = userAvatarUrl;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
 }

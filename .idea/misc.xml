@@ -72,12 +72,18 @@
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1205" />
         <entry key="..\:/Users/bszydxh/2/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.255" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_login.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_main.xml" value="0.29713552800342025" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_publish.xml" value="0.12065972222222222" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_user.xml" value="0.33" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_comment.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/content_main.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/dialog_chage_url.xml" value="0.5" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/fragment_forum.xml" value="0.23802083333333332" />
-        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/fragment_moral.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/fragment_moral.xml" value="0.34304047384007896" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/page_logon.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/page_webview.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/pager_null.xml" value="0.19791666666666666" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/under_bar.xml" value="0.29713552800342025" />
       </map>
     </option>
   </component>

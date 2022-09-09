@@ -57,7 +57,7 @@
                         android:id="@+id/toolbar_user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="bszydxh"
+                        android:text="@string/username"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -66,7 +66,7 @@
                         android:id="@+id/toolbar_user_signature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="开心每一天"
+                        android:text="@string/signature"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                 </LinearLayout>

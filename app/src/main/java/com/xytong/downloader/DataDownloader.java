@@ -11,7 +11,7 @@ import com.xytong.data.CommentData;
 import com.xytong.data.ForumData;
 import com.xytong.data.ReData;
 import com.xytong.data.ShData;
-import com.xytong.data.SharedPreferences.SettingSP;
+import com.xytong.data.sharedPreferences.SettingSP;
 import com.xytong.data.json.ForumPostJson;
 import com.xytong.data.json.ForumRequestJson;
 import com.xytong.data.json.RePostJson;
@@ -140,43 +140,40 @@ public class DataDownloader {
 
     public static List<CommentData> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
         List<CommentData> data = new ArrayList<>();
-        switch (mode) {
-            case "newest": {
-                int need_num = end - start + 1;
-                String text = "{\n" +
-                        "  \"module\": \"comment\",\n" +
-                        "  \"mode\": \"newest\",\n" +
-                        "  \"need_num\": " + need_num + ",\n" +
-                        "  \"num_start\": " + start + ",\n" +
-                        "  \"num_end\": " + end + ",\n" +
-                        "  \"timestamp\": 1650098900\n" +
-                        "}";
-                Poster<List<CommentData>> poster = new Poster<>(SettingSP.getCommentUrl(context), text);
-                poster.setHttpListener(result -> {
-                    List<CommentData> data_init = new ArrayList<>();
-                    try {
-                        JSONObject root = new JSONObject(result);
-                        JSONArray comment_data_array = root.getJSONArray("comment_data");
-                        for (int i = 0; i < comment_data_array.length(); i++) {
-                            CommentData commentData = new CommentData();
-                            JSONObject comment_data = comment_data_array.getJSONObject(i);
-                            commentData.setUserAvatarUrl(comment_data.getString("user_avatar"));
-                            commentData.setUserName(comment_data.getString("user_name"));
-                            commentData.setText(comment_data.getString("text"));
-                            commentData.setLikes(comment_data.getInt("likes"));
-                            commentData.setTimestamp(Long.valueOf(comment_data.getString("timestamp")));
-                            data_init.add(commentData);
-                        }
-                        Log.i("DataDownloader.getCommentData()", "get ok");
-                    } catch (Exception e) {
-                        Log.e("DataDownloader.getCommentData()", "error");
-                        e.printStackTrace();
+        if ("newest".equals(mode)) {
+            int need_num = end - start + 1;
+            String text = "{\n" +
+                    "  \"module\": \"comment\",\n" +
+                    "  \"mode\": \"newest\",\n" +
+                    "  \"need_num\": " + need_num + ",\n" +
+                    "  \"num_start\": " + start + ",\n" +
+                    "  \"num_end\": " + end + ",\n" +
+                    "  \"timestamp\": 1650098900\n" +
+                    "}";
+            Poster<List<CommentData>> poster = new Poster<>(SettingSP.getCommentUrl(context), text);
+            poster.setHttpListener(result -> {
+                List<CommentData> data_init = new ArrayList<>();
+                try {
+                    JSONObject root = new JSONObject(result);
+                    JSONArray comment_data_array = root.getJSONArray("comment_data");
+                    for (int i = 0; i < comment_data_array.length(); i++) {
+                        CommentData commentData = new CommentData();
+                        JSONObject comment_data = comment_data_array.getJSONObject(i);
+                        commentData.setUserAvatarUrl(comment_data.getString("user_avatar"));
+                        commentData.setUserName(comment_data.getString("user_name"));
+                        commentData.setText(comment_data.getString("text"));
+                        commentData.setLikes(comment_data.getInt("likes"));
+                        commentData.setTimestamp(Long.valueOf(comment_data.getString("timestamp")));
+                        data_init.add(commentData);
                     }
-                    return data_init;//www,我错了，主线程在等你！宝贝回家！
-                });
-                data = poster.post();
-                break;
-            }
+                    Log.i("DataDownloader.getCommentData()", "get ok");
+                } catch (Exception e) {
+                    Log.e("DataDownloader.getCommentData()", "error");
+                    e.printStackTrace();
+                }
+                return data_init;//www,我错了，主线程在等你！宝贝回家！
+            });
+            data = poster.post();
         }
         return data;
     }

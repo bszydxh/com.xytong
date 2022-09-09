@@ -2,7 +2,6 @@ package com.xytong.adapter;
 //TODO
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.UserActivity;
 import com.xytong.data.ForumData;
 import com.xytong.data.UserData;
 import com.xytong.image.ImageGetter;
@@ -43,6 +41,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         private final TextView forwarding;
         private final ViewGroup forwardingLayout;
         private final ViewGroup rootTouchLayout;
+
         public ViewHolder(View view) {
             super(view);
             userName = view.findViewById(R.id.card_forum_user_name);
@@ -130,6 +129,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
     }
 
     public interface OnItemClickListener {
+        void onUserClick(View view, UserData userData);
 
         void onTitleClick(View view, int position, ForumData forumData);
 
@@ -155,45 +155,35 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
         String forwardingNum = localDataSet.get(position).getForwarding().toString();
         viewHolder.getComments().setText(commentsNum);
         viewHolder.getForwarding().setText(forwardingNum);
-        viewHolder.getRootTouchLayout().setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                int pos = viewHolder.getLayoutPosition();
-                onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
-            }
-        });
-        viewHolder.getLikesLayout().setOnClickListener(v -> {
-            int pos = viewHolder.getLayoutPosition();
-            thump.changeThump(localDataSet.get(pos),
-                    viewHolder.getLikesImage(), viewHolder.getLikes());
+        if (onItemClickListener != null) {
+            viewHolder.getRootTouchLayout().setOnClickListener(v ->
+                    onItemClickListener.onTitleClick(viewHolder.itemView, position, localDataSet.get(position)));
+            viewHolder.getLikesLayout().setOnClickListener(v ->
+                    thump.changeThump(localDataSet.get(position), viewHolder.getLikesImage(), viewHolder.getLikes()));
+            viewHolder.getForwardingLayout().setOnClickListener(v -> {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                // 比如发送文本形式的数据内容
+                // 指定发送的内容
+                sendIntent.putExtra(Intent.EXTRA_TEXT, localDataSet.get(position).getTitle() + "\n"
+                        + localDataSet.get(position).getText() + "\n用户:" +
+                        localDataSet.get(position).getUserName() +
+                        "\n---来自校园通客户端");
+                // 指定发送内容的类型
+                sendIntent.setType("text/plain");
+                ContextCompat.startActivity(viewHolder.comments.getContext(), Intent.createChooser(sendIntent, "将内容分享至"), null);
+            });
+            viewHolder.getUserAvatar().setOnClickListener(v -> userClick(position, v));
+            viewHolder.getUserName().setOnClickListener(v -> userClick(position, v));
+            viewHolder.getDate().setOnClickListener(v -> userClick(position, v));
+        }
+    }
 
-
-        });
-        viewHolder.getForwardingLayout().setOnClickListener(v -> {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            // 比如发送文本形式的数据内容
-            // 指定发送的内容
-            sendIntent.putExtra(Intent.EXTRA_TEXT, localDataSet.get(position).getTitle() + "\n"
-                    + localDataSet.get(position).getText() + "\n用户:" +
-                    localDataSet.get(position).getUserName() +
-                    "\n---来自校园通客户端");
-            // 指定发送内容的类型
-            sendIntent.setType("text/plain");
-            ContextCompat.startActivity(viewHolder.comments.getContext(), Intent.createChooser(sendIntent, "将内容分享至"), null);
-        });
-        View.OnClickListener imageClickListener = (v->{
-            UserData userData = new UserData();
-            userData.setName(localDataSet.get(position).getUserName());
-            userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("userData",userData);
-            Intent intent = new Intent(v.getContext(), UserActivity.class);
-            intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-            v.getContext().startActivity(intent);
-        });
-        viewHolder.getUserAvatar().setOnClickListener(imageClickListener);
-        viewHolder.getUserName().setOnClickListener(imageClickListener);
-        viewHolder.getDate().setOnClickListener(imageClickListener);
+    private void userClick(int position, View v) {
+        UserData userData = new UserData();
+        userData.setName(localDataSet.get(position).getUserName());
+        userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+        onItemClickListener.onUserClick(v, userData);
     }
 
     @Override

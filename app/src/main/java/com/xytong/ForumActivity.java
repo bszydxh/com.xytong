@@ -69,9 +69,7 @@ public class ForumActivity extends AppCompatActivity {
         String forwardingNum = forumData.getForwarding().toString();
         binding.cardForumIndex.cardForumComments.setText(commentsNum);
         binding.cardForumIndex.cardForumForwarding.setText(forwardingNum);
-        binding.cardForumIndex.cardForumLikesLayout.setOnClickListener(v -> {
-            thump.changeThump(forumData, binding.cardForumIndex.cardForumLikesImage, binding.cardForumIndex.cardForumLikes);
-        });
+        binding.cardForumIndex.cardForumLikesLayout.setOnClickListener(v -> thump.changeThump(forumData, binding.cardForumIndex.cardForumLikesImage, binding.cardForumIndex.cardForumLikes));
         binding.cardForumIndex.cardForumForwardingLayout.setOnClickListener(v -> {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -106,23 +104,11 @@ public class ForumActivity extends AppCompatActivity {
         commentRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
         commentRefreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.finishRefresh(2000);
-            new Thread(() -> {
-                if (model.refreshData()) {
-                    refreshLayout.finishRefresh(true);
-                } else {
-                    refreshLayout.finishRefresh(false);
-                }
-            }).start();
+            new Thread(() -> refreshLayout.finishRefresh(model.refreshData())).start();
         });
         commentRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.finishLoadMore(2000);
-            new Thread(() -> {
-                if (model.loadMoreData()) {
-                    refreshLayout.finishLoadMore(true);
-                } else {
-                    refreshLayout.finishLoadMore(false);
-                }
-            }).start();
+            new Thread(() -> refreshLayout.finishLoadMore(model.loadMoreData())).start();
         });
         RecyclerView commentRecyclerView = binding.forumCommentRecyclerView;
         commentRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -133,45 +119,38 @@ public class ForumActivity extends AppCompatActivity {
             model = new ViewModelProvider(this).get(CommentDataViewModel.class);
             LiveData<List<CommentData>> liveData = model.getDataList();
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                liveData.observe(this, dataList -> {
-                    if (commentRecyclerView.getAdapter() == null) {
-                        Log.i("setAdapter", "ok");
-                        circularProgressIndicator.setVisibility(View.GONE);
-                        commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
-                        commentRecyclerView.setAdapter(commentRecyclerAdapter);
-                        commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onTitleClick(View view, int position, CommentData commentData) {
-                                binding.cardForumCommentEdit.clearFocus();
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                            }
+            handler.post(() -> liveData.observe(this, dataList -> {
+                if (commentRecyclerView.getAdapter() == null) {
+                    Log.i("setAdapter", "ok");
+                    circularProgressIndicator.setVisibility(View.GONE);
+                    commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
+                    commentRecyclerView.setAdapter(commentRecyclerAdapter);
+                    commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
+                        @Override
+                        public void onTitleClick(View view, int position, CommentData commentData) {
+                            binding.cardForumCommentEdit.clearFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
 
-                            @Override
-                            public void onTitleLongClick(View view, int position) {
-                                //TODO
-                            }
-                        });
-                    } else {
-                        Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
-                        commentRecyclerAdapter.notifyDataSetChanged();
-                    }
-                });
-            });
+                        @Override
+                        public void onTitleLongClick(View view, int position) {
+                            //TODO
+                        }
+                    });
+                } else {
+                    Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
+                    commentRecyclerAdapter.notifyDataSetChanged();
+                }
+            }));
 
         }).start();
-        binding.cardForumComment.setOnTouchListener((v, event) -> {
-            return true;
-        });
+        binding.cardForumComment.setOnTouchListener((v, event) -> true);
         binding.getRoot().setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    binding.cardForumCommentEdit.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                default:
-                    break;
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                binding.cardForumCommentEdit.clearFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
             return true;
         });

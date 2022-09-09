@@ -15,12 +15,6 @@ public class ImageCachedDownloader {//该类被废弃，使用谷歌推荐的图
     @Deprecated
     public static Bitmap getBitmap(String url_str) {
         Bitmap bitmap = null;
-        if (true)//数据库查询有无图片bitmap资源
-        {
-
-        } else {
-            //启动下载器
-        }
         try {
             URL url = new URL(url_str);
             URLConnection urlConnection = url.openConnection();

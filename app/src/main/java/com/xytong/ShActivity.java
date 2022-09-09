@@ -83,15 +83,11 @@ public class ShActivity extends AppCompatActivity {
         commentRefreshLayout.setRefreshFooter(new ClassicsFooter(this));
         commentRefreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.finishRefresh(2000);
-            new Thread(() -> {
-                refreshLayout.finishRefresh(model.refreshData());
-            }).start();
+            new Thread(() -> refreshLayout.finishRefresh(model.refreshData())).start();
         });
         commentRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.finishLoadMore(2000);
-            new Thread(() -> {
-                refreshLayout.finishLoadMore(model.loadMoreData());
-            }).start();
+            new Thread(() -> refreshLayout.finishLoadMore(model.loadMoreData())).start();
         });
         RecyclerView commentRecyclerView = binding.shCommentRecyclerView;
         commentRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -102,42 +98,37 @@ public class ShActivity extends AppCompatActivity {
             model = new ViewModelProvider(this).get(CommentDataViewModel.class);
             LiveData<List<CommentData>> liveData = model.getDataList();
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                liveData.observe(this, dataList -> {
-                    if (commentRecyclerView.getAdapter() == null) {
-                        Log.i("setAdapter", "ok");
-                        circularProgressIndicator.setVisibility(View.GONE);
-                        commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
-                        commentRecyclerView.setAdapter(commentRecyclerAdapter);
-                        commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onTitleClick(View view, int position, CommentData commentData) {
-                                binding.cardShCommentEdit.clearFocus();
-                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
-                            }
+            handler.post(() -> liveData.observe(this, dataList -> {
+                if (commentRecyclerView.getAdapter() == null) {
+                    Log.i("setAdapter", "ok");
+                    circularProgressIndicator.setVisibility(View.GONE);
+                    commentRecyclerAdapter = new CommentRecyclerAdapter(dataList);
+                    commentRecyclerView.setAdapter(commentRecyclerAdapter);
+                    commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
+                        @Override
+                        public void onTitleClick(View view, int position, CommentData commentData) {
+                            binding.cardShCommentEdit.clearFocus();
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                        }
 
-                            @Override
-                            public void onTitleLongClick(View view, int position) {
-                                //TODO
-                            }
-                        });
-                    } else {
-                        Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
-                        commentRecyclerAdapter.notifyDataSetChanged();
-                    }
-                });
-            });
+                        @Override
+                        public void onTitleLongClick(View view, int position) {
+                            //TODO
+                        }
+                    });
+                } else {
+                    Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
+                    commentRecyclerAdapter.notifyDataSetChanged();
+                }
+            }));
 
         }).start();
         binding.getRoot().setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    binding.cardShCommentEdit.clearFocus();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-                default:
-                    break;
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                binding.cardShCommentEdit.clearFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
             return true;
         });

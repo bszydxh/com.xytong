@@ -9,8 +9,9 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class RootFragmentPagerAdapter extends FragmentStateAdapter {
-    FragmentManager fragmentManager;
-    private SparseArray<Fragment> fragmentList = new SparseArray<>();
+    final FragmentManager fragmentManager;
+
+    private final SparseArray<Fragment> fragmentList = new SparseArray<>();
 
     public RootFragmentPagerAdapter(@NonNull FragmentManager fm,
                                     @NonNull Lifecycle lifecycle) {

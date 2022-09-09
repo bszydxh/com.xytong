@@ -17,7 +17,6 @@ public interface ForumDataDao {
     int updateForum(ForumData... words);
     @Delete
     void deleteForum(ForumData...words);
-
     @Query("SELECT * FROM forum_list")
     List<ForumData> getAllForum();
 }

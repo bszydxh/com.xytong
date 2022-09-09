@@ -17,7 +17,6 @@ public interface ShDataDao {
     int updateSh(ShData... words);
     @Delete
     void deleteSh(ShData...words);
-
     @Query("SELECT * FROM sh_list")
     List<ShData> getAllSh();
 }

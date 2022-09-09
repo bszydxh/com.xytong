@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.underBar.toolbar);//设置toolbar
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         //数据初始化
-
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

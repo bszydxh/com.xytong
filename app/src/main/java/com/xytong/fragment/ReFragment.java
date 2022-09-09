@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +28,10 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.PublishActivity;
 import com.xytong.R;
 import com.xytong.ReActivity;
+import com.xytong.UserActivity;
 import com.xytong.adapter.ReRecyclerAdapter;
 import com.xytong.data.ReData;
+import com.xytong.data.UserData;
 import com.xytong.data.viewModel.ReDataViewModel;
 import com.xytong.databinding.FragmentReBinding;
 
@@ -43,7 +43,6 @@ public class ReFragment extends Fragment {
     ReRecyclerAdapter reRecyclerAdapter;
     CircularProgressIndicator circularProgressIndicator;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,86 +53,91 @@ public class ReFragment extends Fragment {
                     }
                 });
         binding = FragmentReBinding.inflate(getLayoutInflater());
+        model = new ViewModelProvider(this).get(ReDataViewModel.class);
         circularProgressIndicator = binding.reProgress;
         RefreshLayout reRefreshLayout = binding.reRefreshLayout;
         reRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         reRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
         reRefreshLayout.setOnRefreshListener(refreshLayout -> {
+            model.refreshData();//通知model进行更新
             refreshLayout.finishRefresh(2000);
-            new Thread(() -> {
-                refreshLayout.finishRefresh(model.refreshData());
-            }).start();
         });
         reRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            model.loadMoreData();
             refreshLayout.finishLoadMore(2000);
-            new Thread(() -> {
-                refreshLayout.finishLoadMore(model.loadMoreData());
-            }).start();
         });
         reRefreshLayout.setEnableAutoLoadMore(true);
         RecyclerView reRecyclerView = binding.reRecyclerView;
         LinearLayoutManager reLinearLayoutManager = new LinearLayoutManager(this.requireContext());
         reRecyclerView.setLayoutManager(reLinearLayoutManager);
         reLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        new Thread(() -> {
-            model = new ViewModelProvider(this).get(ReDataViewModel.class);
-            LiveData<List<ReData>> liveData = model.getDataList();
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                liveData.observe(getViewLifecycleOwner(), dataList -> {
-                    if (reRecyclerView.getAdapter() == null) {
-                        Log.i("setAdapter", "ok");
-                        circularProgressIndicator.setVisibility(View.GONE);
-                        reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
-                        reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onBannerClick(View view) {
-                                Toast.makeText(view.getContext(), "banner click!", Toast.LENGTH_SHORT).show();
-                            }
+        LiveData<List<ReData>> liveData = model.getDataList();
+        liveData.observe(getViewLifecycleOwner(), dataList -> {//更新结束，不妨设置一个预期值
+            if (reRecyclerView.getAdapter() == null) {
+                Log.i("setAdapter", "ok");//进行适配器初始化
+                circularProgressIndicator.setVisibility(View.GONE);
+                reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
+                reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onUserClick(View view, UserData userData) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("userData", userData);
+                        Intent intent = new Intent(view.getContext(), UserActivity.class);
+                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                        view.getContext().startActivity(intent);
+                    }
+                    @Override
+                    public void onBannerClick(View view) {
+                        Toast.makeText(view.getContext(), "banner click!", Toast.LENGTH_SHORT).show();
+                    }
 
-                            @Override
-                            public void onTitleClick(View view, int position, ReData reDataIndex) {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("reData", reDataIndex);
-                                bundle.putInt("pos", position);
-                                Intent intent = new Intent(view.getContext(), ReActivity.class);
-                                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                                mStartForResult.launch(intent);
-                            }
+                    @Override
+                    public void onTitleClick(View view, int position, ReData reDataIndex) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("reData", reDataIndex);
+                        bundle.putInt("pos", position);
+                        Intent intent = new Intent(view.getContext(), ReActivity.class);
+                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                        mStartForResult.launch(intent);
+                    }
 
-                            @Override
-                            public void onTitleLongClick(View view, int position) {
-                                // TODO
-                            }
-                        });
-                        reRecyclerView.setAdapter(reRecyclerAdapter);
-                    } else {
-                        Log.i("dataChange", "data num:" + reRecyclerAdapter.getItemCount());
-                        reRecyclerAdapter.notifyDataSetChanged();
+                    @Override
+                    public void onTitleLongClick(View view, int position) {
+                        // TODO
                     }
                 });
-            });
-
-        }).start();
+                reRecyclerView.setAdapter(reRecyclerAdapter);
+            } else {
+                Log.i("dataChange", "data num:" + reRecyclerAdapter.getItemCount());
+                RefreshLayout mReRefreshLayout = binding.reRefreshLayout;
+                mReRefreshLayout.finishRefresh();
+                mReRefreshLayout.finishLoadMore();
+                reRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
         reRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // 获取当前滚动到的条目位置
                     int index = reLinearLayoutManager.findFirstVisibleItemPosition();
                     if (index == 0) {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_24);
-                        Drawable.ConstantState state = bmpDrawable.getConstantState();
-                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
-                        binding.reFab.setImageDrawable(wrap);
+                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_add_24);
+                        if (bmpDrawable != null) {
+                            Drawable.ConstantState state = bmpDrawable.getConstantState();
+                            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                            DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
+                            binding.reFab.setImageDrawable(wrap);
+                        }
                     } else {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_vertical_align_top_24);
-                        Drawable.ConstantState state = bmpDrawable.getConstantState();
-                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                        DrawableCompat.setTint(wrap, ContextCompat.getColor(getContext(), R.color.white));
-                        binding.reFab.setImageDrawable(wrap);
+                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_vertical_align_top_24);
+                        if (bmpDrawable != null) {
+                            Drawable.ConstantState state = bmpDrawable.getConstantState();
+                            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+                            DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
+                            binding.reFab.setImageDrawable(wrap);
+                        }
                     }
                 }
             }

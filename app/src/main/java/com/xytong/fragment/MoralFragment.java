@@ -72,15 +72,6 @@ public class MoralFragment extends Fragment {
         });
         webView.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith("http://") || url.startsWith("https://")) { // 4.0以上必须要加
-                    view.loadUrl(url);
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 switch (error.getPrimaryError()) {
                     case SslError.SSL_INVALID: // 校验过程遇到了bug

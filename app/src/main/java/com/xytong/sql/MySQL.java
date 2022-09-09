@@ -27,7 +27,7 @@ public class MySQL {
                             InputStream is = context.getAssets().open("coreData.db");
                             File newFile = new File(context.getApplicationContext().getExternalFilesDir("").getAbsolutePath() + "/coreData.db");
                             FileOutputStream fos = new FileOutputStream(newFile);
-                            int len = -1;
+                            int len;
                             byte[] buffer = new byte[1024];
                             while ((len = is.read(buffer)) != -1) {
                                 fos.write(buffer, 0, len);

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +27,10 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.PublishActivity;
 import com.xytong.R;
 import com.xytong.ShActivity;
+import com.xytong.UserActivity;
 import com.xytong.adapter.ShRecyclerAdapter;
 import com.xytong.data.ShData;
+import com.xytong.data.UserData;
 import com.xytong.data.viewModel.ShDataViewModel;
 import com.xytong.databinding.FragmentShBinding;
 
@@ -53,70 +53,63 @@ public class ShFragment extends Fragment {
                     }
                 });
         binding = FragmentShBinding.inflate(getLayoutInflater());
+        model = new ViewModelProvider(this).get(ShDataViewModel.class);
         circularProgressIndicator = binding.shProgress;
         RefreshLayout shRefreshLayout = binding.shRefreshLayout;
         shRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         shRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
         shRefreshLayout.setOnRefreshListener(refreshLayout -> {
+            model.refreshData();
             refreshLayout.finishRefresh(2000);
-            new Thread(() -> {
-                if (model.refreshData()) {
-                    refreshLayout.finishRefresh(true);
-                } else {
-                    refreshLayout.finishRefresh(false);
-                }
-            }).start();
         });
         shRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            model.loadMoreData();
             refreshLayout.finishLoadMore(2000);
-            new Thread(() -> {
-                if (model.loadMoreData()) {
-                    refreshLayout.finishLoadMore(true);
-                } else {
-                    refreshLayout.finishLoadMore(false);
-                }
-            }).start();
         });
         shRefreshLayout.setEnableAutoLoadMore(true);
         RecyclerView shRecyclerView = binding.shRecyclerView;
         LinearLayoutManager shLinearLayoutManager = new LinearLayoutManager(this.requireContext());
         shRecyclerView.setLayoutManager(shLinearLayoutManager);
         shLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        new Thread(() -> {
-            model = new ViewModelProvider(this).get(ShDataViewModel.class);
-            LiveData<List<ShData>> liveData = model.getDataList();
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                liveData.observe(getViewLifecycleOwner(), dataList -> {
-                    if (shRecyclerView.getAdapter() == null) {
-                        Log.i("setAdapter", "ok");
-                        circularProgressIndicator.setVisibility(View.GONE);
-                        shRecyclerAdapter = new ShRecyclerAdapter(dataList);
-                        shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onTitleClick(View view, int position, ShData reDataIndex) {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("shData", reDataIndex);
-                                bundle.putInt("pos", position);
-                                Intent intent = new Intent(view.getContext(), ShActivity.class);
-                                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                                mStartForResult.launch(intent);
-                            }
+        LiveData<List<ShData>> liveData = model.getDataList();
+        liveData.observe(getViewLifecycleOwner(), dataList -> {
+            if (shRecyclerView.getAdapter() == null) {
+                Log.i("setAdapter", "ok");
+                circularProgressIndicator.setVisibility(View.GONE);
+                shRecyclerAdapter = new ShRecyclerAdapter(dataList);
+                shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onUserClick(View view, UserData userData) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("userData", userData);
+                        Intent intent = new Intent(view.getContext(), UserActivity.class);
+                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                        view.getContext().startActivity(intent);
+                    }
 
-                            @Override
-                            public void onTitleLongClick(View view, int position) {
-                                // TODO
-                            }
-                        });
-                        shRecyclerView.setAdapter(shRecyclerAdapter);
-                    } else {
-                        Log.i("dataChange", "data num:" + shRecyclerAdapter.getItemCount());
-                        shRecyclerAdapter.notifyDataSetChanged();
+                    @Override
+                    public void onTitleClick(View view, int position, ShData reDataIndex) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("shData", reDataIndex);
+                        bundle.putInt("pos", position);
+                        Intent intent = new Intent(view.getContext(), ShActivity.class);
+                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                        mStartForResult.launch(intent);
+                    }
+                    @Override
+                    public void onTitleLongClick(View view, int position) {
+                        // TODO
                     }
                 });
-            });
-
-        }).start();
+                shRecyclerView.setAdapter(shRecyclerAdapter);
+            } else {
+                Log.i("dataChange", "data num:" + shRecyclerAdapter.getItemCount());
+                RefreshLayout mShRefreshLayout = binding.shRefreshLayout;
+                mShRefreshLayout.finishRefresh();
+                mShRefreshLayout.finishLoadMore();
+                shRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
         shRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

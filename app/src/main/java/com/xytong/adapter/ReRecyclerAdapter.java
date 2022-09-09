@@ -2,8 +2,6 @@ package com.xytong.adapter;
 
 //TODO
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.UserActivity;
 import com.xytong.data.ReData;
 import com.xytong.data.UserData;
 import com.xytong.image.ImageGetter;
@@ -93,8 +90,9 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnItemClickListener {
-        void onBannerClick(View view);
+        void onUserClick(View view, UserData userData);
 
+        void onBannerClick(View view);
 
         void onTitleClick(View view, int position, ReData reData);
 
@@ -122,18 +120,19 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
+        RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
-            case 0: {
-                View view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.card_re, viewGroup, false);
-                viewHolder = new ReCardViewHolder(view);
-                break;
-            }
             case 1: {
                 View view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.card_image, viewGroup, false);
                 viewHolder = new ImageCardViewHolder(view);
+                break;
+            }
+            case 0:
+            default: {
+                View view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.card_re, viewGroup, false);
+                viewHolder = new ReCardViewHolder(view);
                 break;
             }
         }
@@ -151,39 +150,32 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 reCardViewHolder.getText().setText(localDataSet.get(position).getText());
                 reCardViewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
                 reCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
-                reCardViewHolder.getRootTouchLayout().setOnClickListener(v -> {
-                    if (onItemClickListener != null) {
-                        int pos = viewHolder.getLayoutPosition();
-                        onItemClickListener.onTitleClick(viewHolder.itemView, pos, localDataSet.get(pos));
-                    }
-                });
-
-                View.OnClickListener imageClickListener = (v -> {
-                    UserData userData = new UserData();
-                    userData.setName(localDataSet.get(position).getUserName());
-                    userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("userData", userData);
-                    Intent intent = new Intent(v.getContext(), UserActivity.class);
-                    intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                    v.getContext().startActivity(intent);
-                });
-                reCardViewHolder.getUserAvatar().setOnClickListener(imageClickListener);
-                reCardViewHolder.getUserName().setOnClickListener(imageClickListener);
-                reCardViewHolder.getDate().setOnClickListener(imageClickListener);
+                if (onItemClickListener != null) {
+                    reCardViewHolder.getRootTouchLayout().setOnClickListener(v ->
+                            onItemClickListener.onTitleClick(viewHolder.itemView, position, localDataSet.get(position)));
+                    reCardViewHolder.getUserAvatar().setOnClickListener(v -> userClick(position, v));
+                    reCardViewHolder.getUserName().setOnClickListener(v -> userClick(position, v));
+                    reCardViewHolder.getDate().setOnClickListener(v -> userClick(position, v));
+                }
                 break;
             }
             case 1: {
                 ImageCardViewHolder imageCardViewHolder = (ImageCardViewHolder) viewHolder;
-                imageCardViewHolder.getBanner().setOnClickListener(v -> {
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onBannerClick(imageCardViewHolder.itemView);
-                    }
-                });
+                if (onItemClickListener != null) {
+                imageCardViewHolder.getBanner().setOnClickListener(v ->
+                        onItemClickListener.onBannerClick(imageCardViewHolder.itemView));
+                }
                 break;
             }
         }
 
+    }
+
+    private void userClick(int position, View v) {
+        UserData userData = new UserData();
+        userData.setName(localDataSet.get(position).getUserName());
+        userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+        onItemClickListener.onUserClick(v, userData);
     }
 
     @Override

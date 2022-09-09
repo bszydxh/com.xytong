@@ -17,7 +17,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="发单">立即发单</string>
     <string name="接单">接单</string>
-    <string name="username">username</string>
+    <string name="username">未知用户</string>
     <string name="title">标题</string>
     <string name="text">内容\n内容</string>
     <string name="user_avatar">用户头像</string>
@@ -34,6 +34,12 @@
     <string name="date">刚刚</string>
     <string name="showMode">演示模式</string>
     <string name="comment">全部评论</string>
-    <string name="userText">usertext</string>
+    <string name="userText">userText</string>
     <string name="change_url">数据获取链接更改</string>
+    <string name="sh_url">http://rap2api.taobao.org/app/mock/data/2307034</string>
+    <string name="re_url">http://rap2api.taobao.org/app/mock/data/2307037</string>
+    <string name="comment_url">http://rap2api.taobao.org/app/mock/data/2324413</string>
+    <string name="forum_url">http://rap2api.taobao.org/app/mock/data/2255088</string>
+    <string name="access_url">http://rap2api.taobao.org/app/mock/data/2329810</string>
+    <string name="signature"> </string>
 </resources>

@@ -66,7 +66,7 @@ public class Poster<T> implements Callable<T> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 //请求成功 获得返回的流
-                String result_back = "";
+                String result_back;
                 InputStream inputStream = connection.getInputStream();
                 int length = connection.getContentLength();
                 if (length >= 0) {

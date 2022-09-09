@@ -7,9 +7,10 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.xytong.data.SharedPreferences.SettingSP;
+import com.xytong.data.sharedPreferences.SettingSP;
 import com.xytong.databinding.ActivitySettingBinding;
-import com.xytong.view.UrlCreateDialog;
+import com.xytong.ui.UrlCreateDialog;
+
 
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
