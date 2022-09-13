@@ -12,11 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.UserActivity;
-import com.xytong.data.CommentData;
-import com.xytong.data.UserData;
-import com.xytong.image.ImageGetter;
-import com.xytong.ui.Thump;
+import com.xytong.activity.UserActivity;
+import com.xytong.model.entity.CommentData;
+import com.xytong.model.entity.UserData;
+import com.xytong.utils.ImageGetter;
+import com.xytong.view.Thump;
 
 import java.util.List;
 

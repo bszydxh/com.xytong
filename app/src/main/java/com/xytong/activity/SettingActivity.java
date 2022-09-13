@@ -1,0 +1,44 @@
+package com.xytong.activity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.xytong.R;
+import com.xytong.dao.SettingDao;
+import com.xytong.databinding.ActivitySettingBinding;
+import com.xytong.view.UrlCreateDialog;
+
+
+public class SettingActivity extends AppCompatActivity {
+    private ActivitySettingBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
+        super.onCreate(savedInstanceState);
+        binding = ActivitySettingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
+        binding.settingBack.setOnClickListener(v -> finish());
+        binding.demonstrateModeSwitch.setChecked(SettingDao.isDemonstrateMode(this));
+        binding.demonstrateModeSwitch.setOnCheckedChangeListener((v, checked)
+                -> SettingDao.setDemonstrateMode(this, checked));
+        binding.changeUrl.setOnClickListener(v->{
+            UrlCreateDialog dialog= new UrlCreateDialog();
+            dialog.show(getSupportFragmentManager(),"urlChangeDialog");
+        });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
+    }
+}

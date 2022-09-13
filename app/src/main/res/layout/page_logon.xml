@@ -59,19 +59,6 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/logon_user_phone_check"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="请输入验证码"
-                        android:inputType="phone" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="password_toggle">
 
@@ -114,7 +101,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/sign_up"
+                android:id="@+id/logon_button"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:text="@string/注册" />

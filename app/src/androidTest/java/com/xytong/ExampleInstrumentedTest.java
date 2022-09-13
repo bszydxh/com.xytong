@@ -1,17 +1,14 @@
 package com.xytong;
 
-import static org.junit.Assert.assertEquals;
-
 import android.content.Context;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-
-import com.xytong.data.sharedPreferences.UserSP;
-import com.xytong.data.UserData;
-
+import com.xytong.dao.UserDao;
+import com.xytong.model.entity.UserData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -32,11 +29,11 @@ public class ExampleInstrumentedTest {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         UserData userData = new UserData();
         userData.setName("bszydxh");
-        UserSP.setUser(context, userData);
-        assertEquals("bszydxh", UserSP.getUser(context).getName());
-        UserSP.setPwd(context, "1234");
-        assertEquals("1234", UserSP.getPwd(context));
-        UserSP.setToken(context, "1234");
-        assertEquals("1234", UserSP.getToken(context));
+        UserDao.setUser(context, userData);
+        assertEquals("bszydxh", UserDao.getUser(context).getName());
+        UserDao.setPwd(context, "1234");
+        assertEquals("1234", UserDao.getPwd(context));
+        UserDao.setToken(context, "1234");
+        assertEquals("1234", UserDao.getToken(context));
     }
 }

@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.data.ShData;
-import com.xytong.data.UserData;
-import com.xytong.image.ImageGetter;
+import com.xytong.model.entity.ShData;
+import com.xytong.model.entity.UserData;
+import com.xytong.utils.ImageGetter;
 
 import java.util.List;
 

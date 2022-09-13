@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.xytong"
         minSdk 27
-        targetSdk 30
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -38,15 +38,15 @@ android {
 
 dependencies {
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation "androidx.activity:activity:1.5.1"
-    implementation 'androidx.navigation:navigation-fragment:2.5.1'
-    implementation 'androidx.navigation:navigation-ui:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment:2.5.2'
+    implementation 'androidx.navigation:navigation-ui:2.5.2'
     implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
     implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
     implementation 'io.github.scwang90:refresh-header-radar:2.0.5'       //雷达刷新头
@@ -69,8 +69,9 @@ dependencies {
     //noinspection AnnotationProcessorOnCompilePath
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.4'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.4'
 
 }
+

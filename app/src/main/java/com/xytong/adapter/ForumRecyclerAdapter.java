@@ -13,10 +13,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.data.ForumData;
-import com.xytong.data.UserData;
-import com.xytong.image.ImageGetter;
-import com.xytong.ui.Thump;
+import com.xytong.model.entity.ForumData;
+import com.xytong.model.entity.UserData;
+import com.xytong.utils.ImageGetter;
+import com.xytong.view.Thump;
 
 import java.util.List;
 
