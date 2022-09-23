@@ -29,8 +29,8 @@ import com.xytong.R;
 import com.xytong.activity.ShActivity;
 import com.xytong.activity.UserActivity;
 import com.xytong.adapter.ShRecyclerAdapter;
-import com.xytong.model.entity.ShData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.ShVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.viewModel.ShDataViewModel;
 import com.xytong.databinding.FragmentShBinding;
 
@@ -71,7 +71,7 @@ public class ShFragment extends Fragment {
         LinearLayoutManager shLinearLayoutManager = new LinearLayoutManager(this.requireContext());
         shRecyclerView.setLayoutManager(shLinearLayoutManager);
         shLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LiveData<List<ShData>> liveData = model.getDataList();
+        LiveData<List<ShVO>> liveData = model.getDataList();
         liveData.observe(getViewLifecycleOwner(), dataList -> {
             if (shRecyclerView.getAdapter() == null) {
                 Log.i("setAdapter", "ok");
@@ -79,16 +79,16 @@ public class ShFragment extends Fragment {
                 shRecyclerAdapter = new ShRecyclerAdapter(dataList);
                 shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
                     @Override
-                    public void onUserClick(View view, UserData userData) {
+                    public void onUserClick(View view, UserVO userVO) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("userData", userData);
+                        bundle.putSerializable("userData", userVO);
                         Intent intent = new Intent(view.getContext(), UserActivity.class);
                         intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                         view.getContext().startActivity(intent);
                     }
 
                     @Override
-                    public void onTitleClick(View view, int position, ShData reDataIndex) {
+                    public void onTitleClick(View view, int position, ShVO reDataIndex) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("shData", reDataIndex);
                         bundle.putInt("pos", position);

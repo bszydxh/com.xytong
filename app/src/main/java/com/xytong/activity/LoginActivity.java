@@ -3,85 +3,122 @@ package com.xytong.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.tabs.TabLayout;
 import com.xytong.R;
 import com.xytong.adapter.LoginPagerAdapter;
-import com.xytong.model.entity.UserData;
 import com.xytong.databinding.ActivityLoginBinding;
 import com.xytong.databinding.PageLoginBinding;
 import com.xytong.databinding.PageLogonBinding;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.Access;
+import com.xytong.utils.ViewCreatedHelper;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText username_edit_text;
-    private EditText password_edit_text;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        ViewCreatedHelper.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         PageLoginBinding loginBinding = PageLoginBinding.inflate(getLayoutInflater());
         PageLogonBinding logonBinding = PageLogonBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        logonBinding.progress.setVisibility(View.INVISIBLE);
+        loginBinding.progress.setVisibility(View.INVISIBLE);
         ArrayList<View> loginListView = new ArrayList<>();
-        loginBinding.loginButton.setOnClickListener(v -> {
-            Editable username_edit_text = loginBinding.loginUsername.getText();
-            Editable password_edit_text = loginBinding.loginPassword.getText();
+        loginBinding.button.setOnClickListener(v -> {
+            Editable username_edit_text = loginBinding.username.getText();
+            Editable password_edit_text = loginBinding.password.getText();
             String username = username_edit_text == null ? "" : username_edit_text.toString();
             String pwd = password_edit_text == null ? "" : password_edit_text.toString();
-
-            Access.login(this, pwd, username, new Access.StatusListener() {
+            Log.i("login", "username:" + username + "\npassword:" + pwd);
+            Access.login(this, username, pwd, new Access.StatusListener() {
                 @Override
                 public void onStart(Context context) {
+                    loginBinding.progress.setVisibility(View.VISIBLE);
+                    loginBinding.button.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onDone(Context context) {
                     Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
                 @Override
-                public void onError(Context context) {
+                public void onError(Context context, int errorFlag) {
                     Toast.makeText(context, "登录失败", Toast.LENGTH_SHORT).show();
+                    loginBinding.progress.setVisibility(View.INVISIBLE);
+                    loginBinding.button.setVisibility(View.VISIBLE);
                 }
             });
         });
-        logonBinding.logonButton.setOnClickListener(v -> {
-            Editable username_edit_text = loginBinding.loginUsername.getText();
-            Editable password_edit_text = loginBinding.loginPassword.getText();
+        var pwdWatcher = new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Editable password_edit_text = logonBinding.password.getText();
+                Editable password_check_edit_text = logonBinding.passwordCheck.getText();
+                String pwd = password_edit_text == null ? "" : password_edit_text.toString();
+                String pwd_check = password_check_edit_text == null ? "" : password_check_edit_text.toString();
+                if (!Objects.equals(pwd, pwd_check)) {
+                    logonBinding.logonPasswordCheckLayout.setError("两次密码输入不一致！");
+                } else {
+                    logonBinding.logonPasswordCheckLayout.setErrorEnabled(false);
+                }
+
+            }
+        };
+        logonBinding.passwordCheck.addTextChangedListener(pwdWatcher);
+        logonBinding.password.addTextChangedListener(pwdWatcher);
+        logonBinding.logonPasswordCheckLayout.setOnClickListener(v ->
+        {
+        });
+        logonBinding.button.setOnClickListener(v ->
+        {
+            Editable username_edit_text = logonBinding.username.getText();
+            Editable phone_edit_text = logonBinding.phone.getText();
+            Editable password_edit_text = logonBinding.password.getText();
+            Editable password_check_edit_text = logonBinding.passwordCheck.getText();
             String username = username_edit_text == null ? "" : username_edit_text.toString();
+            String phone = phone_edit_text == null ? "" : phone_edit_text.toString();
             String pwd = password_edit_text == null ? "" : password_edit_text.toString();
-            UserData userData = new UserData();
-            Access.logon(this, userData, pwd, new Access.StatusListener() {
+            String pwd_check = password_check_edit_text == null ? "" : password_check_edit_text.toString();
+            UserVO userVO = new UserVO();
+            userVO.setName(username);
+            userVO.setPhoneNumber(phone);
+            Access.logon(this, userVO, pwd, new Access.StatusListener() {
                 @Override
                 public void onStart(Context context) {
-
+                    logonBinding.progress.setVisibility(View.VISIBLE);
+                    logonBinding.button.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
                 public void onDone(Context context) {
-
+                    Toast.makeText(context, "注册成功，已为您自动登录", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
                 @Override
-                public void onError(Context context) {
-
+                public void onError(Context context, int errorFlag) {
+                    Toast.makeText(context, "注册失败", Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -93,6 +130,10 @@ public class LoginActivity extends AppCompatActivity {
         viewPager.setAdapter(loginPagerAdapter);
         TabLayout tabLayout = binding.loginTab;
         tabLayout.setupWithViewPager(viewPager);
+        // Create the scenes
+
+
+
     }
 
     @Override
@@ -100,4 +141,5 @@ public class LoginActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
     }
+
 }

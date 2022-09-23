@@ -13,15 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
 import com.xytong.activity.UserActivity;
-import com.xytong.model.entity.CommentData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.CommentVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageGetter;
 import com.xytong.view.Thump;
 
 import java.util.List;
 
 public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecyclerAdapter.ViewHolder> {
-    private final List<CommentData> localDataSet;
+    private final List<CommentVO> localDataSet;
     private OnItemClickListener onItemClickListener;
 
     /**
@@ -92,7 +92,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
      * @param dataSet String[] containing the data to populate views to be used
      *                by RecyclerView.
      */
-    public CommentRecyclerAdapter(List<CommentData> dataSet) {
+    public CommentRecyclerAdapter(List<CommentVO> dataSet) {
         localDataSet = dataSet;
     }
 
@@ -109,7 +109,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
 
     public interface OnItemClickListener {
 
-        void onTitleClick(View view, int position, CommentData commentData);
+        void onTitleClick(View view, int position, CommentVO commentData);
 
         void onTitleLongClick(View view, int position);
 
@@ -121,7 +121,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Thump<CommentData> thump = new Thump<>();
+        Thump<CommentVO> thump = new Thump<>();
         ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getText().setText(localDataSet.get(position).getText());
@@ -146,11 +146,11 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
                     viewHolder.getLikesImage(), viewHolder.getLikes());
         });
         View.OnClickListener imageClickListener = (v->{
-            UserData userData = new UserData();
-            userData.setName(localDataSet.get(position).getUserName());
-            userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+            UserVO userVO = new UserVO();
+            userVO.setName(localDataSet.get(position).getUserName());
+            userVO.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("userData",userData);
+            bundle.putSerializable("userData", userVO);
             Intent intent = new Intent(v.getContext(), UserActivity.class);
             intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
             v.getContext().startActivity(intent);

@@ -12,15 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.model.entity.ReData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.ReVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageGetter;
 
 import java.util.List;
 
 public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ReData> localDataSet;
+    private final List<ReVO> localDataSet;
     private OnItemClickListener onItemClickListener;
 
     /**
@@ -90,11 +90,11 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnItemClickListener {
-        void onUserClick(View view, UserData userData);
+        void onUserClick(View view, UserVO userVO);
 
         void onBannerClick(View view);
 
-        void onTitleClick(View view, int position, ReData reData);
+        void onTitleClick(View view, int position, ReVO reData);
 
         void onTitleLongClick(View view, int position);
 
@@ -104,7 +104,7 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.onItemClickListener = listener;
     }
 
-    public ReRecyclerAdapter(List<ReData> dataSet) {
+    public ReRecyclerAdapter(List<ReVO> dataSet) {
         localDataSet = dataSet;
     }
 
@@ -172,10 +172,10 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void userClick(int position, View v) {
-        UserData userData = new UserData();
-        userData.setName(localDataSet.get(position).getUserName());
-        userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
-        onItemClickListener.onUserClick(v, userData);
+        UserVO userVO = new UserVO();
+        userVO.setName(localDataSet.get(position).getUserName());
+        userVO.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+        onItemClickListener.onUserClick(v, userVO);
     }
 
     @Override

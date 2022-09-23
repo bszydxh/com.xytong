@@ -4,7 +4,7 @@ package com.xytong.utils;
 import android.content.Context;
 import android.util.Log;
 import androidx.room.Room;
-import com.xytong.model.CoreDataBase;
+import com.xytong.dao.CoreDataBase;
 import io.reactivex.annotations.NonNull;
 
 import java.io.File;

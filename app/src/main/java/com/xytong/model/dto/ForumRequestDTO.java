@@ -1,14 +1,13 @@
-package com.xytong.model.json;
+package com.xytong.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.xytong.model.entity.ShData;
+import com.xytong.model.vo.ForumVO;
+import lombok.Data;
 
 import java.util.List;
 
-import lombok.Data;
-
 @Data
-public class ShRequestJson {
+public class ForumRequestDTO {
     String mode;
     @JsonProperty(value = "num_start")
     int numStart;
@@ -17,15 +16,15 @@ public class ShRequestJson {
     @JsonProperty(value = "num_end")
     int numEnd;
     long timestamp;
-    @JsonProperty(value = "sh_data")
-    List<ShData> shData;
+    @JsonProperty(value = "forum_data")
+    List<ForumVO> forumData;
 
-    public void setShData(List<ShData> shData) {
-        this.shData = shData;
+    public void setForumData(List<ForumVO> forumData) {
+        this.forumData = forumData;
     }
 
-    public List<ShData> getShData() {
-        return shData;
+    public List<ForumVO> getForumData() {
+        return forumData;
     }
 
     public String getTimestamp() {

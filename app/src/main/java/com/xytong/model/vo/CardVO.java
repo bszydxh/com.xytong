@@ -1,4 +1,4 @@
-package com.xytong.model.entity;
+package com.xytong.model.vo;
 
 
 import androidx.room.ColumnInfo;
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 @Entity
-public class CardData implements Serializable {
+public class CardVO implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id = -1;//主键
     @Ignore

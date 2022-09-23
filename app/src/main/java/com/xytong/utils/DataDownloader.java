@@ -6,11 +6,10 @@ import androidx.annotation.NonNull;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xytong.dao.SettingDao;
-import com.xytong.model.entity.CommentData;
-import com.xytong.model.entity.ForumData;
-import com.xytong.model.entity.ReData;
-import com.xytong.model.entity.ShData;
-import com.xytong.model.json.*;
+import com.xytong.model.vo.*;
+import com.xytong.model.vo.ForumVO;
+import com.xytong.model.vo.ReVO;
+import com.xytong.model.dto.*;
 import com.xytong.utils.http.Poster;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,27 +18,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataDownloader {
-    public static List<ForumData> getForumDataList(Context context, @NonNull String mode, int start, int end) {
-        List<ForumData> data = new ArrayList<>();
+    public static List<ForumVO> getForumDataList(Context context, @NonNull String mode, int start, int end) {
+        List<ForumVO> data = new ArrayList<>();
         int need_num = end - start + 1;
         ObjectMapper postMapper = new ObjectMapper();
-        ForumPostJson forumPostJson = new ForumPostJson();
-        forumPostJson.setModule("forums");
-        forumPostJson.setMode(mode);
-        forumPostJson.setNumStart(start);
-        forumPostJson.setNumEnd(end);
-        forumPostJson.setNeedNum(need_num);
-        forumPostJson.setTimestamp(System.currentTimeMillis());
+        ForumPostDTO forumPostDTO = new ForumPostDTO();
+        forumPostDTO.setModule("forums");
+        forumPostDTO.setMode(mode);
+        forumPostDTO.setNumStart(start);
+        forumPostDTO.setNumEnd(end);
+        forumPostDTO.setNeedNum(need_num);
+        forumPostDTO.setTimestamp(System.currentTimeMillis());
         try {
             Log.i("DataDownloader.getReData()", "post ok");
-            Poster<List<ForumData>> poster = new Poster<>(SettingDao.getForumUrl(context),
-                    postMapper.writeValueAsString(forumPostJson));
+            Poster<List<ForumVO>> poster = new Poster<>(SettingDao.getForumUrl(context),
+                    postMapper.writeValueAsString(forumPostDTO));
             poster.setHttpListener(result -> {
-                List<ForumData> data_init = new ArrayList<>();
+                List<ForumVO> data_init = new ArrayList<>();
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
-                    ForumRequestJson forumRequestJson = objectMapper.readValue(result, ForumRequestJson.class);
-                    data_init.addAll(forumRequestJson.getForumData());
+                    ForumRequestDTO forumRequestDTO = objectMapper.readValue(result, ForumRequestDTO.class);
+                    data_init.addAll(forumRequestDTO.getForumData());
                     Log.i("DataDownloader.getForumData()", "get ok");
                 } catch (Exception e) {
                     Log.e("DataDownloader.getForumData()", "error");
@@ -55,27 +54,28 @@ public class DataDownloader {
         }
         return data;
     }
-    public static List<ReData> getReDataList(Context context, @NonNull String mode, int start, int end) {
-        List<ReData> data = new ArrayList<>();
+
+    public static List<ReVO> getReDataList(Context context, @NonNull String mode, int start, int end) {
+        List<ReVO> data = new ArrayList<>();
         int need_num = end - start + 1;
         ObjectMapper postMapper = new ObjectMapper();
-        RePostJson rePostJson = new RePostJson();
-        rePostJson.setModule("run_errands");
-        rePostJson.setMode(mode);
-        rePostJson.setNumStart(start);
-        rePostJson.setNumEnd(end);
-        rePostJson.setNeedNum(need_num);
-        rePostJson.setTimestamp(System.currentTimeMillis());
+        RePostDTO rePostDTO = new RePostDTO();
+        rePostDTO.setModule("run_errands");
+        rePostDTO.setMode(mode);
+        rePostDTO.setNumStart(start);
+        rePostDTO.setNumEnd(end);
+        rePostDTO.setNeedNum(need_num);
+        rePostDTO.setTimestamp(System.currentTimeMillis());
         try {
             Log.i("DataDownloader.getReData()", "post ok");
-            Poster<List<ReData>> poster = new Poster<>(SettingDao.getReUrl(context),
-                    postMapper.writeValueAsString(rePostJson));
+            Poster<List<ReVO>> poster = new Poster<>(SettingDao.getReUrl(context),
+                    postMapper.writeValueAsString(rePostDTO));
             poster.setHttpListener(result -> {
-                List<ReData> data_init = new ArrayList<>();
+                List<ReVO> data_init = new ArrayList<>();
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
-                    ReRequestJson reRequestJson = objectMapper.readValue(result, ReRequestJson.class);
-                    data_init.addAll(reRequestJson.getReData());
+                    ReRequestDTO reRequestDTO = objectMapper.readValue(result, ReRequestDTO.class);
+                    data_init.addAll(reRequestDTO.getReData());
                     Log.i("DataDownloader.getReData()", "get ok");
                 } catch (Exception e) {
                     Log.e("DataDownloader.getReData()", "error");
@@ -92,11 +92,11 @@ public class DataDownloader {
         return data;
     }
 
-    public static List<ShData> getShDataList(Context context, @NonNull String mode, int start, int end) {
-        List<ShData> data = new ArrayList<>();
+    public static List<ShVO> getShDataList(Context context, @NonNull String mode, int start, int end) {
+        List<ShVO> data = new ArrayList<>();
         int need_num = end - start + 1;
         ObjectMapper postMapper = new ObjectMapper();
-        ShPostJson rePostJson = new ShPostJson();
+        ShPostDTO rePostJson = new ShPostDTO();
         rePostJson.setModule("secondhand");
         rePostJson.setMode(mode);
         rePostJson.setNumStart(start);
@@ -105,13 +105,13 @@ public class DataDownloader {
         rePostJson.setTimestamp(System.currentTimeMillis());
         try {
             Log.i("DataDownloader.getShData()", "post ok");
-            Poster<List<ShData>> poster = new Poster<>(SettingDao.getShUrl(context),
+            Poster<List<ShVO>> poster = new Poster<>(SettingDao.getShUrl(context),
                     postMapper.writeValueAsString(rePostJson));
             poster.setHttpListener(result -> {
-                List<ShData> data_init = new ArrayList<>();
+                List<ShVO> data_init = new ArrayList<>();
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
-                    ShRequestJson reRequestJson = objectMapper.readValue(result, ShRequestJson.class);
+                    ShRequestDTO reRequestJson = objectMapper.readValue(result, ShRequestDTO.class);
                     data_init.addAll(reRequestJson.getShData());
                     Log.i("DataDownloader.getShData()", "get ok");
                 } catch (Exception e) {
@@ -130,8 +130,8 @@ public class DataDownloader {
 
     }
 
-    public static List<CommentData> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
-        List<CommentData> data = new ArrayList<>();
+    public static List<CommentVO> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
+        List<CommentVO> data = new ArrayList<>();
         if ("newest".equals(mode)) {
             int need_num = end - start + 1;
             String text = "{\n" +
@@ -142,14 +142,14 @@ public class DataDownloader {
                     "  \"num_end\": " + end + ",\n" +
                     "  \"timestamp\": 1650098900\n" +
                     "}";
-            Poster<List<CommentData>> poster = new Poster<>(SettingDao.getCommentUrl(context), text);
+            Poster<List<CommentVO>> poster = new Poster<>(SettingDao.getCommentUrl(context), text);
             poster.setHttpListener(result -> {
-                List<CommentData> data_init = new ArrayList<>();
+                List<CommentVO> data_init = new ArrayList<>();
                 try {
                     JSONObject root = new JSONObject(result);
                     JSONArray comment_data_array = root.getJSONArray("comment_data");
                     for (int i = 0; i < comment_data_array.length(); i++) {
-                        CommentData commentData = new CommentData();
+                        CommentVO commentData = new CommentVO();
                         JSONObject comment_data = comment_data_array.getJSONObject(i);
                         commentData.setUserAvatarUrl(comment_data.getString("user_avatar"));
                         commentData.setUserName(comment_data.getString("user_name"));

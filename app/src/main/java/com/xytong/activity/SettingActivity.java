@@ -1,15 +1,11 @@
 package com.xytong.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.xytong.R;
 import com.xytong.dao.SettingDao;
 import com.xytong.databinding.ActivitySettingBinding;
+import com.xytong.utils.ViewCreatedHelper;
 import com.xytong.view.UrlCreateDialog;
 
 
@@ -18,10 +14,7 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        ViewCreatedHelper.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());

@@ -1,14 +1,17 @@
 package com.xytong;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.xytong.dao.UserDao;
-import com.xytong.model.vo.UserVO;
+import com.xytong.model.dto.AccessRequestDTO;
+import com.xytong.utils.Access;
+import com.xytong.utils.DataChecker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -16,7 +19,7 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class DataCheckerTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -25,17 +28,12 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void UserSPTest() {
+    public void getTokenTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        UserVO userVO = new UserVO();
-        userVO.setName("bszydxh");
-        UserDao.setUser(context, userVO);
-        assertEquals("bszydxh", UserDao.getUser(context).getName());
-        UserDao.setPwd(context, "1234");
-        assertEquals("1234", UserDao.getPwd(context));
-        UserDao.setToken(context, "1234");
-        assertEquals("1234", UserDao.getToken(context));
+        AccessRequestDTO accessRequestDTO =
+                DataChecker.getToken(context, "bszydxh",
+                        Access.md5Salt("bszydxh", "1357924680"));
+        Log.e("json", accessRequestDTO.toString());
+        assertNotNull(accessRequestDTO);
     }
-
-
 }

@@ -6,21 +6,21 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.xytong.model.entity.ReData;
+import com.xytong.model.vo.ReVO;
 
 import java.util.List;
 
 @Dao
 public interface ReDataDao {
     @Insert
-    void insertRe(ReData... words);
+    void insertRe(ReVO... words);
 
     @Update
-    int updateRe(ReData... words);
+    int updateRe(ReVO... words);
 
     @Delete
-    void deleteRe(ReData... words);
+    void deleteRe(ReVO... words);
 
     @Query("SELECT * FROM re_list")
-    List<ReData> getAllRe();
+    List<ReVO> getAllRe();
 }

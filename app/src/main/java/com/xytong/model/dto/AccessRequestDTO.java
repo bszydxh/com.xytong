@@ -1,18 +1,14 @@
-package com.xytong.model.json;
+package com.xytong.model.dto;
 
 import lombok.Data;
 
 
 @Data
-public class AccessRequestJson {
+public class AccessRequestDTO {
+    String mode;
     String username;
     String token;
-    int id;
     long timestamp;
-
-    public String getId() {
-        return String.valueOf(id);
-    }
 
     public String getTimestamp() {
         return String.valueOf(timestamp);

@@ -1,4 +1,4 @@
-package com.xytong.model.entity;
+package com.xytong.model.vo;
 
 import android.util.Log;
 
@@ -6,7 +6,7 @@ import com.xytong.view.LikeThump;
 
 import java.io.Serializable;
 
-public class CommentData extends CardData implements Serializable, LikeThump {
+public class CommentVO extends CardVO implements Serializable, LikeThump {
     Integer floor = -1;
     Integer likes = 0;
     boolean liked = false;

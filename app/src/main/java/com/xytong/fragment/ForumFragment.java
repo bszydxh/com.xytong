@@ -30,8 +30,8 @@ import com.xytong.activity.PublishActivity;
 import com.xytong.R;
 import com.xytong.activity.UserActivity;
 import com.xytong.adapter.ForumRecyclerAdapter;
-import com.xytong.model.entity.ForumData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.ForumVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.viewModel.ForumDataViewModel;
 import com.xytong.databinding.FragmentForumBinding;
 
@@ -52,8 +52,8 @@ public class ForumFragment extends Fragment {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent intent = result.getData();
                         if (intent != null) {
-                            ForumData data = (ForumData) intent.getExtras().getSerializable("forumData");
-                            List<ForumData> dataList = model.getDataList().getValue();
+                            ForumVO data = (ForumVO) intent.getExtras().getSerializable("forumData");
+                            List<ForumVO> dataList = model.getDataList().getValue();
                             int pos = intent.getExtras().getInt("pos");
                             if (dataList != null) {
                                 dataList.remove(pos);
@@ -122,7 +122,7 @@ public class ForumFragment extends Fragment {
         });
 //        UserDataViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);//父Activity负责提供数据，不提供默认不指定用户
 //        UserData userData = userViewModel.getUserData().getValue();
-        LiveData<List<ForumData>> liveData = model.getDataList();
+        LiveData<List<ForumVO>> liveData = model.getDataList();
         liveData.observe(getViewLifecycleOwner(), dataList -> {
             if (forumRecyclerView.getAdapter() == null) {
                 Log.i("setAdapter", "ok");
@@ -130,16 +130,16 @@ public class ForumFragment extends Fragment {
                 forumRecyclerAdapter = new ForumRecyclerAdapter(dataList);
                 forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
                     @Override
-                    public void onUserClick(View view, UserData userData) {
+                    public void onUserClick(View view, UserVO userVO) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("userData", userData);
+                        bundle.putSerializable("userData", userVO);
                         Intent intent = new Intent(view.getContext(), UserActivity.class);
                         intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                         view.getContext().startActivity(intent);
                     }
 
                     @Override
-                    public void onTitleClick(View view, int position, ForumData forumDataIndex) {
+                    public void onTitleClick(View view, int position, ForumVO forumDataIndex) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("forumData", forumDataIndex);
                         bundle.putInt("pos", position);

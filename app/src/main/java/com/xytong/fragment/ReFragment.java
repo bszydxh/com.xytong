@@ -30,8 +30,8 @@ import com.xytong.R;
 import com.xytong.activity.ReActivity;
 import com.xytong.activity.UserActivity;
 import com.xytong.adapter.ReRecyclerAdapter;
-import com.xytong.model.entity.ReData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.ReVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.viewModel.ReDataViewModel;
 import com.xytong.databinding.FragmentReBinding;
 
@@ -71,7 +71,7 @@ public class ReFragment extends Fragment {
         LinearLayoutManager reLinearLayoutManager = new LinearLayoutManager(this.requireContext());
         reRecyclerView.setLayoutManager(reLinearLayoutManager);
         reLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LiveData<List<ReData>> liveData = model.getDataList();
+        LiveData<List<ReVO>> liveData = model.getDataList();
         liveData.observe(getViewLifecycleOwner(), dataList -> {//更新结束，不妨设置一个预期值
             if (reRecyclerView.getAdapter() == null) {
                 Log.i("setAdapter", "ok");//进行适配器初始化
@@ -79,9 +79,9 @@ public class ReFragment extends Fragment {
                 reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
                 reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
                     @Override
-                    public void onUserClick(View view, UserData userData) {
+                    public void onUserClick(View view, UserVO userVO) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("userData", userData);
+                        bundle.putSerializable("userData", userVO);
                         Intent intent = new Intent(view.getContext(), UserActivity.class);
                         intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                         view.getContext().startActivity(intent);
@@ -92,7 +92,7 @@ public class ReFragment extends Fragment {
                     }
 
                     @Override
-                    public void onTitleClick(View view, int position, ReData reDataIndex) {
+                    public void onTitleClick(View view, int position, ReVO reDataIndex) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("reData", reDataIndex);
                         bundle.putInt("pos", position);

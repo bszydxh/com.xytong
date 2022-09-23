@@ -17,7 +17,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="发单">立即发单</string>
     <string name="接单">接单</string>
-    <string name="username">未知用户</string>
+    <string name="username"> </string>
     <string name="title">标题</string>
     <string name="text">内容\n内容</string>
     <string name="user_avatar">用户头像</string>

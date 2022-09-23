@@ -10,10 +10,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
@@ -21,26 +18,26 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.R;
 import com.xytong.adapter.CommentRecyclerAdapter;
-import com.xytong.model.entity.CommentData;
-import com.xytong.model.entity.ForumData;
-import com.xytong.model.entity.UserData;
-import com.xytong.viewModel.CommentDataViewModel;
 import com.xytong.databinding.ActivityForumBinding;
+import com.xytong.model.vo.CommentVO;
+import com.xytong.model.vo.ForumVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageGetter;
+import com.xytong.utils.ViewCreatedHelper;
 import com.xytong.view.Thump;
+import com.xytong.viewModel.CommentDataViewModel;
 
 import java.util.List;
 
 public class ForumActivity extends AppCompatActivity {
     private ActivityForumBinding binding;
-    ForumData forumData;
+    ForumVO forumData;
     CommentRecyclerAdapter commentRecyclerAdapter;
     CommentDataViewModel model;
     int position;
@@ -49,22 +46,19 @@ public class ForumActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        ViewCreatedHelper.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityForumBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
-        forumData = (ForumData) bundle_back.getSerializable("forumData");
+        forumData = (ForumVO) bundle_back.getSerializable("forumData");
         ImageGetter.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumData.getUserAvatarUrl());
         binding.cardForumIndex.cardForumUserName.setText(forumData.getUserName());
         binding.cardForumIndex.cardForumTitle.setText(forumData.getTitle());
         binding.cardForumIndex.cardForumText.setText(forumData.getText());
         binding.cardForumIndex.cardForumDate.setText(forumData.getDate());
-        Thump<ForumData> thump = new Thump<>();
+        Thump<ForumVO> thump = new Thump<>();
         thump.setupThump(forumData, binding.cardForumIndex.cardForumLikesImage, binding.cardForumIndex.cardForumLikes);
         String commentsNum = forumData.getComments().toString();
         String forwardingNum = forumData.getForwarding().toString();
@@ -85,11 +79,11 @@ public class ForumActivity extends AppCompatActivity {
             ContextCompat.startActivity(this, Intent.createChooser(sendIntent, "将内容分享至"), null);
         });
         View.OnClickListener imageClickListener = (v -> {
-            UserData userData = new UserData();
-            userData.setName(forumData.getUserName());
-            userData.setUserAvatarUrl(forumData.getUserAvatarUrl());
+            UserVO userVO = new UserVO();
+            userVO.setName(forumData.getUserName());
+            userVO.setUserAvatarUrl(forumData.getUserAvatarUrl());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("userData", userData);
+            bundle.putSerializable("userData", userVO);
             Intent intent = new Intent(v.getContext(), UserActivity.class);
             intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
             v.getContext().startActivity(intent);
@@ -118,7 +112,7 @@ public class ForumActivity extends AppCompatActivity {
         commentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         new Thread(() -> {
             model = new ViewModelProvider(this).get(CommentDataViewModel.class);
-            LiveData<List<CommentData>> liveData = model.getDataList();
+            LiveData<List<CommentVO>> liveData = model.getDataList();
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> liveData.observe(this, dataList -> {
                 if (commentRecyclerView.getAdapter() == null) {
@@ -128,7 +122,7 @@ public class ForumActivity extends AppCompatActivity {
                     commentRecyclerView.setAdapter(commentRecyclerAdapter);
                     commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
                         @Override
-                        public void onTitleClick(View view, int position, CommentData commentData) {
+                        public void onTitleClick(View view, int position, CommentVO commentData) {
                             binding.cardForumCommentEdit.clearFocus();
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);

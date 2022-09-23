@@ -1,11 +1,11 @@
-package com.xytong.model.json;
+package com.xytong.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
 @Data
-public class ShPostJson {
+public class ShPostDTO {
     String module;
     String mode;
     @JsonProperty(value = "num_start")

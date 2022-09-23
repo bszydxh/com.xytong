@@ -6,21 +6,21 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.xytong.model.entity.ShData;
+import com.xytong.model.vo.ShVO;
 
 import java.util.List;
 
 @Dao
 public interface ShDataDao {
     @Insert
-    void insertSh(ShData... words);
+    void insertSh(ShVO... words);
 
     @Update
-    int updateSh(ShData... words);
+    int updateSh(ShVO... words);
 
     @Delete
-    void deleteSh(ShData... words);
+    void deleteSh(ShVO... words);
 
     @Query("SELECT * FROM sh_list")
-    List<ShData> getAllSh();
+    List<ShVO> getAllSh();
 }

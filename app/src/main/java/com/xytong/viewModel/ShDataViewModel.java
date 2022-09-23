@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.xytong.model.entity.ShData;
+import com.xytong.model.vo.ShVO;
 import com.xytong.dao.SettingDao;
 import com.xytong.utils.DataDownloader;
 import com.xytong.utils.CoreDataBaseGetter;
@@ -16,22 +16,22 @@ import com.xytong.utils.CoreDataBaseGetter;
 import java.util.List;
 
 public class ShDataViewModel extends AndroidViewModel {
-    private MutableLiveData<List<ShData>> dataList;
+    private MutableLiveData<List<ShVO>> dataList;
 
     public ShDataViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public void setDataList(List<ShData> dataListIndex) {
+    public void setDataList(List<ShVO> dataListIndex) {
         dataList.postValue(dataListIndex);
     }
 
-    public LiveData<List<ShData>> getDataList() {
+    public LiveData<List<ShVO>> getDataList() {
         if (dataList == null) {
             dataList = new MutableLiveData<>();
             new Thread(() -> {
                 Log.i(this.getClass().getName(), "get data");
-                List<ShData> shList;
+                List<ShVO> shList;
                 if (SettingDao.isDemonstrateMode(getApplication())) {//是否打开演示模式
                     shList = CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
                             .getCoreDataBase()
@@ -49,8 +49,8 @@ public class ShDataViewModel extends AndroidViewModel {
 
     public void loadMoreData() {
         new Thread(() -> {
-            List<ShData> shList = dataList.getValue();
-            List<ShData> obtainedDataList;
+            List<ShVO> shList = dataList.getValue();
+            List<ShVO> obtainedDataList;
             if (SettingDao.isDemonstrateMode(getApplication())) {//是否打开演示模式
                 obtainedDataList = CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
                         .getCoreDataBase()
@@ -69,8 +69,8 @@ public class ShDataViewModel extends AndroidViewModel {
 
     public void refreshData() {
         new Thread(() -> {
-            List<ShData> shList = dataList.getValue();
-            List<ShData> obtainedDataList;
+            List<ShVO> shList = dataList.getValue();
+            List<ShVO> obtainedDataList;
             if (SettingDao.isDemonstrateMode(getApplication())) {//是否打开演示模式
                 obtainedDataList = CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
                         .getCoreDataBase()

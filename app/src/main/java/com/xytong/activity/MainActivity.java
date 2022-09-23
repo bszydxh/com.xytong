@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -13,15 +15,16 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.xytong.R;
+import com.xytong.adapter.RootFragmentPagerAdapter;
 import com.xytong.dao.UserDao;
 import com.xytong.databinding.ActivityMainBinding;
 import com.xytong.fragment.ForumFragment;
 import com.xytong.fragment.MoralFragment;
 import com.xytong.fragment.ReFragment;
 import com.xytong.fragment.ShFragment;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.Access;
-import com.xytong.utils.ImageGetter;
-import com.xytong.adapter.RootFragmentPagerAdapter;
+import com.xytong.utils.ViewCreatedHelper;
 
 import java.util.Objects;
 
@@ -40,10 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.underBar.toolbar);//设置toolbar
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         //数据初始化
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        ViewCreatedHelper.setBlackStatusBar(this);
         drawer = binding.drawerLayout;//定义DrawerLayout变量drawer,将主视图的drawer赋值到该变量
         NavigationView navigationView = binding.navView;
         binding.underBar.toolbar.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
@@ -101,13 +101,20 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        ImageGetter.setAvatarViewBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
-                "");
-        ImageGetter.setAvatarViewBitmap(
+        ViewCreatedHelper.setupUserDataViewGroup(
+                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
+                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
+                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
+                UserDao.getUser(this)
+        );
+        ViewCreatedHelper.setupUserDataViewGroup(
                 binding.underBar.toolbarUserAvatar,
-                "");
+                binding.underBar.toolbarUserName,
+                binding.underBar.toolbarUserSignature,
+                UserDao.getUser(this)
+        );
         //此处进行异步用户鉴权，确保用户登录状态（过期没）
-        Access.getTokenForStart(this, new Access.TokenListener() {
+        Access.getTokenForStart(this, new Access.UserDataListener() {
             @Override
             public void onStart(Context context) {
                 Toast.makeText(context, "开始鉴权", Toast.LENGTH_SHORT).show();
@@ -115,24 +122,30 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDone(Context context, String token) {
+            public void onDone(Context context, UserVO userVO) {
                 Toast.makeText(context, "鉴权完成", Toast.LENGTH_SHORT).show();
-                UserDao.setToken(context, token);
-                ImageGetter.setAvatarViewBitmap(navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
-                        "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
-                ImageGetter.setAvatarViewBitmap(
+                ViewCreatedHelper.setupUserDataViewGroup(
+                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
+                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
+                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
+                        UserDao.getUser(context)
+                );
+                ViewCreatedHelper.setupUserDataViewGroup(
                         binding.underBar.toolbarUserAvatar,
-                        "https://s1.ax1x.com/2022/04/16/Lt5zjA.png");
+                        binding.underBar.toolbarUserName,
+                        binding.underBar.toolbarUserSignature,
+                        UserDao.getUser(context)
+                );
                 Log.i("access", "鉴权完成");
             }
 
             @Override
-            public void onError(Context context) {
+            public void onError(Context context, int errorFlag) {
                 Toast.makeText(context, "鉴权失败", Toast.LENGTH_SHORT).show();
                 Log.i("access", "鉴权失败");
             }
         });
-
+        Log.e("UserDataCheck", UserDao.getUser(this).toString());
     }
 
     @Override

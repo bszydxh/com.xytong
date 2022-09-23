@@ -1,11 +1,11 @@
-package com.xytong.model.entity;
+package com.xytong.model.vo;
 
 import androidx.room.Entity;
 
 import java.io.Serializable;
 
 @Entity(tableName = "sh_list")
-public class ShData extends CardData implements Serializable {
+public class ShVO extends CardVO implements Serializable {
     private String price = "null";
 
     ////////////////////////////////////////////////////////

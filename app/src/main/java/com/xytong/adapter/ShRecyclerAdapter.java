@@ -12,15 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.model.entity.ShData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.ShVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageGetter;
 
 import java.util.List;
 
 public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ShData> localDataSet;
+    private final List<ShVO> localDataSet;
 
     private OnItemClickListener onItemClickListener;
 
@@ -80,9 +80,9 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public interface OnItemClickListener {
 
-        void onUserClick(View view, UserData userData);
+        void onUserClick(View view, UserVO userVO);
 
-        void onTitleClick(View view, int position, ShData shData);
+        void onTitleClick(View view, int position, ShVO shData);
 
         void onTitleLongClick(View view, int position);
 
@@ -92,7 +92,7 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.onItemClickListener = listener;
     }
 
-    public ShRecyclerAdapter(List<ShData> dataSet) {
+    public ShRecyclerAdapter(List<ShVO> dataSet) {
         this.localDataSet = dataSet;
     }
 
@@ -128,10 +128,10 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void userClick(int position, View v) {
-        UserData userData = new UserData();
-        userData.setName(localDataSet.get(position).getUserName());
-        userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
-        onItemClickListener.onUserClick(v, userData);
+        UserVO userVO = new UserVO();
+        userVO.setName(localDataSet.get(position).getUserName());
+        userVO.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+        onItemClickListener.onUserClick(v, userVO);
     }
 
     @Override

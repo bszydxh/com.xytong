@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.xytong.model.entity.ForumData;
+import com.xytong.model.vo.ForumVO;
 import com.xytong.dao.SettingDao;
 import com.xytong.utils.DataDownloader;
 import com.xytong.utils.CoreDataBaseGetter;
@@ -17,22 +17,22 @@ import java.util.List;
 
 public class ForumDataViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<ForumData>> dataList;
+    private MutableLiveData<List<ForumVO>> dataList;
 
     public ForumDataViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public void setDataList(List<ForumData> dataListIndex) {
+    public void setDataList(List<ForumVO> dataListIndex) {
         dataList.postValue(dataListIndex);
     }
 
-    public LiveData<List<ForumData>> getDataList() {
+    public LiveData<List<ForumVO>> getDataList() {
         if (dataList == null) {
             dataList = new MutableLiveData<>();
             new Thread(() -> {
                 Log.i(this.getClass().getName() + ".getDataList()", "get data");
-                List<ForumData> forumList;
+                List<ForumVO> forumList;
                 if (SettingDao.isDemonstrateMode(getApplication())) {//是否打开演示模式
                     forumList =
                             CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
@@ -50,8 +50,8 @@ public class ForumDataViewModel extends AndroidViewModel {
 
     public void loadMoreData() {
         new Thread(() -> {
-            List<ForumData> forumList = dataList.getValue();
-            List<ForumData> obtainedDataList;
+            List<ForumVO> forumList = dataList.getValue();
+            List<ForumVO> obtainedDataList;
             if (SettingDao.isDemonstrateMode(getApplication())) {
                 obtainedDataList =
                         CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
@@ -70,8 +70,8 @@ public class ForumDataViewModel extends AndroidViewModel {
 
     public void refreshData() {
         new Thread(() -> {
-            List<ForumData> forumList = dataList.getValue();
-            List<ForumData> obtainedDataList;
+            List<ForumVO> forumList = dataList.getValue();
+            List<ForumVO> obtainedDataList;
             if (SettingDao.isDemonstrateMode(getApplication())) {
                 obtainedDataList =
                         CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())

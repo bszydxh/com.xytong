@@ -1,4 +1,4 @@
-package com.xytong.model.entity;
+package com.xytong.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -6,11 +6,11 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class UserData implements Serializable {
-    private String name = "null";
+public class UserVO implements Serializable {
+    private String name = "未登录";
     private Integer id = -1;
     private String phoneNumber = "null";
-    private String signature = "null";
+    private String signature = "登录/注册";
     private int gender = -1;
     private Long birthday = -1L;
     private String email = "null";

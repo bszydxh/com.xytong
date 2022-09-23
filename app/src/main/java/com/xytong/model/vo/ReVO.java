@@ -1,13 +1,11 @@
-package com.xytong.model.entity;
+package com.xytong.model.vo;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 import java.io.Serializable;
 
 @Entity(tableName = "re_list")
-public class ReData extends CardData implements Serializable {
-    @ColumnInfo
+public class ReVO extends CardVO implements Serializable {
     private String price = "null";
 
     ////////////////////////////////////////////////////////

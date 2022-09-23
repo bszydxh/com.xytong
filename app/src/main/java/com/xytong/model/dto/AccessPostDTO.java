@@ -1,14 +1,16 @@
-package com.xytong.model.json;
+package com.xytong.model.dto;
 
 import lombok.Data;
 
 @Data
-public class AccessPostJson {
+public class AccessPostDTO {
+    String mode;
     String username;
     String password;
+    String token;
     long timestamp;
+
     public String getTimestamp() {
         return String.valueOf(timestamp);
     }
-
 }

@@ -56,7 +56,7 @@ public class Poster<T> {
     }
 
     public Poster<T> postWithToken(Context context, PostListener<T> posterListener) {
-       Access.getTokenForHttp(context, new Access.TokenListener() {
+        Access.getTokenForHttp(context, new Access.TokenListener() {
             @Override
             public void onStart(Context context) {
                 posterListener.onStart(context);
@@ -64,7 +64,7 @@ public class Poster<T> {
 
             @Override
             public void onDone(Context context, String token) {
-                FutureTask<T> task = new FutureTask<>(new HttpWithTokenCallable<T>(path, text, token, httpListener));
+                FutureTask<T> task = new FutureTask<>(new HttpWithTokenCallable<>(path, text, token, httpListener));
                 new Thread(task).start();
                 T data = null;
                 try {
@@ -80,10 +80,10 @@ public class Poster<T> {
             }
 
             @Override
-            public void onError(Context context) {
+            public void onError(Context context, int errorFlag) {
 
             }
         });
-       return this;
+        return this;
     }
 }

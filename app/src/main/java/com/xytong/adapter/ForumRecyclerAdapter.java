@@ -13,15 +13,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xytong.R;
-import com.xytong.model.entity.ForumData;
-import com.xytong.model.entity.UserData;
+import com.xytong.model.vo.ForumVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageGetter;
 import com.xytong.view.Thump;
 
 import java.util.List;
 
 public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdapter.ViewHolder> {
-    private final List<ForumData> localDataSet;
+    private final List<ForumVO> localDataSet;
     private OnItemClickListener onItemClickListener;
 
     /**
@@ -114,7 +114,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
      * @param dataSet String[] containing the data to populate views to be used
      *                by RecyclerView.
      */
-    public ForumRecyclerAdapter(List<ForumData> dataSet) {
+    public ForumRecyclerAdapter(List<ForumVO> dataSet) {
         localDataSet = dataSet;
     }
 
@@ -129,9 +129,9 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
     }
 
     public interface OnItemClickListener {
-        void onUserClick(View view, UserData userData);
+        void onUserClick(View view, UserVO userVO);
 
-        void onTitleClick(View view, int position, ForumData forumData);
+        void onTitleClick(View view, int position, ForumVO forumData);
 
         void onTitleLongClick(View view, int position);
 
@@ -143,7 +143,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Thump<ForumData> thump = new Thump<>();
+        Thump<ForumVO> thump = new Thump<>();
         ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
@@ -180,10 +180,10 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
     }
 
     private void userClick(int position, View v) {
-        UserData userData = new UserData();
-        userData.setName(localDataSet.get(position).getUserName());
-        userData.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
-        onItemClickListener.onUserClick(v, userData);
+        UserVO userVO = new UserVO();
+        userVO.setName(localDataSet.get(position).getUserName());
+        userVO.setUserAvatarUrl(localDataSet.get(position).getUserAvatarUrl());
+        onItemClickListener.onUserClick(v, userVO);
     }
 
     @Override

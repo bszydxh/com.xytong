@@ -6,21 +6,21 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.xytong.model.entity.ForumData;
+import com.xytong.model.vo.ForumVO;
 
 import java.util.List;
 
 @Dao
 public interface ForumDataDao {
     @Insert
-    void insertForum(ForumData... words);
+    void insertForum(ForumVO... words);
 
     @Update
-    int updateForum(ForumData... words);
+    int updateForum(ForumVO... words);
 
     @Delete
-    void deleteForum(ForumData... words);
+    void deleteForum(ForumVO... words);
 
     @Query("SELECT * FROM forum_list")
-    List<ForumData> getAllForum();
+    List<ForumVO> getAllForum();
 }

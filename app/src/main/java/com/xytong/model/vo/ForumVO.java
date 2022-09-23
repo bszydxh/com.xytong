@@ -1,20 +1,15 @@
-package com.xytong.model.entity;
+package com.xytong.model.vo;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-
 import com.xytong.view.LikeThump;
 
 import java.io.Serializable;
 
 @Entity(tableName = "forum_list")
-public class ForumData extends CardData implements Serializable, LikeThump {
-    @ColumnInfo
+public class ForumVO extends CardVO implements Serializable, LikeThump {
     private Integer likes = 0;
-    @ColumnInfo
     private Integer comments = 0;
-    @ColumnInfo
     private Integer forwarding = 0;
     ////////////////////////////////////////////////////////
     @Ignore

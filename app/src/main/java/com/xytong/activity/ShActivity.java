@@ -10,35 +10,32 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.R;
 import com.xytong.adapter.CommentRecyclerAdapter;
-import com.xytong.model.entity.CommentData;
-import com.xytong.model.entity.ShData;
-import com.xytong.model.entity.UserData;
-import com.xytong.viewModel.CommentDataViewModel;
 import com.xytong.databinding.ActivityShBinding;
+import com.xytong.model.vo.CommentVO;
+import com.xytong.model.vo.ShVO;
+import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageGetter;
+import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.viewModel.CommentDataViewModel;
 
 import java.util.List;
 
 public class ShActivity extends AppCompatActivity {
     private ActivityShBinding binding;
-    ShData shData;
+    ShVO shData;
     CommentRecyclerAdapter commentRecyclerAdapter;
     CommentDataViewModel model;
     int position;
@@ -47,16 +44,13 @@ public class ShActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        ViewCreatedHelper.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityShBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
-        shData = (ShData) bundle_back.getSerializable("shData");
+        shData = (ShVO) bundle_back.getSerializable("shData");
         ImageGetter.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shData.getUserAvatarUrl());
         binding.cardShIndex.cardShUserName.setText(shData.getUserName());
         binding.cardShIndex.cardShTitle.setText(shData.getTitle());
@@ -64,11 +58,11 @@ public class ShActivity extends AppCompatActivity {
         binding.cardShIndex.cardShText.setText(shData.getText());
         binding.cardShIndex.cardShPrice.setText(String.format("¥%s", shData.getPrice()));
         View.OnClickListener imageClickListener = (v->{
-            UserData userData = new UserData();
-            userData.setName(shData.getUserName());
-            userData.setUserAvatarUrl(shData.getUserAvatarUrl());
+            UserVO userVO = new UserVO();
+            userVO.setName(shData.getUserName());
+            userVO.setUserAvatarUrl(shData.getUserAvatarUrl());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("userData",userData);
+            bundle.putSerializable("userData", userVO);
             Intent intent = new Intent(v.getContext(), UserActivity.class);
             intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
             v.getContext().startActivity(intent);
@@ -97,7 +91,7 @@ public class ShActivity extends AppCompatActivity {
         commentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         new Thread(() -> {
             model = new ViewModelProvider(this).get(CommentDataViewModel.class);
-            LiveData<List<CommentData>> liveData = model.getDataList();
+            LiveData<List<CommentVO>> liveData = model.getDataList();
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> liveData.observe(this, dataList -> {
                 if (commentRecyclerView.getAdapter() == null) {
@@ -107,7 +101,7 @@ public class ShActivity extends AppCompatActivity {
                     commentRecyclerView.setAdapter(commentRecyclerAdapter);
                     commentRecyclerAdapter.setOnItemClickListener(new CommentRecyclerAdapter.OnItemClickListener() {
                         @Override
-                        public void onTitleClick(View view, int position, CommentData commentData) {
+                        public void onTitleClick(View view, int position, CommentVO commentData) {
                             binding.cardShCommentEdit.clearFocus();
                             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(),0);

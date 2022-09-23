@@ -1,13 +1,14 @@
-package com.xytong.model.json;
+package com.xytong.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.xytong.model.entity.ReData;
-import lombok.Data;
+import com.xytong.model.vo.ShVO;
 
 import java.util.List;
 
+import lombok.Data;
+
 @Data
-public class ReRequestJson {
+public class ShRequestDTO {
     String mode;
     @JsonProperty(value = "num_start")
     int numStart;
@@ -16,15 +17,15 @@ public class ReRequestJson {
     @JsonProperty(value = "num_end")
     int numEnd;
     long timestamp;
-    @JsonProperty(value = "re_data")
-    List<ReData> reData;
+    @JsonProperty(value = "sh_data")
+    List<ShVO> shData;
 
-    public void setReData(List<ReData> reData) {
-        this.reData = reData;
+    public void setShData(List<ShVO> shData) {
+        this.shData = shData;
     }
 
-    public List<ReData> getReData() {
-        return reData;
+    public List<ShVO> getShData() {
+        return shData;
     }
 
     public String getTimestamp() {
