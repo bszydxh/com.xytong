@@ -11,15 +11,15 @@ import com.xytong.fragment.ForumFragment;
 import com.xytong.fragment.ReFragment;
 import com.xytong.fragment.ShFragment;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ImageUtils;
+import com.xytong.utils.ViewCreateUtils;
 
 public class UserActivity extends AppCompatActivity {
     ActivityUserBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         binding = ActivityUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
@@ -30,7 +30,7 @@ public class UserActivity extends AppCompatActivity {
             userVO.setName("未知用户");
         }
         binding.userName.setText(userVO.getName());
-        ImageGetter.setAvatarViewBitmap(binding.userAvatar, userVO.getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(binding.userAvatar, userVO.getUserAvatarUrl());
         binding.userBack.setOnClickListener(v -> finish());
         RootFragmentPagerAdapter rootFragmentPagerAdapter;
         rootFragmentPagerAdapter = new RootFragmentPagerAdapter(

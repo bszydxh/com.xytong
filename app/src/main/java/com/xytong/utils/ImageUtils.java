@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.xytong.R;
 
-public class ImageGetter {
+public class ImageUtils {
     static public void setAvatarViewBitmap(ImageView view, String url) {
         Glide.with(view.getContext())
                 .load(url)

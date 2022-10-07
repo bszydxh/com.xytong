@@ -10,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
+/**
+ * 可缓存的vo设计，交由room进行缓存
+ */
 @Entity
 public class CardVO implements Serializable {
     @PrimaryKey(autoGenerate = true)

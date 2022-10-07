@@ -6,8 +6,9 @@ import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 import com.xytong.dao.UserDao;
-import com.xytong.model.vo.UserVO;
 import com.xytong.model.dto.AccessRequestDTO;
+import com.xytong.model.dto.UserRequestDTO;
+import com.xytong.model.vo.UserVO;
 
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +21,7 @@ import java.security.spec.X509EncodedKeySpec;
 import static java.lang.Thread.sleep;
 
 
-public class Access {
+public class AccessUtils {
     static final int USER_NOT_FOUND_ERROR = -1;
     static final int SERVER_ERROR = -2;
     static final int TOKEN_EXPIRED_ERROR = -3;
@@ -88,19 +89,52 @@ public class Access {
             AccessRequestDTO accessRequestDTO = null;
             //耗时操作
             try {
-                accessRequestDTO = DataChecker.getToken(context, username, md5Salt(username, pwd));
+                accessRequestDTO = TokenUtils.getToken(context, username, md5Salt(username, pwd));
+                Log.i("login", "get ok");
             } catch (Exception e) {
                 Log.e("login", "error");
                 error_flag = true;
                 e.printStackTrace();
             }
-            if (error_flag || accessRequestDTO == null) {
+            if (accessRequestDTO == null) {
+                Log.w("login", "dto null");
                 handler.post(() -> statusListener.onError(context, -1));
-            } else {
-                handler.post(() -> statusListener.onDone(context));
+                return;
             }
+            if (error_flag) {
+                Log.w("login", "no dto");
+                handler.post(() -> statusListener.onError(context, -1));
+                return;
+            }
+            if (accessRequestDTO.getToken() == null) {
+                Log.w("login", "null token");
+                handler.post(() -> statusListener.onError(context, -1));
+                return;
+            }
+            if (accessRequestDTO.getToken().trim().equals("")) {
+                Log.w("login", "no token");
+                handler.post(() -> statusListener.onError(context, -1));
+                return;
+            }
+            Log.i("login", "check ok");
+            UserDao.setToken(context, accessRequestDTO.getToken());
+            handler.post(() -> statusListener.onDone(context));
+            UserRequestDTO userRequestDTO = UserUtils.getUser(context, username);
+            if (userRequestDTO == null) {
+                Log.i("login", "get user error");
+                return;
+            }
+            UserVO userVO = new UserVO();
+            userVO.setName(userRequestDTO.getUsername());
+            userVO.setBirthday(userRequestDTO.getBirthday_timestamp());
+            userVO.setSexInteger(userRequestDTO.getGender());
+            userVO.setEmail(userRequestDTO.getEmail());
+            userVO.setUserAvatarUrl(userRequestDTO.getAvatar());
+            userVO.setPhoneNumber(userRequestDTO.getPhone());
+            userVO.setSignature(userRequestDTO.getSignature());
+            UserDao.setUser(context, userVO);
         }).start();
-//接下来获取用户信息
+
     }
 
     public static void logon(Context context, UserVO userVO, String pwd, StatusListener statusListener) {

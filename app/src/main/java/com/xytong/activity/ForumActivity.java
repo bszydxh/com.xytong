@@ -28,8 +28,8 @@ import com.xytong.databinding.ActivityForumBinding;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ImageUtils;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.view.Thump;
 import com.xytong.viewModel.CommentDataViewModel;
 
@@ -46,14 +46,14 @@ public class ForumActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityForumBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
         forumData = (ForumVO) bundle_back.getSerializable("forumData");
-        ImageGetter.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumData.getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumData.getUserAvatarUrl());
         binding.cardForumIndex.cardForumUserName.setText(forumData.getUserName());
         binding.cardForumIndex.cardForumTitle.setText(forumData.getTitle());
         binding.cardForumIndex.cardForumText.setText(forumData.getText());

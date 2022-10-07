@@ -1,10 +1,10 @@
-package com.xytong.utils.http;
+package com.xytong.utils.poster;
 
 
 import android.content.Context;
-import com.xytong.utils.Access;
-import com.xytong.utils.http.callable.HttpCallable;
-import com.xytong.utils.http.callable.HttpWithTokenCallable;
+import com.xytong.utils.poster.callable.HttpCallable;
+import com.xytong.utils.poster.callable.HttpWithTokenCallable;
+import com.xytong.utils.AccessUtils;
 
 import java.util.concurrent.FutureTask;
 
@@ -56,7 +56,7 @@ public class Poster<T> {
     }
 
     public Poster<T> postWithToken(Context context, PostListener<T> posterListener) {
-        Access.getTokenForHttp(context, new Access.TokenListener() {
+        AccessUtils.getTokenForHttp(context, new AccessUtils.TokenListener() {
             @Override
             public void onStart(Context context) {
                 posterListener.onStart(context);

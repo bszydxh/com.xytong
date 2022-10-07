@@ -10,7 +10,7 @@ import com.xytong.model.vo.*;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.ReVO;
 import com.xytong.model.dto.*;
-import com.xytong.utils.http.Poster;
+import com.xytong.utils.poster.Poster;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

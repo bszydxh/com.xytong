@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 public class CoreDataBaseGetter {
     volatile private static CoreDataBaseGetter sqliteGetter = null;//双检查锁
-    private CoreDataBase coreDataBase;
+    private volatile CoreDataBase coreDataBase;
     public static CoreDataBaseGetter getInstance(Context context) throws RuntimeException {
         if (sqliteGetter == null) {
             synchronized (CoreDataBaseGetter.class) {

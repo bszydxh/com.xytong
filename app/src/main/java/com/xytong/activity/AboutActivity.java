@@ -4,14 +4,14 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.xytong.R;
 import com.xytong.databinding.ActivityAboutBinding;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ViewCreateUtils;
 
 public class AboutActivity extends AppCompatActivity {
     private ActivityAboutBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityAboutBinding.inflate(getLayoutInflater());

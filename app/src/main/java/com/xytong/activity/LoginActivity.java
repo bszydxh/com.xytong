@@ -16,8 +16,8 @@ import com.xytong.databinding.ActivityLoginBinding;
 import com.xytong.databinding.PageLoginBinding;
 import com.xytong.databinding.PageLogonBinding;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.Access;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.AccessUtils;
+import com.xytong.utils.ViewCreateUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,7 +25,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = username_edit_text == null ? "" : username_edit_text.toString();
             String pwd = password_edit_text == null ? "" : password_edit_text.toString();
             Log.i("login", "username:" + username + "\npassword:" + pwd);
-            Access.login(this, username, pwd, new Access.StatusListener() {
+            AccessUtils.login(this, username, pwd, new AccessUtils.StatusListener() {
                 @Override
                 public void onStart(Context context) {
                     loginBinding.progress.setVisibility(View.VISIBLE);
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             UserVO userVO = new UserVO();
             userVO.setName(username);
             userVO.setPhoneNumber(phone);
-            Access.logon(this, userVO, pwd, new Access.StatusListener() {
+            AccessUtils.logon(this, userVO, pwd, new AccessUtils.StatusListener() {
                 @Override
                 public void onStart(Context context) {
                     logonBinding.progress.setVisibility(View.VISIBLE);

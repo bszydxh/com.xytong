@@ -27,6 +27,7 @@ public class UrlCreateDialog extends DialogFragment {
         binding.urlComment.setText(SettingDao.getCommentUrl(requireContext()));
         binding.urlForum.setText(SettingDao.getForumUrl(requireContext()));
         binding.urlAccess.setText(SettingDao.getAccessUrl(requireContext()));
+        binding.urlUser.setText(SettingDao.getUserUrl(requireContext()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("设置获取信息url")
                 .setView(binding.getRoot())
@@ -44,6 +45,7 @@ public class UrlCreateDialog extends DialogFragment {
                     binding.urlComment.setText(context.getString(R.string.comment_url));
                     binding.urlForum.setText(context.getString(R.string.forum_url));
                     binding.urlAccess.setText(context.getString(R.string.access_url));
+                    binding.urlUser.setText(context.getString(R.string.user_url));
                 })
                 .setPositiveButton("保存", (dialog, id) -> {
                     SettingDao.setCommentUrl(requireContext(), String.valueOf(binding.urlComment.getText()));
@@ -51,6 +53,7 @@ public class UrlCreateDialog extends DialogFragment {
                     SettingDao.setForumUrl(requireContext(), String.valueOf(binding.urlForum.getText()));
                     SettingDao.setShUrl(requireContext(), String.valueOf(binding.urlSh.getText()));
                     SettingDao.setAccessUrl(requireContext(), String.valueOf(binding.urlAccess.getText()));
+                    SettingDao.setUserUrl(requireContext(), String.valueOf(binding.urlUser.getText()));
                     try {
                         Field field = Objects.requireNonNull(dialog.getClass().getSuperclass()).getDeclaredField("mShowing");
                         field.setAccessible(true);

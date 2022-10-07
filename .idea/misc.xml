@@ -75,8 +75,13 @@
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_login.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_main.xml" value="0.29713552800342025" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_publish.xml" value="0.12065972222222222" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_re.xml" value="0.264" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/activity_user.xml" value="0.33" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_comment.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_forum.xml" value="0.6" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_image.xml" value="0.10008357709987463" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_re.xml" value="0.536" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/card_sh.xml" value="0.264" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/content_main.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/dialog_chage_url.xml" value="0.5" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/fragment_forum.xml" value="0.23802083333333332" />
@@ -87,6 +92,7 @@
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/page_logon.xml" value="0.33" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/page_webview.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/pager_null.xml" value="0.19791666666666666" />
+        <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/qwqw.xml" value="0.2039333048311244" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/layout/under_bar.xml" value="0.29713552800342025" />
         <entry key="..\:/Users/bszydxh/com.xytong/app/src/main/res/menu/activity_main_drawer.xml" value="0.16545532278751604" />
       </map>
@@ -104,7 +110,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.1" />
+        <option name="scale" value="0.5" />
       </ProjectState>
     </option>
   </component>

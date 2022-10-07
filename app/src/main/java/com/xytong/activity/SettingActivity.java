@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.xytong.R;
 import com.xytong.dao.SettingDao;
 import com.xytong.databinding.ActivitySettingBinding;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.view.UrlCreateDialog;
 
 
@@ -14,7 +14,7 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xytong.R;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
+import com.xytong.utils.ImageUtils;
 import com.xytong.view.Thump;
 
 import java.util.List;
@@ -144,7 +144,7 @@ public class ForumRecyclerAdapter extends RecyclerView.Adapter<ForumRecyclerAdap
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Thump<ForumVO> thump = new Thump<>();
-        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getTitle().setText(localDataSet.get(position).getTitle());
         viewHolder.getText().setText(localDataSet.get(position).getText());

@@ -15,7 +15,7 @@ import com.xytong.R;
 import com.xytong.activity.UserActivity;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
+import com.xytong.utils.ImageUtils;
 import com.xytong.view.Thump;
 
 import java.util.List;
@@ -122,7 +122,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Thump<CommentVO> thump = new Thump<>();
-        ImageGetter.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(viewHolder.getUserAvatar(), localDataSet.get(viewHolder.getAdapterPosition()).getUserAvatarUrl());
         viewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         viewHolder.getText().setText(localDataSet.get(position).getText());
         viewHolder.getDate().setText(localDataSet.get(position).getDate());

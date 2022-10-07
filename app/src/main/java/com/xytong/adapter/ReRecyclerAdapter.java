@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xytong.R;
 import com.xytong.model.vo.ReVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
+import com.xytong.utils.ImageUtils;
 
 import java.util.List;
 
@@ -144,7 +144,7 @@ public class ReRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (viewHolder.getItemViewType()) {
             case 0: {
                 ReCardViewHolder reCardViewHolder = (ReCardViewHolder) viewHolder;
-                ImageGetter.setAvatarViewBitmap(reCardViewHolder.getUserAvatar(), localDataSet.get(reCardViewHolder.getAdapterPosition()).getUserAvatarUrl());//被弃用
+                ImageUtils.setAvatarViewBitmap(reCardViewHolder.getUserAvatar(), localDataSet.get(reCardViewHolder.getAdapterPosition()).getUserAvatarUrl());//被弃用
                 reCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());
                 reCardViewHolder.getTitle().setText(localDataSet.get(position).getTitle());
                 reCardViewHolder.getText().setText(localDataSet.get(position).getText());

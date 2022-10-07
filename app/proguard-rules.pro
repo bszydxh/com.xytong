@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.xytong.model.** {*;}
+-keep class lombok.** {*;}
+-keep class com.fasterxml.jackson.** {*;}

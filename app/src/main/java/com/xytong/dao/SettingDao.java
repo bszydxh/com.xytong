@@ -104,4 +104,20 @@ public interface SettingDao {
         editor.putString("access_url", url);
         editor.apply();
     }
+    static String getUserUrl(Context context) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences("user_url", Context.MODE_PRIVATE);
+        String access_url = sharedPreferences.getString("access_url", "");
+        if (Objects.equals(access_url, "")) {
+            setAccessUrl(context, context.getString(R.string.user_url));
+        }
+        return sharedPreferences.getString("access_url", "127.0.0.1");
+    }
+
+    static void setUserUrl(Context context, String url) {
+        SharedPreferences sharedPref = context.getSharedPreferences("user_url", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("access_url", url);
+        editor.apply();
+    }
 }

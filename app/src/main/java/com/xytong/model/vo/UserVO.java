@@ -15,6 +15,7 @@ public class UserVO implements Serializable {
     private Long birthday = -1L;
     private String email = "null";
     private String userAvatarUrl = "";
+
     @JsonIgnore
     public String getSexString() {
         String str = "未知";
@@ -32,4 +33,18 @@ public class UserVO implements Serializable {
         return str;
     }
 
+    public String setSexInteger(String str) {
+        switch (str) {
+            case "unknown":
+                gender = -1;
+                break;
+            case "female":
+                gender = 0;
+                break;
+            case "male":
+                gender = 1;
+                break;
+        }
+        return str;
+    }
 }

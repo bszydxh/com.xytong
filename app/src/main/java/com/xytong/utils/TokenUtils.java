@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xytong.dao.SettingDao;
 import com.xytong.model.dto.AccessPostDTO;
 import com.xytong.model.dto.AccessRequestDTO;
-import com.xytong.utils.http.Poster;
+import com.xytong.utils.poster.Poster;
 
-public class DataChecker {
+public class TokenUtils {
 
     /**
      * @param context
@@ -23,24 +23,24 @@ public class DataChecker {
         accessPostDTO.setUsername(username);
         accessPostDTO.setPassword(md5WithSalt);
         try {
-            Log.i("DataChecker.getToken())", "post ok");
+            Log.i("TokenUtils.getToken())", "post ok");
             Poster<AccessRequestDTO> poster = new Poster<>(SettingDao.getAccessUrl(context),
                     postMapper.writeValueAsString(accessPostDTO));
             poster.setHttpListener(result -> {
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
                     AccessRequestDTO accessRequestDTO = objectMapper.readValue(result, AccessRequestDTO.class);
-                    Log.i("DataChecker.getToken())", "get ok");
+                    Log.i("TokenUtils.getToken())", "get ok:"+accessRequestDTO.toString());
                     return accessRequestDTO;//异步完成数据传递
                 } catch (Exception e) {
-                    Log.e("DataChecker.getToken())", "error");
+                    Log.e("TokenUtils.getToken())", "error");
                     e.printStackTrace();
                 }
                 return null;
             });
             return poster.post();//由于该方法被包裹在新线程进行，该线程会等待网络进程
         } catch (Exception e) {
-            Log.e("DataChecker.getToken()", "error");
+            Log.e("TokenUtils.getToken()", "error");
             e.printStackTrace();
         }
         return null;

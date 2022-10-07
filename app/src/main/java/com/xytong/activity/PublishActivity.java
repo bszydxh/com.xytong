@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.xytong.R;
 import com.xytong.databinding.ActivityPublishBinding;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ViewCreateUtils;
 
 public class PublishActivity extends AppCompatActivity {
     ActivityPublishBinding binding;
@@ -12,7 +12,7 @@ public class PublishActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         binding = ActivityPublishBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xytong.R;
 import com.xytong.model.vo.ShVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
+import com.xytong.utils.ImageUtils;
 
 import java.util.List;
 
@@ -109,7 +109,7 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         ShRecyclerAdapter.ViewHolder shCardViewHolder = (ViewHolder) viewHolder;
-        ImageGetter.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getUserAvatarUrl());
         shCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
         shCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         shCardViewHolder.getTitle().setText(localDataSet.get(position).getTitle());

@@ -27,8 +27,8 @@ import com.xytong.databinding.ActivityShBinding;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.ShVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ImageUtils;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.CommentDataViewModel;
 
 import java.util.List;
@@ -44,14 +44,14 @@ public class ShActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         super.onCreate(savedInstanceState);
         binding = ActivityShBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
         shData = (ShVO) bundle_back.getSerializable("shData");
-        ImageGetter.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shData.getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shData.getUserAvatarUrl());
         binding.cardShIndex.cardShUserName.setText(shData.getUserName());
         binding.cardShIndex.cardShTitle.setText(shData.getTitle());
         binding.cardShIndex.cardShDate.setText(shData.getDate());

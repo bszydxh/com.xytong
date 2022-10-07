@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.xytong.model.vo.UserVO;
 
-public class ViewCreatedHelper {
+public class ViewCreateUtils {
     public static void setBlackStatusBar(Context context) {
         Window window = ((androidx.core.app.ComponentActivity) context).getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -17,7 +17,7 @@ public class ViewCreatedHelper {
     }
 
     public static void setupUserDataViewGroup(ImageView imageView, TextView name, TextView signature, UserVO userVO) {
-        ImageGetter.setAvatarViewBitmap(imageView,
+        ImageUtils.setAvatarViewBitmap(imageView,
                 userVO.getUserAvatarUrl());
         name.setText(userVO.getName());
         signature.setText(userVO.getSignature());

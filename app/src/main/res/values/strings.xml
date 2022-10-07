@@ -36,10 +36,15 @@
     <string name="comment">全部评论</string>
     <string name="userText">userText</string>
     <string name="change_url">数据获取链接更改</string>
-    <string name="sh_url">http://rap2api.taobao.org/app/mock/data/2307034</string>
-    <string name="re_url">http://rap2api.taobao.org/app/mock/data/2307037</string>
+<!--    <string name="sh_url">http://rap2api.taobao.org/app/mock/data/2307034</string>-->
+<!--    <string name="re_url">http://rap2api.taobao.org/app/mock/data/2307037</string>-->
     <string name="comment_url">http://rap2api.taobao.org/app/mock/data/2324413</string>
-    <string name="forum_url">http://rap2api.taobao.org/app/mock/data/2255088</string>
-    <string name="access_url">http://rap2api.taobao.org/app/mock/data/2329810</string>
+<!--    <string name="forum_url">http://rap2api.taobao.org/app/mock/data/2255088</string>-->
+<!--    <string name="access_url">http://rap2api.taobao.org/app/mock/data/2329810</string>-->
     <string name="signature"> </string>
+    <string name="sh_url">http://xytong.top/secondhand</string>
+    <string name="re_url">http://xytong.top/run_errands</string>
+    <string name="forum_url">http://xytong.top/forums</string>
+    <string name="access_url">http://xytong.top/access</string>
+    <string name="user_url">http://xytong.top/user</string>
 </resources>

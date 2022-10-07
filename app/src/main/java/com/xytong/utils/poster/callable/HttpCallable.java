@@ -1,26 +1,25 @@
-package com.xytong.utils.http.callable;
+package com.xytong.utils.poster.callable;
 
 import android.util.Log;
-import com.xytong.utils.http.HttpListener;
+import com.xytong.utils.poster.HttpListener;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
-public class HttpWithTokenCallable<T> implements Callable<T> {
-    private final HttpListener<T> httpListener;
+public class HttpCallable<T> implements Callable<T> {
+    private HttpListener<T> httpListener;
     private String path = "";
     private String text = "";
-    private String token = "";
 
-    public HttpWithTokenCallable(String path, String text, String token, HttpListener<T> httpListener) {
-        if (httpListener == null) {
+    public HttpCallable(String path, String text, HttpListener<T> httpListener) {
+        if(httpListener==null)
+        {
             httpListener = result -> null;
         }
         this.path = path;
         this.text = text;
-        this.token = token;
         this.httpListener = httpListener;
     }
 
@@ -33,7 +32,6 @@ public class HttpWithTokenCallable<T> implements Callable<T> {
             connection.setConnectTimeout(5000);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("token", token);
             OutputStream outputStream = connection.getOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
             outputStreamWriter.write(text);
@@ -71,6 +69,8 @@ public class HttpWithTokenCallable<T> implements Callable<T> {
         }
         return data_init;
     }
+
+
 
 
 }

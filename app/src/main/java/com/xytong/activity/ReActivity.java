@@ -27,8 +27,8 @@ import com.xytong.databinding.ActivityReBinding;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.ReVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageGetter;
-import com.xytong.utils.ViewCreatedHelper;
+import com.xytong.utils.ImageUtils;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.CommentDataViewModel;
 
 import java.util.List;
@@ -45,13 +45,13 @@ public class ReActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewCreatedHelper.setBlackStatusBar(this);
+        ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         binding = ActivityReBinding.inflate(getLayoutInflater());
         Bundle bundle_back = getIntent().getExtras();
         position = bundle_back.getInt("pos");
         reData = (ReVO) bundle_back.getSerializable("reData");
-        ImageGetter.setAvatarViewBitmap(binding.cardReIndex.cardReUserAvatar, reData.getUserAvatarUrl());
+        ImageUtils.setAvatarViewBitmap(binding.cardReIndex.cardReUserAvatar, reData.getUserAvatarUrl());
         binding.cardReIndex.cardReUserName.setText(reData.getUserName());
         binding.cardReIndex.cardReTitle.setText(reData.getTitle());
         binding.cardReIndex.cardReText.setText(reData.getText());
