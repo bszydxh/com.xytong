@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ForumRequestDTO {
+public class ForumResponseDTO {
     String mode;
     @JsonProperty(value = "num_start")
     int numStart;

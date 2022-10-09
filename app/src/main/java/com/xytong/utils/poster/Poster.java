@@ -2,9 +2,12 @@ package com.xytong.utils.poster;
 
 
 import android.content.Context;
+import android.util.Log;
+import androidx.annotation.NonNull;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xytong.utils.AccessUtils;
 import com.xytong.utils.poster.callable.HttpCallable;
 import com.xytong.utils.poster.callable.HttpWithTokenCallable;
-import com.xytong.utils.AccessUtils;
 
 import java.util.concurrent.FutureTask;
 
@@ -24,8 +27,9 @@ public class Poster<T> {
         void onError(Context context);
     }
 
-    public void setHttpListener(HttpListener<T> httpListener) {
+    public Poster<T> setHttpListener(HttpListener<T> httpListener) {
         this.httpListener = httpListener;
+        return this;
     }
 
     public Poster(String path, String text) {
@@ -36,6 +40,17 @@ public class Poster<T> {
             this.text = text;
         }
     }
+
+//    public static <T> Poster<T> init(String path, String text) {
+//        Poster<T> poster = new Poster<T>();
+//        if (path != null) {
+//            poster.path = path;
+//        }
+//        if (text != null) {
+//            poster.text = text;
+//        }
+//        return poster;
+//    }
 
     /**
      * 实时返回需要的数据，警告：会造成线程阻塞
@@ -85,5 +100,30 @@ public class Poster<T> {
             }
         });
         return this;
+    }
+
+    public static <T> T jacksonPost(String URL, @NonNull Object postDTO, Class<T> valueType) {
+        ObjectMapper postMapper = new ObjectMapper();
+        Class<?> postDTOClass = postDTO.getClass();
+        try {
+            Log.i("Poster.jacksonPost()", "posting: " + postDTOClass.getName() + " -> server");
+            Poster<T> poster = new Poster<>(URL, postMapper.writeValueAsString(postDTO));
+            poster.setHttpListener(result -> {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    T requestDTO_result = objectMapper.readValue(result, valueType);
+                    Log.i("Poster.jacksonPost()", "has response: server -> " + requestDTO_result.getClass().getName()
+                            + " \nresult:" + requestDTO_result.toString());
+                    return requestDTO_result;//异步完成数据传递
+                } catch (Exception e) {
+                    Log.e("Poster.jacksonPost()", "jackson unpack error:" + e.toString());
+                }
+                return null;
+            });//由于该方法被包裹在新线程进行，该线程会等待网络进程
+            return poster.post();
+        } catch (Exception e) {
+            Log.e("Poster.jacksonPost()", "error" + e.toString());
+        }
+        return null;
     }
 }

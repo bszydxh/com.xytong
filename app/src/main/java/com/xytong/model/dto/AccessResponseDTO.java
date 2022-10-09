@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class AccessRequestDTO {
+public class AccessResponseDTO {
     String mode;
     String username;
     String token;

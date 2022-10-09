@@ -1,11 +1,15 @@
 package com.xytong.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -20,21 +24,22 @@ import com.xytong.fragment.ForumFragment;
 import com.xytong.fragment.MoralFragment;
 import com.xytong.fragment.ReFragment;
 import com.xytong.fragment.ShFragment;
+import com.xytong.model.vo.UserVO;
+import com.xytong.utils.AccessUtils;
 import com.xytong.utils.ViewCreateUtils;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-
     private ViewPager2 rootViewPager;
     private RootFragmentPagerAdapter rootFragmentPagerAdapter;
     private DrawerLayout drawer;
     private boolean webViewIsFocused = false;
     private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//声明onCreate,方法继承之前的状态
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());//赋值阶段,inflate为调用生成的绑定类中包含的静态方法。这将为要使用的活动创建一个绑定类的实例。
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         setSupportActionBar(binding.underBar.toolbar);//设置toolbar
@@ -46,9 +51,28 @@ public class MainActivity extends AppCompatActivity {
         binding.underBar.toolbar.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
         //对右下方悬浮按键绑定监听事件
         View nav_header_view = binding.navView.getHeaderView(0);
+        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Log.i("MainActivity", "back");
+                        ViewCreateUtils.setupUserDataViewGroup(
+                                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
+                                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
+                                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
+                                UserDao.getUser(this)
+                        );
+                        ViewCreateUtils.setupUserDataViewGroup(
+                                binding.underBar.toolbarUserAvatar,
+                                binding.underBar.toolbarUserName,
+                                binding.underBar.toolbarUserSignature,
+                                UserDao.getUser(this)
+                        );
+                    }
+                });
         nav_header_view.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
+            mStartForResult.launch(intent);
         });
         Menu navMenu = binding.navView.getMenu();
         MenuItem settingItem = navMenu.findItem(R.id.nav_setting);
@@ -111,61 +135,45 @@ public class MainActivity extends AppCompatActivity {
                 UserDao.getUser(this)
         );
         //此处进行异步用户鉴权，确保用户登录状态（过期没）
-//        AccessUtils.getTokenForStart(this, new AccessUtils.UserDataListener() {
-//            @Override
-//            public void onStart(Context context) {
-//                Toast.makeText(context, "开始鉴权", Toast.LENGTH_SHORT).show();
-//                Log.i("access", "开始鉴权");
-//            }
-//
-//            @Override
-//            public void onDone(Context context, UserVO userVO) {
-//                Toast.makeText(context, "鉴权完成", Toast.LENGTH_SHORT).show();
-//                ViewCreateUtils.setupUserDataViewGroup(
-//                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
-//                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
-//                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
-//                        UserDao.getUser(context)
-//                );
-//                ViewCreateUtils.setupUserDataViewGroup(
-//                        binding.underBar.toolbarUserAvatar,
-//                        binding.underBar.toolbarUserName,
-//                        binding.underBar.toolbarUserSignature,
-//                        UserDao.getUser(context)
-//                );
-//                Log.i("access", "鉴权完成");
-//            }
-//
-//            @Override
-//            public void onError(Context context, int errorFlag) {
-//                Toast.makeText(context, "鉴权失败", Toast.LENGTH_SHORT).show();
-//                Log.i("access", "鉴权失败");
-//            }
-//        });
-//        Log.e("UserDataCheck", UserDao.getUser(this).toString());
+        AccessUtils.getTokenForStart(this, new AccessUtils.UserDataListener() {
+            @Override
+            public void onStart(Context context) {
+                Log.i("access", "开始鉴权");
+            }
+
+            @Override
+            public void onDone(Context context, UserVO userVO) {
+                ViewCreateUtils.setupUserDataViewGroup(
+                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
+                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
+                        navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
+                        UserDao.getUser(context)
+                );
+                ViewCreateUtils.setupUserDataViewGroup(
+                        binding.underBar.toolbarUserAvatar,
+                        binding.underBar.toolbarUserName,
+                        binding.underBar.toolbarUserSignature,
+                        UserDao.getUser(context)
+                );
+                Log.i("access", "鉴权完成");
+            }
+
+            @Override
+            public void onError(Context context, int errorFlag) {
+                Log.i("access", "鉴权失败");
+            }
+        });
+        Log.e("UserDataCheck", UserDao.getUser(this).toString());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("MainActivity", "onResume");
-        NavigationView navigationView = binding.navView;
-        ViewCreateUtils.setupUserDataViewGroup(
-                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
-                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
-                navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
-                UserDao.getUser(this)
-        );
-        ViewCreateUtils.setupUserDataViewGroup(
-                binding.underBar.toolbarUserAvatar,
-                binding.underBar.toolbarUserName,
-                binding.underBar.toolbarUserSignature,
-                UserDao.getUser(this)
-        );
     }
 
     @Override

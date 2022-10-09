@@ -3,7 +3,7 @@ package com.xytong.model.dto;
 import lombok.Data;
 
 @Data
-public class UserRequestDTO {
+public class UserResponseDTO {
     String mode;
     String username;
     String avatar;

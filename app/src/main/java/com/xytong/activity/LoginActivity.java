@@ -1,5 +1,6 @@
 package com.xytong.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -56,7 +57,12 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(Context context, int errorFlag) {
-                    Toast.makeText(context, "登录失败", Toast.LENGTH_SHORT).show();
+                    if(errorFlag == AccessUtils.USERNAME_OR_PASSWORD_ERROR)
+                    {
+                        Toast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                    } else if (errorFlag == AccessUtils.SERVER_ERROR) {
+                        Toast.makeText(context, "未连接网络", Toast.LENGTH_SHORT).show();
+                    }
                     loginBinding.progress.setVisibility(View.INVISIBLE);
                     loginBinding.button.setVisibility(View.VISIBLE);
                 }
@@ -82,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     logonBinding.logonPasswordCheckLayout.setErrorEnabled(false);
                 }
-
             }
         };
         logonBinding.passwordCheck.addTextChangedListener(pwdWatcher);
@@ -133,11 +138,11 @@ public class LoginActivity extends AppCompatActivity {
         // Create the scenes
 
 
-
     }
 
     @Override
     public void finish() {
+        setResult(Activity.RESULT_OK);
         super.finish();
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
     }

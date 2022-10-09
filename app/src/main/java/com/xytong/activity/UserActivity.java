@@ -2,6 +2,8 @@ package com.xytong.activity;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.xytong.R;
@@ -13,9 +15,13 @@ import com.xytong.fragment.ShFragment;
 import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageUtils;
 import com.xytong.utils.ViewCreateUtils;
+import com.xytong.viewModel.UserDataViewModel;
 
 public class UserActivity extends AppCompatActivity {
     ActivityUserBinding binding;
+
+    UserDataViewModel model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +35,16 @@ public class UserActivity extends AppCompatActivity {
             userVO = new UserVO();
             userVO.setName("未知用户");
         }
+        model = new ViewModelProvider(this).get(UserDataViewModel.class);
+        LiveData<UserVO> liveData = model.getUserData(userVO.getName());
+        liveData.observe(this, userLiveData -> {
+            if(userLiveData==null)
+            {
+                return;
+            }
+            binding.userSignature.setText(userLiveData.getSignature());
+        });
+
         binding.userName.setText(userVO.getName());
         ImageUtils.setAvatarViewBitmap(binding.userAvatar, userVO.getUserAvatarUrl());
         binding.userBack.setOnClickListener(v -> finish());
@@ -42,7 +58,7 @@ public class UserActivity extends AppCompatActivity {
         ViewPager2 rootViewPager = binding.pager;
         rootViewPager.setAdapter(rootFragmentPagerAdapter);
         TabLayoutMediator tab = new TabLayoutMediator(binding.tab, rootViewPager, (tab1, position) -> {
-            switch (position){
+            switch (position) {
                 case 0:
                     tab1.setText("跑腿");
                     break;
@@ -56,6 +72,7 @@ public class UserActivity extends AppCompatActivity {
         });
         tab.attach();
     }
+
     @Override
     public void finish() {
         super.finish();

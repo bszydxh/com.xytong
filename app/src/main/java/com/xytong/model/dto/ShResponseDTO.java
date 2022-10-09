@@ -2,13 +2,12 @@ package com.xytong.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xytong.model.vo.ShVO;
+import lombok.Data;
 
 import java.util.List;
 
-import lombok.Data;
-
 @Data
-public class ShRequestDTO {
+public class ShResponseDTO {
     String mode;
     @JsonProperty(value = "num_start")
     int numStart;
