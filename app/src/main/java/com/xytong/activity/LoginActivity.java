@@ -135,9 +135,6 @@ public class LoginActivity extends AppCompatActivity {
         viewPager.setAdapter(loginPagerAdapter);
         TabLayout tabLayout = binding.loginTab;
         tabLayout.setupWithViewPager(viewPager);
-        // Create the scenes
-
-
     }
 
     @Override

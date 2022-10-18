@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -20,20 +19,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.xytong.R;
 import com.xytong.activity.ForumActivity;
 import com.xytong.activity.PublishActivity;
-import com.xytong.R;
 import com.xytong.activity.UserActivity;
 import com.xytong.adapter.ForumRecyclerAdapter;
+import com.xytong.databinding.FragmentForumBinding;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.UserVO;
 import com.xytong.viewModel.ForumDataViewModel;
-import com.xytong.databinding.FragmentForumBinding;
 
 import java.util.List;
 

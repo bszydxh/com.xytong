@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -20,20 +19,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.xytong.activity.PublishActivity;
 import com.xytong.R;
+import com.xytong.activity.PublishActivity;
 import com.xytong.activity.ReActivity;
 import com.xytong.activity.UserActivity;
 import com.xytong.adapter.ReRecyclerAdapter;
+import com.xytong.databinding.FragmentReBinding;
 import com.xytong.model.vo.ReVO;
 import com.xytong.model.vo.UserVO;
 import com.xytong.viewModel.ReDataViewModel;
-import com.xytong.databinding.FragmentReBinding;
 
 import java.util.List;
 
@@ -86,6 +84,7 @@ public class ReFragment extends Fragment {
                         intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
                         view.getContext().startActivity(intent);
                     }
+
                     @Override
                     public void onBannerClick(View view) {
                         Toast.makeText(view.getContext(), "banner click!", Toast.LENGTH_SHORT).show();

@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         rootViewPager = binding.underBar.pager;
         rootViewPager.setAdapter(rootFragmentPagerAdapter);
         rootViewPager.setUserInputEnabled(false);
+        rootViewPager.setOffscreenPageLimit(5);
         BottomNavigationView bottomNavigationView = binding.underBar.btmNav;
         //导航栏绑定根ViewPager2适配器事件
         bottomNavigationView.setOnItemSelectedListener(item -> {

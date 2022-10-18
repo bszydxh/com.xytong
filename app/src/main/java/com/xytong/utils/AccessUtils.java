@@ -116,7 +116,6 @@ public class AccessUtils {
             }
             Log.i("login", "check ok");
             UserDao.setToken(context, accessResponseDTO.getToken());
-            handler.post(() -> statusListener.onDone(context));
             UserResponseDTO userResponseDTO = UserDownloader.getUser(context, username);
             UserVO userVO = UserVO.init(userResponseDTO);
             if (userVO != null) {
@@ -124,6 +123,7 @@ public class AccessUtils {
             } else {
                 Log.i("login", "get userVO error");
             }
+            handler.post(() -> statusListener.onDone(context));
         }).start();
 
     }

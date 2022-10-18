@@ -44,6 +44,6 @@ public class ShVO extends CardVO implements Serializable {
     }
 
     public String toString() {
-        return "ShVO(price=" + this.getPrice() + ")";
+        return "ShVO(title=" + this.getTitle() + ")";
     }
 }

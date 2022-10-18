@@ -112,7 +112,8 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ImageUtils.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getUserAvatarUrl());
         shCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
         shCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());
-        shCardViewHolder.getTitle().setText(localDataSet.get(position).getTitle());
+        String title = localDataSet.get(position).getTitle();
+        shCardViewHolder.getTitle().setText(title.length() < 28 ? title : title.substring(0, 28) + "...");
         shCardViewHolder.getText().setText(localDataSet.get(position).getText());
         shCardViewHolder.getPrice().setText(String.format("¥%s", localDataSet.get(position).getPrice()));
         if (onItemClickListener != null) {
