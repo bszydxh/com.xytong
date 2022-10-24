@@ -2,7 +2,6 @@ package com.xytong.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,10 +27,10 @@ import com.xytong.adapter.ShRecyclerAdapter;
 import com.xytong.databinding.FragmentShBinding;
 import com.xytong.model.vo.ShVO;
 import com.xytong.model.vo.UserVO;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.ShDataViewModel;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ShFragment extends Fragment {
     FragmentShBinding binding;
@@ -66,11 +63,9 @@ public class ShFragment extends Fragment {
         });
         shRefreshLayout.setEnableAutoLoadMore(true);
         RecyclerView shRecyclerView = binding.shRecyclerView;
-        //LinearLayoutManager shLinearLayoutManager = new LinearLayoutManager(this.requireContext());
         StaggeredGridLayoutManager staggeredGridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         shRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        //shLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         LiveData<List<ShVO>> liveData = model.getDataList();
         liveData.observe(getViewLifecycleOwner(), dataList -> {
             if (shRecyclerView.getAdapter() == null) {
@@ -119,17 +114,17 @@ public class ShFragment extends Fragment {
                     // 获取当前滚动到的条目位置
                     int index = staggeredGridLayoutManager.findFirstVisibleItemPositions(new int[2])[0];
                     if (index == 0) {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_add_24);
-                        Drawable.ConstantState state = Objects.requireNonNull(bmpDrawable).getConstantState();
-                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                        DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
-                        binding.shFab.setImageDrawable(wrap);
+                        ViewCreateUtils.setImage(
+                                binding.shFab,
+                                R.drawable.ic_baseline_add_24,
+                                R.color.white
+                        );
                     } else {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_vertical_align_top_24);
-                        Drawable.ConstantState state = Objects.requireNonNull(bmpDrawable).getConstantState();
-                        Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                        DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
-                        binding.shFab.setImageDrawable(wrap);
+                        ViewCreateUtils.setImage(
+                                binding.shFab,
+                                R.drawable.ic_baseline_vertical_align_top_24,
+                                R.color.white
+                        );
                     }
                 }
             }

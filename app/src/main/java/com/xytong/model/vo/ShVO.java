@@ -1,15 +1,15 @@
 package com.xytong.model.vo;
 
 import androidx.room.Entity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 @Entity(tableName = "sh_list")
 public class ShVO extends CardVO implements Serializable {
     private String price = "null";
-
-    public ShVO() {
-    }
+    @JsonProperty("image_url")
+    private String imageUrl;
 
     ////////////////////////////////////////////////////////
     public String getPrice() {
@@ -45,5 +45,13 @@ public class ShVO extends CardVO implements Serializable {
 
     public String toString() {
         return "ShVO(title=" + this.getTitle() + ")";
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

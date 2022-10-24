@@ -38,6 +38,8 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private final TextView date;
         private final ViewGroup rootTouchLayout;
 
+        private ImageView image;
+
         public ViewHolder(View view) {
             super(view);
             date = view.findViewById(R.id.card_sh_date);
@@ -47,6 +49,7 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             text = view.findViewById(R.id.card_sh_text);
             price = view.findViewById(R.id.card_sh_price);
             rootTouchLayout = view.findViewById(R.id.card_sh_touch);
+            image = view.findViewById(R.id.card_sh_image);
         }
 
         public TextView getDate() {
@@ -75,6 +78,10 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ViewGroup getRootTouchLayout() {
             return rootTouchLayout;
+        }
+
+        public ImageView getImage() {
+            return image;
         }
     }
 
@@ -110,6 +117,7 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         ShRecyclerAdapter.ViewHolder shCardViewHolder = (ViewHolder) viewHolder;
         ImageUtils.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getUserAvatarUrl());
+        ImageUtils.setImageBitmap(shCardViewHolder.getImage(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getImageUrl());
         shCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
         shCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());
         String title = localDataSet.get(position).getTitle();

@@ -1,13 +1,9 @@
 package com.xytong.view;
 
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-
 import com.xytong.R;
+import com.xytong.utils.ViewCreateUtils;
 
 public class Thump<T extends LikeThump> {
 
@@ -29,15 +25,10 @@ public class Thump<T extends LikeThump> {
 
     private void ThumpSetter(T data, ImageView imageView, TextView textView, String likesString) {
         textView.setText(likesString);
-        Drawable bmpDrawable = ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_baseline_thumb_up_24);
-        if (bmpDrawable != null) {
-            Drawable.ConstantState state = bmpDrawable.getConstantState();
-            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-            DrawableCompat.setTint(wrap, ContextCompat.getColor(imageView.getContext(),
-                    data.isLiked() ? R.color.sky_blue : R.color.dark_gray));
-            imageView.setImageDrawable(wrap);
-        }
+        ViewCreateUtils.setImage(
+                imageView,
+                R.drawable.ic_baseline_thumb_up_24,
+                data.isLiked() ? R.color.sky_blue : R.color.dark_gray
+        );
     }
-
-
 }

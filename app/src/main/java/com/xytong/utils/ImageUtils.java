@@ -12,5 +12,11 @@ public class ImageUtils {
                 .placeholder(R.mipmap.default_user_avatar)
                 .into(view);
     }
+    static public void setImageBitmap(ImageView view, String url) {
+        Glide.with(view.getContext())
+                .load(url)
+                .placeholder(R.mipmap.pic)
+                .into(view);
+    }
 }
 

@@ -52,12 +52,13 @@ public class ShActivity extends AppCompatActivity {
         position = bundle_back.getInt("pos");
         shData = (ShVO) bundle_back.getSerializable("shData");
         ImageUtils.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shData.getUserAvatarUrl());
+        ImageUtils.setImageBitmap(binding.cardShIndex.cardShImage, shData.getImageUrl());
         binding.cardShIndex.cardShUserName.setText(shData.getUserName());
         binding.cardShIndex.cardShTitle.setText(shData.getTitle());
         binding.cardShIndex.cardShDate.setText(shData.getDate());
         binding.cardShIndex.cardShText.setText(shData.getText());
         binding.cardShIndex.cardShPrice.setText(String.format("¥%s", shData.getPrice()));
-        View.OnClickListener imageClickListener = (v->{
+        View.OnClickListener imageClickListener = (v -> {
             UserVO userVO = new UserVO();
             userVO.setName(shData.getUserName());
             userVO.setUserAvatarUrl(shData.getUserAvatarUrl());
@@ -103,8 +104,8 @@ public class ShActivity extends AppCompatActivity {
                         @Override
                         public void onTitleClick(View view, int position, CommentVO commentData) {
                             binding.cardShCommentEdit.clearFocus();
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         }
 
                         @Override

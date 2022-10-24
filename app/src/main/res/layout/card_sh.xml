@@ -19,14 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:paddingBottom="12dp"
         android:background="#00000000"
         android:orientation="horizontal"
         android:paddingLeft="4dp"
-        android:paddingRight="4dp">
+        android:paddingRight="4dp"
+        android:paddingBottom="12dp">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_sh_user_avatar_layout"
+            android:id="@+id/card_sh_image_layout"
             android:layout_width="0dp"
             android:layout_height="240dp"
             app:cardCornerRadius="10dp"
@@ -36,10 +36,28 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/card_sh_user_avatar"
+                android:id="@+id/card_sh_image"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                android:contentDescription="@string/user_avatar"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/pic"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_sh_user_avatar_layout"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_sh_price">
+
+            <ImageView
+                android:id="@+id/card_sh_user_avatar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/default_user_avatar"/>
         </com.google.android.material.card.MaterialCardView>
@@ -48,14 +66,14 @@
             android:id="@+id/card_sh_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="@string/username"
             android:textColor="@color/dark_gray"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_sh_date"/>
+            app:layout_constraintBottom_toBottomOf="@+id/card_sh_user_avatar_layout"
+            app:layout_constraintStart_toEndOf="@+id/card_sh_user_avatar_layout"
+            app:layout_constraintTop_toTopOf="@+id/card_sh_user_avatar_layout"/>
 
         <TextView
             android:id="@+id/card_sh_date"
@@ -96,7 +114,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_sh_user_avatar_layout"/>
+            app:layout_constraintTop_toBottomOf="@+id/card_sh_image_layout"/>
 
         <TextView
             android:id="@+id/card_sh_text"
@@ -109,6 +127,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_sh_title"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

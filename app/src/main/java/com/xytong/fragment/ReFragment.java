@@ -2,7 +2,6 @@ package com.xytong.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +11,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,6 +28,7 @@ import com.xytong.adapter.ReRecyclerAdapter;
 import com.xytong.databinding.FragmentReBinding;
 import com.xytong.model.vo.ReVO;
 import com.xytong.model.vo.UserVO;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.ReDataViewModel;
 
 import java.util.List;
@@ -122,21 +120,17 @@ public class ReFragment extends Fragment {
                     // 获取当前滚动到的条目位置
                     int index = reLinearLayoutManager.findFirstVisibleItemPosition();
                     if (index == 0) {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_add_24);
-                        if (bmpDrawable != null) {
-                            Drawable.ConstantState state = bmpDrawable.getConstantState();
-                            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                            DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
-                            binding.reFab.setImageDrawable(wrap);
-                        }
+                        ViewCreateUtils.setImage(
+                                binding.reFab,
+                                R.drawable.ic_baseline_add_24,
+                                R.color.white
+                        );
                     } else {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_vertical_align_top_24);
-                        if (bmpDrawable != null) {
-                            Drawable.ConstantState state = bmpDrawable.getConstantState();
-                            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                            DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
-                            binding.reFab.setImageDrawable(wrap);
-                        }
+                        ViewCreateUtils.setImage(
+                                binding.reFab,
+                                R.drawable.ic_baseline_vertical_align_top_24,
+                                R.color.white
+                        );
                     }
                 }
             }

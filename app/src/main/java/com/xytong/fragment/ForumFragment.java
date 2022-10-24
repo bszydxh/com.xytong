@@ -3,7 +3,6 @@ package com.xytong.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,6 +28,7 @@ import com.xytong.adapter.ForumRecyclerAdapter;
 import com.xytong.databinding.FragmentForumBinding;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.UserVO;
+import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.ForumDataViewModel;
 
 import java.util.List;
@@ -91,21 +89,17 @@ public class ForumFragment extends Fragment {
                     // 获取当前滚动到的条目位置
                     int index = forumLinearLayoutManager.findFirstVisibleItemPosition();
                     if (index == 0) {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_add_24);
-                        if (bmpDrawable != null) {
-                            Drawable.ConstantState state = bmpDrawable.getConstantState();
-                            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                            DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
-                            binding.forumFab.setImageDrawable(wrap);
-                        }
+                        ViewCreateUtils.setImage(
+                                binding.forumFab,
+                                R.drawable.ic_baseline_add_24,
+                                R.color.white
+                        );
                     } else {
-                        Drawable bmpDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_vertical_align_top_24);
-                        if (bmpDrawable != null) {
-                            Drawable.ConstantState state = bmpDrawable.getConstantState();
-                            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
-                            DrawableCompat.setTint(wrap, ContextCompat.getColor(requireContext(), R.color.white));
-                            binding.forumFab.setImageDrawable(wrap);
-                        }
+                        ViewCreateUtils.setImage(
+                                binding.forumFab,
+                                R.drawable.ic_baseline_vertical_align_top_24,
+                                R.color.white
+                        );
                     }
                 }
             }
@@ -118,8 +112,6 @@ public class ForumFragment extends Fragment {
                 forumRecyclerView.smoothScrollToPosition(0);
             }
         });
-//        UserDataViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);//父Activity负责提供数据，不提供默认不指定用户
-//        UserData userData = userViewModel.getUserData().getValue();
         LiveData<List<ForumVO>> liveData = model.getDataList();
         liveData.observe(getViewLifecycleOwner(), dataList -> {
             if (forumRecyclerView.getAdapter() == null) {

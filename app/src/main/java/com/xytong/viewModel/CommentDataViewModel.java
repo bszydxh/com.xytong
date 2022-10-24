@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommentDataViewModel extends AndroidViewModel {
-
+//TODO!!!!!
     private MutableLiveData<List<CommentVO>> dataList;
 
     public CommentDataViewModel(@NonNull Application application) {
