@@ -1,5 +1,6 @@
 package com.xytong.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,19 +39,57 @@ public class ShFragment extends Fragment {
     ShDataViewModel model;
     CircularProgressIndicator circularProgressIndicator;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        binding = FragmentShBinding.inflate(getLayoutInflater());
+        model = new ViewModelProvider(this).get(ShDataViewModel.class);
+        circularProgressIndicator = binding.shProgress;
+        LiveData<List<ShVO>> liveData = model.getDataList();
+        RefreshLayout shRefreshLayout = binding.shRefreshLayout;
+        RecyclerView shRecyclerView = binding.shRecyclerView;
+        StaggeredGridLayoutManager staggeredGridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        ActivityResultLauncher<Intent> shActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Log.i("ActivityResultLauncher", "shActivity back");
                     }
                 });
-        binding = FragmentShBinding.inflate(getLayoutInflater());
-        model = new ViewModelProvider(this).get(ShDataViewModel.class);
-        circularProgressIndicator = binding.shProgress;
-        RefreshLayout shRefreshLayout = binding.shRefreshLayout;
+        ActivityResultLauncher<Intent> publishActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        shRefreshLayout.autoRefresh();
+                    }
+                });
+        shRecyclerAdapter = new ShRecyclerAdapter(liveData.getValue());
+        shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onUserClick(View view, UserVO userVO) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userVO);
+                Intent intent = new Intent(view.getContext(), UserActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                view.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onTitleClick(View view, int position, ShVO reDataIndex) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("shData", reDataIndex);
+                bundle.putInt("pos", position);
+                Intent intent = new Intent(view.getContext(), ShActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                shActivityResultLauncher.launch(intent);
+            }
+
+            @Override
+            public void onTitleLongClick(View view, int position) {
+                // TODO
+            }
+        });
         shRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         shRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
         shRefreshLayout.setOnRefreshListener(refreshLayout -> {
@@ -62,43 +101,13 @@ public class ShFragment extends Fragment {
             refreshLayout.finishLoadMore(2000);
         });
         shRefreshLayout.setEnableAutoLoadMore(true);
-        RecyclerView shRecyclerView = binding.shRecyclerView;
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        shRecyclerView.setAdapter(shRecyclerAdapter);
         shRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        LiveData<List<ShVO>> liveData = model.getDataList();
         liveData.observe(getViewLifecycleOwner(), dataList -> {
-            if (shRecyclerView.getAdapter() == null) {
-                Log.i("setAdapter", "ok");
-                circularProgressIndicator.setVisibility(View.GONE);
-                shRecyclerAdapter = new ShRecyclerAdapter(dataList);
-                shRecyclerAdapter.setOnItemClickListener(new ShRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onUserClick(View view, UserVO userVO) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("userData", userVO);
-                        Intent intent = new Intent(view.getContext(), UserActivity.class);
-                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                        view.getContext().startActivity(intent);
-                    }
-
-                    @Override
-                    public void onTitleClick(View view, int position, ShVO reDataIndex) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("shData", reDataIndex);
-                        bundle.putInt("pos", position);
-                        Intent intent = new Intent(view.getContext(), ShActivity.class);
-                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                        mStartForResult.launch(intent);
-                    }
-
-                    @Override
-                    public void onTitleLongClick(View view, int position) {
-                        // TODO
-                    }
-                });
-                shRecyclerView.setAdapter(shRecyclerAdapter);
-            } else {
+            if (shRecyclerView.getAdapter() != null) {
+                if (dataList.size() > 0) {
+                    circularProgressIndicator.setVisibility(View.GONE);
+                }
                 Log.i("dataChange", "data num:" + shRecyclerAdapter.getItemCount());
                 RefreshLayout mShRefreshLayout = binding.shRefreshLayout;
                 mShRefreshLayout.finishRefresh();
@@ -132,11 +141,16 @@ public class ShFragment extends Fragment {
         binding.shFab.setOnClickListener(v -> {
             int index = staggeredGridLayoutManager.findFirstVisibleItemPositions(new int[2])[0];
             if (index == 0) {
-                v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putString("name", "sh");
+                Intent intent = new Intent(v.getContext(), PublishActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                publishActivityResultLauncher.launch(intent);
             } else {
                 shRecyclerView.smoothScrollToPosition(0);
             }
         });
+        model.refreshData();
         return binding.getRoot();
     }
 

@@ -1,18 +1,14 @@
 package com.xytong.viewModel;
 
 import android.app.Application;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.xytong.model.vo.ForumVO;
-import com.xytong.dao.SettingDao;
 import com.xytong.utils.DataDownloader;
-import com.xytong.utils.CoreDataBaseGetter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ForumDataViewModel extends AndroidViewModel {
@@ -30,38 +26,22 @@ public class ForumDataViewModel extends AndroidViewModel {
     public LiveData<List<ForumVO>> getDataList() {
         if (dataList == null) {
             dataList = new MutableLiveData<>();
-            new Thread(() -> {
-                Log.i(this.getClass().getName() + ".getDataList()", "get data");
-                List<ForumVO> forumList;
-                if (SettingDao.isDemonstrateMode(getApplication())) {//是否打开演示模式
-                    forumList =
-                            CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
-                                    .getCoreDataBase()
-                                    .getForumDataDao()
-                                    .getAllForum();
-                } else {
-                    forumList = DataDownloader.getForumDataList(getApplication().getApplicationContext(), "newest", 0, 10);
-                }
-                dataList.postValue(forumList);
-            }).start();
+            List<ForumVO> forumList = new ArrayList<>();
+            dataList.setValue(forumList);
         }
         return dataList;
     }
 
     public void loadMoreData() {
         new Thread(() -> {
-            List<ForumVO> forumList = dataList.getValue();
+            List<ForumVO> forumList = getDataList().getValue();
             List<ForumVO> obtainedDataList;
-            if (SettingDao.isDemonstrateMode(getApplication())) {
-                obtainedDataList =
-                        CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
-                                .getCoreDataBase()
-                                .getForumDataDao()
-                                .getAllForum();
-            } else {
-                obtainedDataList = DataDownloader.getForumDataList(getApplication().getApplicationContext(), "newest", 0, 10);
+            if (forumList == null) {
+                return;
             }
-            if (forumList != null && obtainedDataList != null) {
+            int listSize = forumList.size();
+            obtainedDataList = DataDownloader.getForumDataList(getApplication().getApplicationContext(), "newest", listSize, listSize + 10);
+            if (obtainedDataList != null) {
                 forumList.addAll(obtainedDataList);
                 dataList.postValue(forumList);
             }
@@ -72,15 +52,7 @@ public class ForumDataViewModel extends AndroidViewModel {
         new Thread(() -> {
             List<ForumVO> forumList = dataList.getValue();
             List<ForumVO> obtainedDataList;
-            if (SettingDao.isDemonstrateMode(getApplication())) {
-                obtainedDataList =
-                        CoreDataBaseGetter.getInstance(getApplication().getApplicationContext())
-                                .getCoreDataBase()
-                                .getForumDataDao()
-                                .getAllForum();
-            } else {
-                obtainedDataList = DataDownloader.getForumDataList(getApplication().getApplicationContext(), "newest", 0, 10);
-            }
+            obtainedDataList = DataDownloader.getForumDataList(getApplication().getApplicationContext(), "newest", 0, 10);
             if (forumList != null && obtainedDataList != null) {
                 forumList.clear();
                 forumList.addAll(obtainedDataList);

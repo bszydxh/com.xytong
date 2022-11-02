@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "ccd020ac54638bc92c1b5a70972d9f4e",
+    "identityHash": "8d2fc65a43880982918e3a319a1507f3",
     "entities": [
       {
         "tableName": "forum_list",
@@ -130,11 +130,17 @@
       },
       {
         "tableName": "sh_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_name` TEXT, `user_avatar` TEXT, `title` TEXT, `text` TEXT, `timestamp` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price` TEXT, `imageUrl` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_name` TEXT, `user_avatar` TEXT, `title` TEXT, `text` TEXT, `timestamp` INTEGER)",
         "fields": [
           {
             "fieldPath": "price",
             "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -188,7 +194,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ccd020ac54638bc92c1b5a70972d9f4e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d2fc65a43880982918e3a319a1507f3')"
     ]
   }
 }

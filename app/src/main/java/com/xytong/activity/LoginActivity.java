@@ -15,10 +15,13 @@ import com.xytong.R;
 import com.xytong.adapter.LoginPagerAdapter;
 import com.xytong.databinding.ActivityLoginBinding;
 import com.xytong.databinding.PageLoginBinding;
-import com.xytong.databinding.PageLogonBinding;
+import com.xytong.databinding.PageSignupBinding;
+import com.xytong.model.dto.captcha.CaptchaSendRequestDTO;
+import com.xytong.model.dto.captcha.CaptchaSendResponseDTO;
 import com.xytong.model.vo.UserVO;
 import com.xytong.utils.AccessUtils;
 import com.xytong.utils.ViewCreateUtils;
+import com.xytong.utils.poster.Poster;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,10 +34,37 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         PageLoginBinding loginBinding = PageLoginBinding.inflate(getLayoutInflater());
-        PageLogonBinding logonBinding = PageLogonBinding.inflate(getLayoutInflater());
+        PageSignupBinding signupBinding = PageSignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        logonBinding.progress.setVisibility(View.INVISIBLE);
+        signupBinding.button.setClickable(false);
+        signupBinding.button.setBackgroundColor(getResources().getColor(R.color.dark_gray, getTheme()));
+        signupBinding.progress.setVisibility(View.INVISIBLE);
         loginBinding.progress.setVisibility(View.INVISIBLE);
+
+        AccessUtils.StatusListener loginListener = new AccessUtils.StatusListener() {
+            @Override
+            public void onStart(Context context) {
+                loginBinding.progress.setVisibility(View.VISIBLE);
+                loginBinding.button.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onDone(Context context) {
+                Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onError(Context context, int errorFlag) {
+                if (errorFlag == AccessUtils.USERNAME_OR_PASSWORD_ERROR) {
+                    Toast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                } else if (errorFlag == AccessUtils.SERVER_ERROR) {
+                    Toast.makeText(context, "未连接网络", Toast.LENGTH_SHORT).show();
+                }
+                loginBinding.progress.setVisibility(View.INVISIBLE);
+                loginBinding.button.setVisibility(View.VISIBLE);
+            }
+        };
         ArrayList<View> loginListView = new ArrayList<>();
         loginBinding.button.setOnClickListener(v -> {
             Editable username_edit_text = loginBinding.username.getText();
@@ -42,31 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = username_edit_text == null ? "" : username_edit_text.toString();
             String pwd = password_edit_text == null ? "" : password_edit_text.toString();
             Log.i("login", "username:" + username + "\npassword:" + pwd);
-            AccessUtils.login(this, username, pwd, new AccessUtils.StatusListener() {
-                @Override
-                public void onStart(Context context) {
-                    loginBinding.progress.setVisibility(View.VISIBLE);
-                    loginBinding.button.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onDone(Context context) {
-                    Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-
-                @Override
-                public void onError(Context context, int errorFlag) {
-                    if(errorFlag == AccessUtils.USERNAME_OR_PASSWORD_ERROR)
-                    {
-                        Toast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-                    } else if (errorFlag == AccessUtils.SERVER_ERROR) {
-                        Toast.makeText(context, "未连接网络", Toast.LENGTH_SHORT).show();
-                    }
-                    loginBinding.progress.setVisibility(View.INVISIBLE);
-                    loginBinding.button.setVisibility(View.VISIBLE);
-                }
-            });
+            AccessUtils.login(this, username, pwd, loginListener);
         });
         var pwdWatcher = new TextWatcher() {
             @Override
@@ -79,40 +85,60 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Editable password_edit_text = logonBinding.password.getText();
-                Editable password_check_edit_text = logonBinding.passwordCheck.getText();
+                Editable password_edit_text = signupBinding.password.getText();
+                Editable password_check_edit_text = signupBinding.passwordCheck.getText();
                 String pwd = password_edit_text == null ? "" : password_edit_text.toString();
                 String pwd_check = password_check_edit_text == null ? "" : password_check_edit_text.toString();
                 if (!Objects.equals(pwd, pwd_check)) {
-                    logonBinding.logonPasswordCheckLayout.setError("两次密码输入不一致！");
+                    signupBinding.logonPasswordCheckLayout.setError("两次密码输入不一致！");
+                    signupBinding.button.setClickable(false);
+                    signupBinding.button.setBackgroundColor(getResources().getColor(R.color.dark_gray, getTheme()));
                 } else {
-                    logonBinding.logonPasswordCheckLayout.setErrorEnabled(false);
+                    signupBinding.logonPasswordCheckLayout.setErrorEnabled(false);
+                    signupBinding.button.setClickable(true);
+                    signupBinding.button.setBackgroundColor(getResources().getColor(R.color.sky_blue, getTheme()));
                 }
             }
         };
-        logonBinding.passwordCheck.addTextChangedListener(pwdWatcher);
-        logonBinding.password.addTextChangedListener(pwdWatcher);
-        logonBinding.logonPasswordCheckLayout.setOnClickListener(v ->
+        signupBinding.passwordCheck.addTextChangedListener(pwdWatcher);
+        signupBinding.password.addTextChangedListener(pwdWatcher);
+        signupBinding.logonPasswordCheckLayout.setOnClickListener(v ->
         {
         });
-        logonBinding.button.setOnClickListener(v ->
+        signupBinding.captchaLayout.setEndIconOnClickListener(v ->
         {
-            Editable username_edit_text = logonBinding.username.getText();
-            Editable phone_edit_text = logonBinding.phone.getText();
-            Editable password_edit_text = logonBinding.password.getText();
-            Editable password_check_edit_text = logonBinding.passwordCheck.getText();
+            Editable email_edit_text = signupBinding.email.getText();
+            String email = email_edit_text == null ? "" : email_edit_text.toString();
+            CaptchaSendRequestDTO captchaSendRequestDTO = new CaptchaSendRequestDTO();
+            captchaSendRequestDTO.setEmail(email);
+            captchaSendRequestDTO.setTimestamp(System.currentTimeMillis());
+            new Thread(() -> Poster.jacksonPost(
+                    "http:xytong.top:7426/captcha/v1/send",
+                    captchaSendRequestDTO,
+                    CaptchaSendResponseDTO.class
+            )).start();
+            Toast.makeText(this, "验证码发送成功", Toast.LENGTH_SHORT).show();
+        });
+        signupBinding.button.setOnClickListener(v ->
+        {
+            Editable username_edit_text = signupBinding.username.getText();
+            Editable password_edit_text = signupBinding.password.getText();
+            Editable email_edit_text = signupBinding.email.getText();
+            Editable captcha_edit_text = signupBinding.captcha.getText();
+            Editable password_check_edit_text = signupBinding.passwordCheck.getText();
             String username = username_edit_text == null ? "" : username_edit_text.toString();
-            String phone = phone_edit_text == null ? "" : phone_edit_text.toString();
             String pwd = password_edit_text == null ? "" : password_edit_text.toString();
+            String email = email_edit_text == null ? "" : email_edit_text.toString();
             String pwd_check = password_check_edit_text == null ? "" : password_check_edit_text.toString();
+            String captcha = captcha_edit_text == null ? "" : captcha_edit_text.toString();
             UserVO userVO = new UserVO();
             userVO.setName(username);
-            userVO.setPhoneNumber(phone);
-            AccessUtils.logon(this, userVO, pwd, new AccessUtils.StatusListener() {
+            userVO.setEmail(email);
+            AccessUtils.signup(this, userVO, captcha, pwd, new AccessUtils.StatusListener() {
                 @Override
                 public void onStart(Context context) {
-                    logonBinding.progress.setVisibility(View.VISIBLE);
-                    logonBinding.button.setVisibility(View.INVISIBLE);
+                    signupBinding.progress.setVisibility(View.VISIBLE);
+                    signupBinding.button.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
@@ -124,11 +150,13 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onError(Context context, int errorFlag) {
                     Toast.makeText(context, "注册失败", Toast.LENGTH_SHORT).show();
+                    signupBinding.progress.setVisibility(View.INVISIBLE);
+                    signupBinding.button.setVisibility(View.VISIBLE);
                 }
             });
         });
         loginListView.add(loginBinding.getRoot());
-        loginListView.add(logonBinding.getRoot());
+        loginListView.add(signupBinding.getRoot());
         binding.loginBack.setOnClickListener(v -> finish());
         ViewPager viewPager = binding.loginPager;
         LoginPagerAdapter loginPagerAdapter = new LoginPagerAdapter(loginListView);

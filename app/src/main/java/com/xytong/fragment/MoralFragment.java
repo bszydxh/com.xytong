@@ -7,17 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.GeolocationPermissions;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
+import android.webkit.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.tabs.TabLayout;
 import com.xytong.R;
@@ -33,8 +26,9 @@ public class MoralFragment extends Fragment {
     WebView webView;
     WebViewPagerAdapter webViewPagerAdapter;
 
+
     @SuppressLint("SetJavaScriptEnabled")
-    private View getWebView(String url) {
+    private View getWebView(String url, boolean add) {
         PageWebviewBinding pageWebviewBinding = PageWebviewBinding.inflate(getLayoutInflater());
         WebView webView = pageWebviewBinding.webView;
         WebSettings webSettings = webView.getSettings();
@@ -43,20 +37,10 @@ public class MoralFragment extends Fragment {
         webSettings.setAllowFileAccess(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setBuiltInZoomControls(true);
-        webView.loadUrl(url);
-
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
-        });
-        webView.setWebChromeClient(new WebChromeClient() {
+        if (add) {
+            webView.loadUrl(url);
+        }
+        WebChromeClient webChromeClient = new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int progress) { // 显示加载进度，自选
                 LinearProgressIndicator progressView = binding.progressBar;
@@ -69,8 +53,25 @@ public class MoralFragment extends Fragment {
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
                 callback.invoke(origin, true, false); // 页面有请求位置的时候需要
             }
-        });
+
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                return true;
+            }
+        };
+
+        webView.setWebChromeClient(webChromeClient);
         webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 switch (error.getPrimaryError()) {
@@ -88,7 +89,6 @@ public class MoralFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentMoralBinding.inflate(getLayoutInflater());
         ViewPager viewPager = binding.webPager;
         ArrayList<View> viewListView = new ArrayList<>();
@@ -100,16 +100,58 @@ public class MoralFragment extends Fragment {
         menuList.add("求是");
         menuList.add("大学生党校");
         webViewPagerAdapter = new WebViewPagerAdapter(viewListView, menuList);
-        webViewPagerAdapter.addItem(getWebView("http://m.people.cn/"));
-        webViewPagerAdapter.addItem(getWebView("http://m.news.cn/"));
-        webViewPagerAdapter.addItem(getWebView("http://www.12371.cn/dsxx/"));
-        webViewPagerAdapter.addItem(getWebView("http://www.xuexi.cn/"));
-        webViewPagerAdapter.addItem(getWebView("http://m.qstheory.cn"));
-        webViewPagerAdapter.addItem(getWebView("http://www.uucps.edu.cn/"));
+        webViewPagerAdapter.addItem(getWebView("http://m.people.cn/", true));
+        for (int i = 0; i < 5; i++) {
+            webViewPagerAdapter.addItem(getWebView("", false));
+        }
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                WebView webViewIndex = webViewPagerAdapter.getPrimaryItem().findViewById(R.id.web_view);
+                switch (position) {
+                    case 0: {
+                        webViewIndex.loadUrl("http://m.people.cn/");
+                        break;
+                    }
+                    case 1: {
+                        webViewIndex.loadUrl("http://m.news.cn/");
+                        break;
+                    }
+                    case 2: {
+                        webViewIndex.loadUrl("http://www.12371.cn/dsxx/");
+                        break;
+                    }
+                    case 3: {
+                        webViewIndex.loadUrl("http://www.xuexi.cn/");
+                        break;
+                    }
+                    case 4: {
+                        webViewIndex.loadUrl("http://m.qstheory.cn");
+                        break;
+                    }
+                    case 5: {
+                        webViewIndex.loadUrl("http://www.uucps.edu.cn/");
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         viewPager.setAdapter(webViewPagerAdapter);
         TabLayout tabLayout = binding.tab;
+        tabLayout.setVisibility(View.VISIBLE);
         tabLayout.setupWithViewPager(viewPager);
-        binding.moralFab.setOnClickListener(v->{
+        binding.moralFab.setOnClickListener(v -> {
             webView = webViewPagerAdapter.getPrimaryItem().findViewById(R.id.web_view);
             webView.reload();
         });

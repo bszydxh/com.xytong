@@ -101,17 +101,16 @@ public class Poster<T> {
         });
         return this;
     }
-
-    public static <T> T jacksonPost(String URL, @NonNull Object postDTO, Class<T> valueType) {
+    public static <T> T jacksonPost(String URL, @NonNull Object requestDTO, Class<T> responseDTOType) {
         ObjectMapper postMapper = new ObjectMapper();
-        Class<?> postDTOClass = postDTO.getClass();
+        Class<?> postDTOClass = requestDTO.getClass();
         try {
             Log.i("Poster.jacksonPost()", "posting: " + postDTOClass.getName() + " -> server");
-            Poster<T> poster = new Poster<>(URL, postMapper.writeValueAsString(postDTO));
+            Poster<T> poster = new Poster<>(URL, postMapper.writeValueAsString(requestDTO));
             poster.setHttpListener(result -> {
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
-                    T requestDTO_result = objectMapper.readValue(result, valueType);
+                    T requestDTO_result = objectMapper.readValue(result, responseDTOType);
                     Log.i("Poster.jacksonPost()", "has response: server -> " + requestDTO_result.getClass().getName()
                             + " \nresult:" + requestDTO_result.toString());
                     return requestDTO_result;//异步完成数据传递

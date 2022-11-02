@@ -5,10 +5,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
+import androidx.annotation.NonNull;
+import com.xytong.dao.SettingDao;
 import com.xytong.dao.UserDao;
-import com.xytong.model.dto.AccessResponseDTO;
-import com.xytong.model.dto.UserResponseDTO;
+import com.xytong.model.dto.access.AccessCheckResponseDTO;
+import com.xytong.model.dto.access.AccessSignupRequestDTO;
+import com.xytong.model.dto.access.AccessSignupResponseDTO;
+import com.xytong.model.dto.user.UserResponseDTO;
 import com.xytong.model.vo.UserVO;
+import com.xytong.utils.poster.Poster;
 
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
@@ -22,33 +27,37 @@ import static java.lang.Thread.sleep;
 
 
 public class AccessUtils {
-    public static final int USER_NOT_FOUND_ERROR = -1;
+    public static final int UNKNOWN_ERROR = -1;
     public static final int SERVER_ERROR = -2;
     public static final int TOKEN_EXPIRED_ERROR = -3;
     public static final int USERNAME_OR_PASSWORD_ERROR = -4;
 
+    public static final int CAPTCHA_CODE_ERROR = -5;
+    public static final int EMAIL_EXIST_ERROR = -6;
+    public static final int USER_EXIST_ERROR = -7;
+
     public interface UserDataListener {
-        public void onStart(Context context);
+        void onStart(Context context);
 
-        public void onDone(Context context, UserVO userVO);
+        void onDone(Context context, UserVO userVO);
 
-        public void onError(Context context, int errorFlag);
+        void onError(Context context, int errorFlag);
     }
 
     public interface TokenListener {
-        public void onStart(Context context);
+        void onStart(Context context);
 
-        public void onDone(Context context, String token);
+        void onDone(Context context, String token);
 
-        public void onError(Context context, int errorFlag);
+        void onError(Context context, int errorFlag);
     }
 
     public interface StatusListener {
-        public void onStart(Context context);
+        void onStart(Context context);
 
-        public void onDone(Context context);
+        void onDone(Context context);
 
-        public void onError(Context context, int errorFlag);
+        void onError(Context context, int errorFlag);
     }
 
     public static String md5Salt(String userName, String pwd) {
@@ -86,11 +95,10 @@ public class AccessUtils {
         new Thread(() -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> statusListener.onStart(context));
-            boolean error_flag = false;
-            AccessResponseDTO accessResponseDTO;
+            AccessCheckResponseDTO accessCheckResponseDTO;
             //耗时操作
             try {
-                accessResponseDTO = TokenDownloader.getTokenFromServer(context, username, md5Salt(username, pwd));
+                accessCheckResponseDTO = TokenDownloader.getTokenFromServer(context, username, md5Salt(username, pwd));
                 Log.i("login", "get ok");
             } catch (Exception e) {
                 Log.e("login", "error");
@@ -98,24 +106,24 @@ public class AccessUtils {
                 e.printStackTrace();
                 return;
             }
-            if (accessResponseDTO == null) {
+            if (accessCheckResponseDTO == null) {
                 Log.w("login", "dto null");
                 handler.post(() -> statusListener.onError(context, SERVER_ERROR));
                 return;
             }
 
-            if (accessResponseDTO.getToken() == null) {
+            if (accessCheckResponseDTO.getToken() == null) {
                 Log.w("login", "null token");
                 handler.post(() -> statusListener.onError(context, USERNAME_OR_PASSWORD_ERROR));
                 return;
             }
-            if (accessResponseDTO.getToken().trim().equals("")) {
+            if (accessCheckResponseDTO.getToken().trim().equals("")) {
                 Log.w("login", "no token");
                 handler.post(() -> statusListener.onError(context, USERNAME_OR_PASSWORD_ERROR));
                 return;
             }
             Log.i("login", "check ok");
-            UserDao.setToken(context, accessResponseDTO.getToken());
+            UserDao.setToken(context, accessCheckResponseDTO.getToken());
             UserResponseDTO userResponseDTO = UserDownloader.getUser(context, username);
             UserVO userVO = UserVO.init(userResponseDTO);
             if (userVO != null) {
@@ -128,8 +136,61 @@ public class AccessUtils {
 
     }
 
-    public static void logon(Context context, UserVO userVO, String pwd, StatusListener statusListener) {
-
+    public static void signup(Context context, @NonNull UserVO userVO, String captcha, String pwd, StatusListener statusListener) {
+        new Thread(() -> {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> statusListener.onStart(context));
+            AccessSignupResponseDTO accessSignupResponseDTO;
+            //耗时操作
+            try {
+                AccessSignupRequestDTO accessSignupRequestDTO = new AccessSignupRequestDTO();
+                accessSignupRequestDTO.setTimestamp(System.currentTimeMillis());
+                accessSignupRequestDTO.setUsername(userVO.getName());
+                accessSignupRequestDTO.setEmail(userVO.getEmail());
+                accessSignupRequestDTO.setPassword(AccessUtils.md5Salt(userVO.getName(), pwd));
+                accessSignupRequestDTO.setCaptchaCode(captcha);
+                accessSignupResponseDTO = Poster.jacksonPost(
+                        SettingDao.getUrl(context, SettingDao.ACCESS_URL_NAME, SettingDao.ACCESS_URL_RES) + "/signup",
+                        accessSignupRequestDTO,
+                        AccessSignupResponseDTO.class);
+                Log.i("signup", "get ok");
+            } catch (Exception e) {
+                Log.e("signup", "error");
+                handler.post(() -> statusListener.onError(context, SERVER_ERROR));
+                e.printStackTrace();
+                return;
+            }
+            if (accessSignupResponseDTO == null) {
+                Log.w("signup", "dto null");
+                handler.post(() -> statusListener.onError(context, SERVER_ERROR));
+                return;
+            }
+            if (accessSignupResponseDTO.getToken() == null || accessSignupResponseDTO.getToken().trim().equals("")) {
+                Log.w("signup", "token error");
+                final int errorCode;
+                switch (accessSignupResponseDTO.getMode()) {
+                    case "captchaCode error":
+                        errorCode = CAPTCHA_CODE_ERROR;
+                        break;
+                    case "user exist error":
+                        errorCode = USER_EXIST_ERROR;
+                        break;
+                    case "email exist error":
+                        errorCode = EMAIL_EXIST_ERROR;
+                        break;
+                    default:
+                        errorCode = UNKNOWN_ERROR;
+                        break;
+                }
+                Log.w("signup", accessSignupResponseDTO.getMode());
+                handler.post(() -> statusListener.onError(context, errorCode));
+                return;
+            }
+            Log.i("signup", "check ok");
+            UserDao.setToken(context, accessSignupResponseDTO.getToken());
+            UserDao.setUser(context, userVO);
+            handler.post(() -> statusListener.onDone(context));
+        }).start();
     }
 
     /**

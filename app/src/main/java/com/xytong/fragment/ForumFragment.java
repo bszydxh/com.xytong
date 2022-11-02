@@ -43,7 +43,15 @@ public class ForumFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        binding = FragmentForumBinding.inflate(getLayoutInflater());
+        model = new ViewModelProvider(this).get(ForumDataViewModel.class);//应在主线程加载
+        circularProgressIndicator = binding.forumProgress;
+        LiveData<List<ForumVO>> liveData = model.getDataList();
+        RecyclerView forumRecyclerView = binding.forumRecyclerView;
+        RefreshLayout forumRefreshLayout = binding.forumRefreshLayout;
+        LinearLayoutManager forumLinearLayoutManager = new LinearLayoutManager(this.requireContext());
+        ActivityResultLauncher<Intent> forumActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent intent = result.getData();
@@ -59,28 +67,39 @@ public class ForumFragment extends Fragment {
                         }
                     }
                 });
-        binding = FragmentForumBinding.inflate(getLayoutInflater());
-        model = new ViewModelProvider(this).get(ForumDataViewModel.class);//应在主线程加载
-        circularProgressIndicator = binding.forumProgress;
-        RecyclerView forumRecyclerView = binding.forumRecyclerView;
-        LinearLayoutManager forumLinearLayoutManager = new LinearLayoutManager(this.requireContext());
-        forumRecyclerView.setLayoutManager(forumLinearLayoutManager);
-        forumLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        RefreshLayout forumRefreshLayout = binding.forumRefreshLayout;
-        forumRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
-        forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
+        ActivityResultLauncher<Intent> publishActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        forumRefreshLayout.autoRefresh();
+                    }
+                });
+        forumRecyclerAdapter = new ForumRecyclerAdapter(liveData.getValue());
+        forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onUserClick(View view, UserVO userVO) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userVO);
+                Intent intent = new Intent(view.getContext(), UserActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                view.getContext().startActivity(intent);
+            }
 
-        forumRefreshLayout.setOnRefreshListener(refreshLayout ->
-        {
-            model.refreshData();
-            refreshLayout.finishRefresh(2000);
+            @Override
+            public void onTitleClick(View view, int position, ForumVO forumDataIndex) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("forumData", forumDataIndex);
+                bundle.putInt("pos", position);
+                Intent intent = new Intent(view.getContext(), ForumActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                forumActivityResultLauncher.launch(intent);
+            }
+
+            @Override
+            public void onTitleLongClick(View view, int position) {
+                // TODO
+            }
         });
-        forumRefreshLayout.setOnLoadMoreListener(refreshLayout ->
-        {
-            model.loadMoreData();
-            refreshLayout.finishLoadMore(2000);
-        });
-        forumRefreshLayout.setEnableAutoLoadMore(true);
         forumRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -104,47 +123,27 @@ public class ForumFragment extends Fragment {
                 }
             }
         });
-        binding.forumFab.setOnClickListener(v -> {
-            int index = forumLinearLayoutManager.findFirstVisibleItemPosition();
-            if (index == 0) {
-                v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
-            } else {
-                forumRecyclerView.smoothScrollToPosition(0);
-            }
+        forumRecyclerView.setAdapter(forumRecyclerAdapter);
+        forumRecyclerView.setLayoutManager(forumLinearLayoutManager);
+        forumLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        forumRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
+        forumRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
+        forumRefreshLayout.setOnRefreshListener(refreshLayout ->
+        {
+            model.refreshData();
+            refreshLayout.finishRefresh(2000);
         });
-        LiveData<List<ForumVO>> liveData = model.getDataList();
+        forumRefreshLayout.setOnLoadMoreListener(refreshLayout ->
+        {
+            model.loadMoreData();
+            refreshLayout.finishLoadMore(2000);
+        });
+        forumRefreshLayout.setEnableAutoLoadMore(true);
         liveData.observe(getViewLifecycleOwner(), dataList -> {
-            if (forumRecyclerView.getAdapter() == null) {
-                Log.i("setAdapter", "ok");
-                circularProgressIndicator.setVisibility(View.GONE);
-                forumRecyclerAdapter = new ForumRecyclerAdapter(dataList);
-                forumRecyclerAdapter.setOnItemClickListener(new ForumRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onUserClick(View view, UserVO userVO) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("userData", userVO);
-                        Intent intent = new Intent(view.getContext(), UserActivity.class);
-                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                        view.getContext().startActivity(intent);
-                    }
-
-                    @Override
-                    public void onTitleClick(View view, int position, ForumVO forumDataIndex) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("forumData", forumDataIndex);
-                        bundle.putInt("pos", position);
-                        Intent intent = new Intent(view.getContext(), ForumActivity.class);
-                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                        mStartForResult.launch(intent);
-                    }
-
-                    @Override
-                    public void onTitleLongClick(View view, int position) {
-                        // TODO
-                    }
-                });
-                forumRecyclerView.setAdapter(forumRecyclerAdapter);
-            } else {
+            if (forumRecyclerView.getAdapter() != null) {
+                if (dataList.size() > 0) {
+                    circularProgressIndicator.setVisibility(View.GONE);
+                }
                 Log.i("dataChange", "data num:" + forumRecyclerAdapter.getItemCount());
                 RefreshLayout mReRefreshLayout = binding.forumRefreshLayout;
                 mReRefreshLayout.finishRefresh();
@@ -152,6 +151,19 @@ public class ForumFragment extends Fragment {
                 forumRecyclerAdapter.notifyDataSetChanged();
             }
         });
+        binding.forumFab.setOnClickListener(v -> {
+            int index = forumLinearLayoutManager.findFirstVisibleItemPosition();
+            if (index <= 0) {
+                Bundle bundle = new Bundle();
+                bundle.putString("name", "forum");
+                Intent intent = new Intent(v.getContext(), PublishActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                publishActivityResultLauncher.launch(intent);
+            } else {
+                forumRecyclerView.smoothScrollToPosition(0);
+            }
+        });
+        model.refreshData();
         return binding.getRoot();
     }
 

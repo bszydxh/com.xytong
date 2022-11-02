@@ -2,18 +2,15 @@ package com.xytong.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-
-import com.xytong.R;
 import com.xytong.dao.SettingDao;
 import com.xytong.databinding.DialogChageUrlBinding;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
+
 
 public class UrlCreateDialog extends DialogFragment {
     DialogChageUrlBinding binding;
@@ -22,12 +19,12 @@ public class UrlCreateDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         binding = DialogChageUrlBinding.inflate(getLayoutInflater());
-        binding.urlRe.setText(SettingDao.getReUrl(requireContext()));
-        binding.urlSh.setText(SettingDao.getShUrl(requireContext()));
-        binding.urlComment.setText(SettingDao.getCommentUrl(requireContext()));
-        binding.urlForum.setText(SettingDao.getForumUrl(requireContext()));
-        binding.urlAccess.setText(SettingDao.getAccessUrl(requireContext()));
-        binding.urlUser.setText(SettingDao.getUserUrl(requireContext()));
+        binding.urlRe.setText(SettingDao.getUrl(requireContext(), SettingDao.RE_URL_NAME, SettingDao.RE_URL_RES));
+        binding.urlSh.setText(SettingDao.getUrl(requireContext(), SettingDao.SH_URL_NAME, SettingDao.SH_URL_RES));
+        binding.urlComment.setText(SettingDao.getUrl(requireContext(), SettingDao.COMMENT_URL_NAME, SettingDao.COMMENT_URL_RES));
+        binding.urlForum.setText(SettingDao.getUrl(requireContext(), SettingDao.FORUM_URL_NAME, SettingDao.FORUM_URL_RES));
+        binding.urlAccess.setText(SettingDao.getUrl(requireContext(), SettingDao.ACCESS_URL_NAME, SettingDao.ACCESS_URL_RES));
+        binding.urlUser.setText(SettingDao.getUrl(requireContext(), SettingDao.USER_URL_NAME, SettingDao.USER_URL_RES));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("设置获取信息url")
                 .setView(binding.getRoot())
@@ -39,21 +36,20 @@ public class UrlCreateDialog extends DialogFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Context context = requireContext();
-                    binding.urlRe.setText(context.getString(R.string.re_url));
-                    binding.urlSh.setText(context.getString(R.string.sh_url));
-                    binding.urlComment.setText(context.getString(R.string.comment_url));
-                    binding.urlForum.setText(context.getString(R.string.forum_url));
-                    binding.urlAccess.setText(context.getString(R.string.access_url));
-                    binding.urlUser.setText(context.getString(R.string.user_url));
+                    binding.urlRe.setText(SettingDao.RE_URL_RES);
+                    binding.urlSh.setText(SettingDao.SH_URL_RES);
+                    binding.urlComment.setText(SettingDao.COMMENT_URL_RES);
+                    binding.urlForum.setText(SettingDao.FORUM_URL_RES);
+                    binding.urlAccess.setText(SettingDao.ACCESS_URL_RES);
+                    binding.urlUser.setText(SettingDao.USER_URL_RES);
                 })
                 .setPositiveButton("保存", (dialog, id) -> {
-                    SettingDao.setCommentUrl(requireContext(), String.valueOf(binding.urlComment.getText()));
-                    SettingDao.setReUrl(requireContext(), String.valueOf(binding.urlRe.getText()));
-                    SettingDao.setForumUrl(requireContext(), String.valueOf(binding.urlForum.getText()));
-                    SettingDao.setShUrl(requireContext(), String.valueOf(binding.urlSh.getText()));
-                    SettingDao.setAccessUrl(requireContext(), String.valueOf(binding.urlAccess.getText()));
-                    SettingDao.setUserUrl(requireContext(), String.valueOf(binding.urlUser.getText()));
+                    SettingDao.setUrl(requireContext(), SettingDao.COMMENT_URL_NAME, String.valueOf(binding.urlComment.getText()));
+                    SettingDao.setUrl(requireContext(), SettingDao.RE_URL_NAME, String.valueOf(binding.urlRe.getText()));
+                    SettingDao.setUrl(requireContext(), SettingDao.FORUM_URL_NAME, String.valueOf(binding.urlForum.getText()));
+                    SettingDao.setUrl(requireContext(), SettingDao.SH_URL_NAME, String.valueOf(binding.urlSh.getText()));
+                    SettingDao.setUrl(requireContext(), SettingDao.ACCESS_URL_NAME, String.valueOf(binding.urlAccess.getText()));
+                    SettingDao.setUrl(requireContext(), SettingDao.USER_URL_NAME, String.valueOf(binding.urlUser.getText()));
                     try {
                         Field field = Objects.requireNonNull(dialog.getClass().getSuperclass()).getDeclaredField("mShowing");
                         field.setAccessible(true);

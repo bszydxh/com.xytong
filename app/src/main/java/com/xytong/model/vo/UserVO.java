@@ -2,7 +2,7 @@ package com.xytong.model.vo;
 
 import android.util.Log;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.xytong.model.dto.UserResponseDTO;
+import com.xytong.model.dto.user.UserResponseDTO;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ public class UserVO implements Serializable {
     private String name = "未登录";
     private Integer id = -1;
     private String phoneNumber = "null";
-    private String signature = "登录/注册";
+    private String signature = "";
     private int gender = -1;
     private Long birthday = -1L;
     private String email = "null";
@@ -20,7 +20,7 @@ public class UserVO implements Serializable {
     }
 
     public static UserVO init(UserResponseDTO userResponseDTO) {
-        if (userResponseDTO == null) {
+        if (userResponseDTO == null||userResponseDTO.getUsername() == null) {
             Log.i("init", "get user dto error");
             return null;
         }

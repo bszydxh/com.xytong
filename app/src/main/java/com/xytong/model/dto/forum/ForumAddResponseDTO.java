@@ -1,4 +1,4 @@
-package com.xytong.model.dto;
+package com.xytong.model.dto.forum;
 
 import lombok.Data;
 

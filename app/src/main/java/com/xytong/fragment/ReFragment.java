@@ -42,16 +42,27 @@ public class ReFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+
+        binding = FragmentReBinding.inflate(getLayoutInflater());
+        model = new ViewModelProvider(this).get(ReDataViewModel.class);
+        circularProgressIndicator = binding.reProgress;
+        RefreshLayout reRefreshLayout = binding.reRefreshLayout;
+        RecyclerView reRecyclerView = binding.reRecyclerView;
+        LinearLayoutManager reLinearLayoutManager = new LinearLayoutManager(this.requireContext());
+        LiveData<List<ReVO>> liveData = model.getDataList();
+        ActivityResultLauncher<Intent> reActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Log.i("ActivityResultLauncher", "reActivity back");
                     }
                 });
-        binding = FragmentReBinding.inflate(getLayoutInflater());
-        model = new ViewModelProvider(this).get(ReDataViewModel.class);
-        circularProgressIndicator = binding.reProgress;
-        RefreshLayout reRefreshLayout = binding.reRefreshLayout;
+        ActivityResultLauncher<Intent> publishActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        reRefreshLayout.autoRefresh();
+                    }
+                });
         reRefreshLayout.setRefreshHeader(new MaterialHeader(this.requireContext()));
         reRefreshLayout.setRefreshFooter(new ClassicsFooter(this.requireContext()));
         reRefreshLayout.setOnRefreshListener(refreshLayout -> {
@@ -63,48 +74,46 @@ public class ReFragment extends Fragment {
             refreshLayout.finishLoadMore(2000);
         });
         reRefreshLayout.setEnableAutoLoadMore(true);
-        RecyclerView reRecyclerView = binding.reRecyclerView;
-        LinearLayoutManager reLinearLayoutManager = new LinearLayoutManager(this.requireContext());
+
         reRecyclerView.setLayoutManager(reLinearLayoutManager);
         reLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LiveData<List<ReVO>> liveData = model.getDataList();
+        reRecyclerAdapter = new ReRecyclerAdapter(liveData.getValue());
+        reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onUserClick(View view, UserVO userVO) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userData", userVO);
+                Intent intent = new Intent(view.getContext(), UserActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                view.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onBannerClick(View view) {
+                Toast.makeText(view.getContext(), "banner click!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTitleClick(View view, int position, ReVO reDataIndex) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reData", reDataIndex);
+                bundle.putInt("pos", position);
+                Intent intent = new Intent(view.getContext(), ReActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                reActivityResultLauncher.launch(intent);
+            }
+
+            @Override
+            public void onTitleLongClick(View view, int position) {
+                // TODO
+            }
+        });
+        reRecyclerView.setAdapter(reRecyclerAdapter);
         liveData.observe(getViewLifecycleOwner(), dataList -> {//更新结束，不妨设置一个预期值
-            if (reRecyclerView.getAdapter() == null) {
-                Log.i("setAdapter", "ok");//进行适配器初始化
-                circularProgressIndicator.setVisibility(View.GONE);
-                reRecyclerAdapter = new ReRecyclerAdapter(model.getDataList().getValue());
-                reRecyclerAdapter.setOnItemClickListener(new ReRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onUserClick(View view, UserVO userVO) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("userData", userVO);
-                        Intent intent = new Intent(view.getContext(), UserActivity.class);
-                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                        view.getContext().startActivity(intent);
-                    }
-
-                    @Override
-                    public void onBannerClick(View view) {
-                        Toast.makeText(view.getContext(), "banner click!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onTitleClick(View view, int position, ReVO reDataIndex) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("reData", reDataIndex);
-                        bundle.putInt("pos", position);
-                        Intent intent = new Intent(view.getContext(), ReActivity.class);
-                        intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
-                        mStartForResult.launch(intent);
-                    }
-
-                    @Override
-                    public void onTitleLongClick(View view, int position) {
-                        // TODO
-                    }
-                });
-                reRecyclerView.setAdapter(reRecyclerAdapter);
-            } else {
+            if (reRecyclerView.getAdapter() != null) {
+                if (dataList.size() > 0) {
+                    circularProgressIndicator.setVisibility(View.GONE);
+                }
                 Log.i("dataChange", "data num:" + reRecyclerAdapter.getItemCount());
                 RefreshLayout mReRefreshLayout = binding.reRefreshLayout;
                 mReRefreshLayout.finishRefresh();
@@ -138,11 +147,16 @@ public class ReFragment extends Fragment {
         binding.reFab.setOnClickListener(v -> {
             int index = reLinearLayoutManager.findFirstVisibleItemPosition();
             if (index == 0) {
-                v.getContext().startActivity(new Intent(v.getContext(), PublishActivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putString("name", "re");
+                Intent intent = new Intent(v.getContext(), PublishActivity.class);
+                intent.putExtras(bundle); // 将Bundle对象嵌入Intent中
+                publishActivityResultLauncher.launch(intent);
             } else {
                 reRecyclerView.smoothScrollToPosition(0);
             }
         });
+        model.refreshData();
         return binding.getRoot();
     }
 }

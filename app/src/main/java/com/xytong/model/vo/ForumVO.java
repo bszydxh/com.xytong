@@ -1,5 +1,6 @@
 package com.xytong.model.vo;
 
+import android.util.Log;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import com.xytong.view.LikeThump;
@@ -8,9 +9,9 @@ import java.io.Serializable;
 
 @Entity(tableName = "forum_list")
 public class ForumVO extends CardVO implements Serializable, LikeThump {
-    private Integer likes = 0;
-    private Integer comments = 0;
-    private Integer forwarding = 0;
+    private Integer likes;
+    private Integer comments;
+    private Integer forwarding;
     ////////////////////////////////////////////////////////
     @Ignore
     private Boolean liked = false;
@@ -32,16 +33,31 @@ public class ForumVO extends CardVO implements Serializable, LikeThump {
     }
 
     public void setComments(Integer comments) {
-        this.comments = comments;
+        if (comments == null) {
+            Log.w("ForumVO", "Comments null warning! Check the server database");
+            this.comments = 0;
+        } else {
+            this.comments = comments;
+        }
     }
 
     public void setForwarding(Integer forwarding) {
-        this.forwarding = forwarding;
+        if (forwarding == null) {
+            Log.w("ForumVO", "Comments null warning! Check the server database");
+            this.forwarding = 0;
+        } else {
+            this.forwarding = forwarding;
+        }
     }
 
     @Override
     public void setLikes(Integer likes) {
-        this.likes = likes;
+        if (likes == null) {
+            Log.w("ForumVO", "Comments null warning! Check the server database");
+            this.likes = 0;
+        } else {
+            this.likes = likes;
+        }
     }
 
     @Override

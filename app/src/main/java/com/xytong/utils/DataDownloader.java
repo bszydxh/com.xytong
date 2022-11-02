@@ -3,8 +3,16 @@ package com.xytong.utils;
 import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import com.xytong.dao.ListTimeDao;
 import com.xytong.dao.SettingDao;
-import com.xytong.model.dto.*;
+import com.xytong.model.dto.comment.CommentGetRequestDTO;
+import com.xytong.model.dto.comment.CommentGetResponseDTO;
+import com.xytong.model.dto.forum.ForumGetRequestDTO;
+import com.xytong.model.dto.forum.ForumGetResponseDTO;
+import com.xytong.model.dto.re.ReGetRequestDTO;
+import com.xytong.model.dto.re.ReGetResponseDTO;
+import com.xytong.model.dto.sh.ShGetRequestDTO;
+import com.xytong.model.dto.sh.ShGetResponseDTO;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.ReVO;
@@ -19,54 +27,67 @@ import java.util.List;
 public class DataDownloader {
     public static List<ForumVO> getForumDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
-        ForumPostDTO forumPostDTO = new ForumPostDTO();
-        forumPostDTO.setModule("forums");
-        forumPostDTO.setMode(mode);
-        forumPostDTO.setNumStart(start);
-        forumPostDTO.setNumEnd(end);
-        forumPostDTO.setNeedNum(need_num);
-        forumPostDTO.setTimestamp(System.currentTimeMillis());
-        ForumResponseDTO forumResponseDTO = Poster.jacksonPost(SettingDao.getForumUrl(context), forumPostDTO, ForumResponseDTO.class);
-        if (forumResponseDTO == null) {
-            Log.e("DataDownloader.getForumDataList()","获取失败");
+        ForumGetRequestDTO forumGetRequestDTO = new ForumGetRequestDTO();
+        forumGetRequestDTO.setModule("forums");
+        forumGetRequestDTO.setMode(mode);
+        forumGetRequestDTO.setNumStart(start);
+        forumGetRequestDTO.setNumEnd(end);
+        forumGetRequestDTO.setNeedNum(need_num);
+        if (start == 0) {
+            Log.e("DataDownloader.getForumDataList()", "new timestamp");
+            ListTimeDao.setForumTime(context, System.currentTimeMillis());
+        }
+        forumGetRequestDTO.setTimestamp(ListTimeDao.getForumTime(context));
+        ForumGetResponseDTO forumGetResponseDTO = Poster.jacksonPost(
+                SettingDao.getUrl(context, SettingDao.FORUM_URL_NAME, SettingDao.FORUM_URL_RES) + "/get",
+                forumGetRequestDTO,
+                ForumGetResponseDTO.class);
+        if (forumGetResponseDTO == null) {
+            Log.e("DataDownloader.getForumDataList()", "获取失败");
             return new ArrayList<>();
         }
-        return forumResponseDTO.getForumData();
+        return forumGetResponseDTO.getForumData();
     }
 
     public static List<ReVO> getReDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
-        RePostDTO rePostDTO = new RePostDTO();
-        rePostDTO.setModule("run_errands");
-        rePostDTO.setMode(mode);
-        rePostDTO.setNumStart(start);
-        rePostDTO.setNumEnd(end);
-        rePostDTO.setNeedNum(need_num);
-        rePostDTO.setTimestamp(System.currentTimeMillis());
-        ReResponseDTO reResponseDTO = Poster.jacksonPost(SettingDao.getReUrl(context), rePostDTO, ReResponseDTO.class);
-        if (reResponseDTO == null) {
-            Log.e("DataDownloader.getReDataList()","获取失败");
+        ReGetRequestDTO reGetRequestDTO = new ReGetRequestDTO();
+        reGetRequestDTO.setModule("run_errands");
+        reGetRequestDTO.setMode(mode);
+        reGetRequestDTO.setNumStart(start);
+        reGetRequestDTO.setNumEnd(end);
+        reGetRequestDTO.setNeedNum(need_num);
+        reGetRequestDTO.setTimestamp(ListTimeDao.getReTime(context));
+        ReGetResponseDTO reGetResponseDTO = Poster.jacksonPost(
+                SettingDao.getUrl(context, SettingDao.RE_URL_NAME, SettingDao.RE_URL_RES) + "/get",
+                reGetRequestDTO,
+                ReGetResponseDTO.class);
+        if (reGetResponseDTO == null) {
+            Log.e("DataDownloader.getReDataList()", "获取失败");
             return new ArrayList<>();
         }
-        return reResponseDTO.getReData();
+        return reGetResponseDTO.getReData();
 
     }
 
     public static List<ShVO> getShDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
-        ShPostDTO shPostDTO = new ShPostDTO();
-        shPostDTO.setModule("secondhand");
-        shPostDTO.setMode(mode);
-        shPostDTO.setNumStart(start);
-        shPostDTO.setNumEnd(end);
-        shPostDTO.setNeedNum(need_num);
-        shPostDTO.setTimestamp(System.currentTimeMillis());
-        ShResponseDTO shResponseDTO = Poster.jacksonPost(SettingDao.getShUrl(context), shPostDTO, ShResponseDTO.class);
-        if (shResponseDTO == null) {
-            Log.e("DataDownloader.getShDataList()","获取失败");
+        ShGetRequestDTO shGetRequestDTO = new ShGetRequestDTO();
+        shGetRequestDTO.setModule("secondhand");
+        shGetRequestDTO.setMode(mode);
+        shGetRequestDTO.setNumStart(start);
+        shGetRequestDTO.setNumEnd(end);
+        shGetRequestDTO.setNeedNum(need_num);
+        shGetRequestDTO.setTimestamp(ListTimeDao.getShTime(context));
+        ShGetResponseDTO shGetResponseDTO = Poster.jacksonPost(
+                SettingDao.getUrl(context, SettingDao.SH_URL_NAME, SettingDao.SH_URL_RES) + "/get",
+                shGetRequestDTO,
+                ShGetResponseDTO.class);
+        if (shGetResponseDTO == null) {
+            Log.e("DataDownloader.getShDataList()", "获取失败");
             return new ArrayList<>();
         }
-        return shResponseDTO.getShData();
+        return shGetResponseDTO.getShData();
     }
 
     public static List<CommentVO> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
@@ -81,7 +102,7 @@ public class DataDownloader {
                     "  \"num_end\": " + end + ",\n" +
                     "  \"timestamp\": 1650098900\n" +
                     "}";
-            Poster<List<CommentVO>> poster = new Poster<>(SettingDao.getCommentUrl(context), text);
+            Poster<List<CommentVO>> poster = new Poster<>(SettingDao.getUrl(context, SettingDao.COMMENT_URL_NAME, SettingDao.COMMENT_URL_RES), text);
             poster.setHttpListener(result -> {
                 List<CommentVO> data_init = new ArrayList<>();
                 try {
@@ -107,5 +128,26 @@ public class DataDownloader {
             data = poster.post();
         }
         return data;
+    }
+
+    public static List<CommentVO> getCommentDataList(Context context, Long cid, String module, @NonNull String mode, int start, int end) {
+        int need_num = end - start + 1;
+        CommentGetRequestDTO commentGetRequestDTO = new CommentGetRequestDTO();
+        commentGetRequestDTO.setModule(module);
+        commentGetRequestDTO.setCid(cid);
+        commentGetRequestDTO.setMode(mode);
+        commentGetRequestDTO.setNumStart(start);
+        commentGetRequestDTO.setNumEnd(end);
+        commentGetRequestDTO.setNeedNum(need_num);
+        commentGetRequestDTO.setTimestamp(ListTimeDao.getShTime(context));
+        CommentGetResponseDTO shGetResponseDTO = Poster.jacksonPost(
+                SettingDao.getUrl(context, SettingDao.COMMENT_URL_NAME, SettingDao.COMMENT_URL_RES) + "/get",
+                commentGetRequestDTO,
+                CommentGetResponseDTO.class);
+        if (shGetResponseDTO == null) {
+            Log.e("DataDownloader.getCommentDataList()", "获取失败");
+            return new ArrayList<>();
+        }
+        return shGetResponseDTO.getData();
     }
 }

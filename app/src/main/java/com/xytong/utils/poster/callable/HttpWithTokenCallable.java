@@ -39,34 +39,33 @@ public class HttpWithTokenCallable<T> implements Callable<T> {
             outputStreamWriter.write(text);
             //获得结果码
             outputStreamWriter.close();
+
+            //请求成功 获得返回的流
+            String result_back;
+            InputStream inputStream = connection.getInputStream();
+            int length = connection.getContentLength();
+            if (length >= 0) {
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, length);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                for (int result = bufferedInputStream.read(); result != -1; result = bufferedInputStream.read()) {
+                    byteArrayOutputStream.write((byte) result);
+                }
+                result_back = byteArrayOutputStream.toString();
+            } else {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                for (int result = inputStream.read(); result != -1; result = inputStream.read()) {
+                    byteArrayOutputStream.write((byte) result);
+                }
+                result_back = byteArrayOutputStream.toString();
+            }
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
-                //请求成功 获得返回的流
-                String result_back;
-                InputStream inputStream = connection.getInputStream();
-                int length = connection.getContentLength();
-                if (length >= 0) {
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, length);
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    for (int result = bufferedInputStream.read(); result != -1; result = bufferedInputStream.read()) {
-                        byteArrayOutputStream.write((byte) result);
-                    }
-                    result_back = byteArrayOutputStream.toString();
-                } else {
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    for (int result = inputStream.read(); result != -1; result = inputStream.read()) {
-                        byteArrayOutputStream.write((byte) result);
-                    }
-                    result_back = byteArrayOutputStream.toString();
-                }
                 data_init = httpListener.onResultBack(result_back);
             } else {
                 //请求失败
-                Log.e("Poster", "http error");
-
+                Log.e("Poster", "http error\n" + result_back);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             Log.e("Poster", "get error");
         }
         return data_init;

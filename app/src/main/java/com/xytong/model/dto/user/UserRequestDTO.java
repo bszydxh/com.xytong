@@ -1,9 +1,9 @@
-package com.xytong.model.dto;
+package com.xytong.model.dto.user;
 
 import lombok.Data;
 
 @Data
-public class UserPostDTO{
+public class UserRequestDTO {
     String mode;
     String token;
     String username;

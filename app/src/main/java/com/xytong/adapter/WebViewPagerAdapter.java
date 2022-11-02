@@ -61,4 +61,5 @@ public class WebViewPagerAdapter extends PagerAdapter {
     public CharSequence getPageTitle(int position) {
         return menuLists.get(position);
     }
+
 }

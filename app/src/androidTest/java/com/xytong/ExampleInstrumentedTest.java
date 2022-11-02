@@ -4,8 +4,8 @@ import android.content.Context;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.xytong.dao.UserDao;
-import com.xytong.model.dto.UserPostDTO;
-import com.xytong.model.dto.UserResponseDTO;
+import com.xytong.model.dto.user.UserRequestDTO;
+import com.xytong.model.dto.user.UserResponseDTO;
 import com.xytong.model.vo.UserVO;
 import com.xytong.utils.poster.Poster;
 import org.junit.Test;
@@ -42,8 +42,8 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void jacksonPostTest() {
-        UserPostDTO userPostDTO = new UserPostDTO();
-        userPostDTO.setUsername("bszydxh");
-        Poster.jacksonPost("http://192.168.137.1/user", userPostDTO, UserResponseDTO.class);
+        UserRequestDTO userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setUsername("bszydxh");
+        Poster.jacksonPost("http://192.168.137.1/user", userRequestDTO, UserResponseDTO.class);
     }
 }

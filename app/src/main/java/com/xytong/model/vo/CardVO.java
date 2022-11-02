@@ -11,13 +11,14 @@ import java.io.Serializable;
 
 /**
  * 可缓存的vo设计，交由room进行缓存
+ * 现在版本不可用，会炸的！
  */
 @Entity
 public class CardVO implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id = -1;//主键
     @Ignore
-    private String uid;//用户id，TODO
+    private String uid;
     @Ignore
     private String cid;//卡片消息id，TODO
     @ColumnInfo(name = "user_name")

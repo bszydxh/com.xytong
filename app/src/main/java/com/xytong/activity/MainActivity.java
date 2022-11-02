@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -56,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Log.i("MainActivity", "back");
+                        if (!Objects.equals(UserDao.getUser(this), new UserVO())) {
+                            navigationView.getHeaderView(0).findViewById(R.id.nav_layout).setBackgroundColor(getResources().getColor(R.color.white_blue1));
+                        } else {
+                            navigationView.getHeaderView(0).findViewById(R.id.nav_layout).setBackgroundColor(getResources().getColor(R.color.dark_gray));
+                        }
                         ViewCreateUtils.setupUserDataViewGroup(
                                 navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
                                 navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
@@ -71,8 +77,40 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         nav_header_view.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            mStartForResult.launch(intent);
+            if (!Objects.equals(UserDao.getUser(this), new UserVO())) {
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("是否退出登录？")//设置标题
+                        .setNegativeButton("再想想", (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .setPositiveButton("退出", (dialog1, which) -> {
+                            UserDao.setUser(this, new UserVO());
+                            UserDao.setToken(this, "");
+                            UserDao.setPwd(this, "");
+                            if (!Objects.equals(UserDao.getUser(this), new UserVO())) {
+                                navigationView.getHeaderView(0).findViewById(R.id.nav_layout).setBackgroundColor(getResources().getColor(R.color.white_blue1, getTheme()));
+                            } else {
+                                navigationView.getHeaderView(0).findViewById(R.id.nav_layout).setBackgroundColor(getResources().getColor(R.color.dark_gray, getTheme()));
+                            }
+                            ViewCreateUtils.setupUserDataViewGroup(
+                                    navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
+                                    navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),
+                                    navigationView.getHeaderView(0).findViewById(R.id.drawer_user_signature),
+                                    UserDao.getUser(this)
+                            );
+                            ViewCreateUtils.setupUserDataViewGroup(
+                                    binding.underBar.toolbarUserAvatar,
+                                    binding.underBar.toolbarUserName,
+                                    binding.underBar.toolbarUserSignature,
+                                    UserDao.getUser(this)
+                            );
+                        }).create();
+                dialog.show();//显示对话框
+            } else {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                mStartForResult.launch(intent);
+            }
+
         });
         Menu navMenu = binding.navView.getMenu();
         MenuItem settingItem = navMenu.findItem(R.id.nav_setting);
@@ -123,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+        if (!Objects.equals(UserDao.getUser(this), new UserVO())) {
+            navigationView.getHeaderView(0).findViewById(R.id.nav_layout).setBackgroundColor(getResources().getColor(R.color.white_blue1));
+        } else {
+            navigationView.getHeaderView(0).findViewById(R.id.nav_layout).setBackgroundColor(getResources().getColor(R.color.dark_gray));
+        }
         ViewCreateUtils.setupUserDataViewGroup(
                 navigationView.getHeaderView(0).findViewById(R.id.drawer_user_avatar),
                 navigationView.getHeaderView(0).findViewById(R.id.drawer_user_name),

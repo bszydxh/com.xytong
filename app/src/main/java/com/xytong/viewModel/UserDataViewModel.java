@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.xytong.model.dto.UserResponseDTO;
+import com.xytong.model.dto.user.UserResponseDTO;
 import com.xytong.model.vo.UserVO;
 import com.xytong.utils.UserDownloader;
 

@@ -1,18 +1,18 @@
-package com.xytong.model.dto;
+package com.xytong.model.dto.comment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
 
 @Data
-public class ShPostDTO {
+public class CommentGetRequestDTO {
     String module;
     String mode;
+    Long cid;
     @JsonProperty(value = "num_start")
-    int numStart;
+    Integer numStart;
     @JsonProperty(value = "need_num")
-    int needNum;
+    Integer needNum;
     @JsonProperty(value = "num_end")
-    int numEnd;
-    long timestamp;
+    Integer numEnd;
+    Long timestamp;
 }
