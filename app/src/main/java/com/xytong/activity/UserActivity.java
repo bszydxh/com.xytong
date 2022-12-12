@@ -9,9 +9,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.xytong.R;
 import com.xytong.adapter.RootFragmentPagerAdapter;
 import com.xytong.databinding.ActivityUserBinding;
-import com.xytong.fragment.ForumFragment;
-import com.xytong.fragment.ReFragment;
-import com.xytong.fragment.ShFragment;
 import com.xytong.model.vo.UserVO;
 import com.xytong.utils.ImageUtils;
 import com.xytong.utils.ViewCreateUtils;
@@ -52,9 +49,9 @@ public class UserActivity extends AppCompatActivity {
         rootFragmentPagerAdapter = new RootFragmentPagerAdapter(
                 getSupportFragmentManager(), getLifecycle()
         );
-        rootFragmentPagerAdapter.addFragment(new ReFragment());
-        rootFragmentPagerAdapter.addFragment(new ShFragment());
-        rootFragmentPagerAdapter.addFragment(new ForumFragment());
+//        rootFragmentPagerAdapter.addFragment(new ReFragment());
+//        rootFragmentPagerAdapter.addFragment(new ShFragment());
+//        rootFragmentPagerAdapter.addFragment(new ForumFragment());
         ViewPager2 rootViewPager = binding.pager;
         rootViewPager.setAdapter(rootFragmentPagerAdapter);
         TabLayoutMediator tab = new TabLayoutMediator(binding.tab, rootViewPager, (tab1, position) -> {

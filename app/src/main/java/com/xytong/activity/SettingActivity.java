@@ -3,10 +3,8 @@ package com.xytong.activity;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.xytong.R;
-import com.xytong.dao.SettingDao;
 import com.xytong.databinding.ActivitySettingBinding;
 import com.xytong.utils.ViewCreateUtils;
-import com.xytong.view.UrlCreateDialog;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -20,13 +18,14 @@ public class SettingActivity extends AppCompatActivity {
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());//binding中getRoot()方法是对binding根视图的引用,也相当于创建视图
         binding.settingBack.setOnClickListener(v -> finish());
-        binding.demonstrateModeSwitch.setChecked(SettingDao.isDemonstrateMode(this));
-        binding.demonstrateModeSwitch.setOnCheckedChangeListener((v, checked)
-                -> SettingDao.setDemonstrateMode(this, checked));
-        binding.changeUrl.setOnClickListener(v->{
-            UrlCreateDialog dialog= new UrlCreateDialog();
-            dialog.show(getSupportFragmentManager(),"urlChangeDialog");
-        });
+        //功能屏蔽
+//        binding.demonstrateModeSwitch.setChecked(SettingDao.isDemonstrateMode(this));
+//        binding.demonstrateModeSwitch.setOnCheckedChangeListener((v, checked)
+//                -> SettingDao.setDemonstrateMode(this, checked));
+//        binding.changeUrl.setOnClickListener(v->{
+//            UrlCreateDialog dialog= new UrlCreateDialog();
+//            dialog.show(getSupportFragmentManager(),"urlChangeDialog");
+//        });
     }
 
     @Override

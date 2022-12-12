@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.xytong.R;
 import com.xytong.adapter.RootFragmentPagerAdapter;
+import com.xytong.dao.SettingDao;
 import com.xytong.dao.UserDao;
 import com.xytong.databinding.ActivityMainBinding;
 import com.xytong.fragment.ForumFragment;
@@ -52,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
         binding.underBar.toolbar.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
         //对右下方悬浮按键绑定监听事件
         View nav_header_view = binding.navView.getHeaderView(0);
+        SettingDao.setUrl(this, SettingDao.COMMENT_URL_NAME, getText(SettingDao.COMMENT_URL_RES).toString());
+        SettingDao.setUrl(this, SettingDao.RE_URL_NAME,getText(SettingDao.RE_URL_RES).toString() );
+        SettingDao.setUrl(this, SettingDao.FORUM_URL_NAME, getText(SettingDao.FORUM_URL_RES).toString());
+        SettingDao.setUrl(this, SettingDao.SH_URL_NAME, getText(SettingDao.SH_URL_RES).toString());
+        SettingDao.setUrl(this, SettingDao.ACCESS_URL_NAME,getText(SettingDao.ACCESS_URL_RES).toString() );
+        SettingDao.setUrl(this, SettingDao.USER_URL_NAME,getText(SettingDao.USER_URL_RES).toString() );
+        SettingDao.setUrl(this, SettingDao.CAPTCHA_URL_NAME, getText(SettingDao.CAPTCHA_URL_RES).toString());
         ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
