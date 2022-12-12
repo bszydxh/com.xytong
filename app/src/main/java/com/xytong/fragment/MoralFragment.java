@@ -104,7 +104,6 @@ public class MoralFragment extends Fragment {
         for (int i = 0; i < 5; i++) {
             webViewPagerAdapter.addItem(getWebView("", false));
         }
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -113,30 +112,42 @@ public class MoralFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                WebView webViewIndex = webViewPagerAdapter.getPrimaryItem().findViewById(R.id.web_view);
+                WebView webViewIndex = webViewPagerAdapter.getViewLists().get(position).findViewById(R.id.web_view);
                 switch (position) {
                     case 0: {
-                        webViewIndex.loadUrl("http://m.people.cn/");
+                        if (webViewIndex.getUrl() == null) {
+                            webViewIndex.loadUrl("http://m.people.cn/");
+                        }
                         break;
                     }
                     case 1: {
-                        webViewIndex.loadUrl("http://m.news.cn/");
+                        if (webViewIndex.getUrl() == null) {
+                            webViewIndex.loadUrl("http://m.news.cn/");
+                        }
                         break;
                     }
                     case 2: {
-                        webViewIndex.loadUrl("http://www.12371.cn/dsxx/");
+                        if (webViewIndex.getUrl() == null) {
+                            webViewIndex.loadUrl("http://www.12371.cn/dsxx/");
+                        }
                         break;
                     }
                     case 3: {
-                        webViewIndex.loadUrl("http://www.xuexi.cn/");
+                        if (webViewIndex.getUrl() == null) {
+                            webViewIndex.loadUrl("http://www.xuexi.cn/");
+                        }
                         break;
                     }
                     case 4: {
-                        webViewIndex.loadUrl("http://m.qstheory.cn");
+                        if (webViewIndex.getUrl() == null) {
+                            webViewIndex.loadUrl("http://m.qstheory.cn");
+                        }
                         break;
                     }
                     case 5: {
-                        webViewIndex.loadUrl("http://www.uucps.edu.cn/");
+                        if (webViewIndex.getUrl() == null) {
+                            webViewIndex.loadUrl("http://www.uucps.edu.cn/");
+                        }
                         break;
                     }
                 }

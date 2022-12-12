@@ -37,11 +37,11 @@ public class CoreDataBaseGetter {
                             Log.e("SQLite", "create file error");
                             throw new RuntimeException("create file error");
                         }
-
                     } else {
                         Log.d("SQLite", "ok");
                     }
-                    sqliteGetter.coreDataBase = Room.databaseBuilder(context, CoreDataBase.class, "coreData")
+                    sqliteGetter.coreDataBase =
+                            Room.databaseBuilder(context, CoreDataBase.class, "coreData")
                             .createFromFile(db_file) //new a database
                             .build();
                 } else {

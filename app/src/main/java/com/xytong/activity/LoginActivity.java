@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.xytong.R;
 import com.xytong.adapter.LoginPagerAdapter;
+import com.xytong.dao.SettingDao;
 import com.xytong.databinding.ActivityLoginBinding;
 import com.xytong.databinding.PageLoginBinding;
 import com.xytong.databinding.PageSignupBinding;
@@ -113,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             captchaSendRequestDTO.setEmail(email);
             captchaSendRequestDTO.setTimestamp(System.currentTimeMillis());
             new Thread(() -> Poster.jacksonPost(
-                    "http:xytong.top:7426/captcha/v1/send",
+                    SettingDao.getUrl(this, SettingDao.CAPTCHA_URL_NAME, SettingDao.CAPTCHA_URL_RES) + "/send",
                     captchaSendRequestDTO,
                     CaptchaSendResponseDTO.class
             )).start();

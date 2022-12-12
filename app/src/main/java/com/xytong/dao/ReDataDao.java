@@ -1,26 +1,21 @@
 package com.xytong.dao;
 
-import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import com.xytong.model.vo.ReVO;
+import androidx.room.*;
+import com.xytong.model.po.RePO;
 
 import java.util.List;
 
 @Dao
 public interface ReDataDao {
     @Insert
-    void insertRe(ReVO... words);
+    void insertRe(RePO... words);
 
     @Update
-    int updateRe(ReVO... words);
+    int updateRe(RePO... words);
 
     @Delete
-    void deleteRe(ReVO... words);
+    void deleteRe(RePO... words);
 
-    @Query("SELECT * FROM re_list")
-    List<ReVO> getAllRe();
+    @Query("SELECT * FROM re")
+    List<RePO> getAllRe();
 }

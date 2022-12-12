@@ -2,63 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "8d2fc65a43880982918e3a319a1507f3",
+    "identityHash": "ba7aae3fcfc607e905d8cd27168bfa4c",
     "entities": [
       {
-        "tableName": "forum_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`likes` INTEGER, `comments` INTEGER, `forwarding` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_name` TEXT, `user_avatar` TEXT, `title` TEXT, `text` TEXT, `timestamp` INTEGER)",
+        "tableName": "forum",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT)",
         "fields": [
-          {
-            "fieldPath": "likes",
-            "columnName": "likes",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "comments",
-            "columnName": "comments",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "forwarding",
-            "columnName": "forwarding",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "userName",
-            "columnName": "user_name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "userAvatarUrl",
-            "columnName": "user_avatar",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "text",
-            "columnName": "text",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -73,48 +25,12 @@
         "foreignKeys": []
       },
       {
-        "tableName": "re_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_name` TEXT, `user_avatar` TEXT, `title` TEXT, `text` TEXT, `timestamp` INTEGER)",
+        "tableName": "re",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT)",
         "fields": [
-          {
-            "fieldPath": "price",
-            "columnName": "price",
-            "affinity": "TEXT",
-            "notNull": false
-          },
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "userName",
-            "columnName": "user_name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "userAvatarUrl",
-            "columnName": "user_avatar",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "text",
-            "columnName": "text",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -129,54 +45,12 @@
         "foreignKeys": []
       },
       {
-        "tableName": "sh_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price` TEXT, `imageUrl` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_name` TEXT, `user_avatar` TEXT, `title` TEXT, `text` TEXT, `timestamp` INTEGER)",
+        "tableName": "sh",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT)",
         "fields": [
-          {
-            "fieldPath": "price",
-            "columnName": "price",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "imageUrl",
-            "columnName": "imageUrl",
-            "affinity": "TEXT",
-            "notNull": false
-          },
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "userName",
-            "columnName": "user_name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "userAvatarUrl",
-            "columnName": "user_avatar",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "text",
-            "columnName": "text",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -194,7 +68,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d2fc65a43880982918e3a319a1507f3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba7aae3fcfc607e905d8cd27168bfa4c')"
     ]
   }
 }

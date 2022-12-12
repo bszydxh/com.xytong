@@ -112,16 +112,16 @@ public class Poster<T> {
                     ObjectMapper objectMapper = new ObjectMapper();
                     T requestDTO_result = objectMapper.readValue(result, responseDTOType);
                     Log.i("Poster.jacksonPost()", "has response: server -> " + requestDTO_result.getClass().getName()
-                            + " \nresult:" + requestDTO_result.toString());
+                            + " \nresult:" + requestDTO_result);
                     return requestDTO_result;//异步完成数据传递
                 } catch (Exception e) {
-                    Log.e("Poster.jacksonPost()", "jackson unpack error:" + e.toString());
+                    Log.e("Poster.jacksonPost()", "jackson unpack error:" + e);
                 }
                 return null;
             });//由于该方法被包裹在新线程进行，该线程会等待网络进程
             return poster.post();
         } catch (Exception e) {
-            Log.e("Poster.jacksonPost()", "error" + e.toString());
+            Log.e("Poster.jacksonPost()", "error" + e);
         }
         return null;
     }

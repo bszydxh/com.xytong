@@ -1,26 +1,21 @@
 package com.xytong.dao;
 
-import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import com.xytong.model.vo.ShVO;
+import androidx.room.*;
+import com.xytong.model.po.ShPO;
 
 import java.util.List;
 
 @Dao
 public interface ShDataDao {
     @Insert
-    void insertSh(ShVO... words);
+    void insertSh(ShPO... words);
 
     @Update
-    int updateSh(ShVO... words);
+    int updateSh(ShPO... words);
 
     @Delete
-    void deleteSh(ShVO... words);
+    void deleteSh(ShPO... words);
 
-    @Query("SELECT * FROM sh_list")
-    List<ShVO> getAllSh();
+    @Query("SELECT * FROM sh")
+    List<ShPO> getAllSh();
 }

@@ -1,11 +1,9 @@
 package com.xytong.model.vo;
 
-import androidx.room.Entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-@Entity(tableName = "sh_list")
 public class ShVO extends CardVO implements Serializable {
     private String price = "null";
     @JsonProperty("image_url")

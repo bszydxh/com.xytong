@@ -3,7 +3,7 @@ package com.xytong.model.dto.access;
 import lombok.Data;
 
 @Data
-public class AccessCheckPostDTO {
+public class AccessCheckRequestDTO {
     String mode;
     String username;
     String password;

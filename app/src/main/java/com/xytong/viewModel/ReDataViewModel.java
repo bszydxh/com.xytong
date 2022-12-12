@@ -39,7 +39,12 @@ public class ReDataViewModel extends AndroidViewModel {
                 return;
             }
             int listSize = reList.size();
-            obtainedDataList = DataDownloader.getReDataList(getApplication().getApplicationContext(), "newest", listSize, listSize + 10);
+            obtainedDataList =
+                    DataDownloader.getReDataList(
+                            getApplication().getApplicationContext(),
+                            "newest",
+                            listSize,
+                            listSize + 10);
             if (obtainedDataList != null) {
                 reList.addAll(obtainedDataList);
                 dataList.postValue(reList);
@@ -51,7 +56,12 @@ public class ReDataViewModel extends AndroidViewModel {
         new Thread(() -> {
             List<ReVO> reList = dataList.getValue();
             List<ReVO> obtainedDataList;
-            obtainedDataList = DataDownloader.getReDataList(getApplication().getApplicationContext(), "newest", 0, 10);
+            obtainedDataList =
+                    DataDownloader.getReDataList(
+                            getApplication().getApplicationContext(),
+                            "newest",
+                            0,
+                            10);
             if (reList != null && obtainedDataList != null) {
                 reList.clear();
                 reList.addAll(obtainedDataList);

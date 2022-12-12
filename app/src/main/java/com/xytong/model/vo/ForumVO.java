@@ -1,19 +1,15 @@
 package com.xytong.model.vo;
 
 import android.util.Log;
-import androidx.room.Entity;
-import androidx.room.Ignore;
 import com.xytong.view.LikeThump;
 
 import java.io.Serializable;
 
-@Entity(tableName = "forum_list")
 public class ForumVO extends CardVO implements Serializable, LikeThump {
     private Integer likes;
     private Integer comments;
     private Integer forwarding;
     ////////////////////////////////////////////////////////
-    @Ignore
     private Boolean liked = false;
 
     public ForumVO() {

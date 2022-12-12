@@ -4,7 +4,7 @@ import android.content.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xytong.dao.SettingDao;
 import com.xytong.dao.UserDao;
-import com.xytong.model.dto.access.AccessCheckPostDTO;
+import com.xytong.model.dto.access.AccessCheckRequestDTO;
 import com.xytong.model.dto.access.AccessCheckResponseDTO;
 import com.xytong.utils.poster.Poster;
 import org.jetbrains.annotations.Nullable;
@@ -21,13 +21,13 @@ public class TokenDownloader {
     @Nullable
     public static AccessCheckResponseDTO getTokenFromServer(Context context, String username, String md5WithSalt) {
         ObjectMapper postMapper = new ObjectMapper();
-        AccessCheckPostDTO accessCheckPostDTO = new AccessCheckPostDTO();
-        accessCheckPostDTO.setTimestamp(System.currentTimeMillis());
-        accessCheckPostDTO.setUsername(username);
-        accessCheckPostDTO.setPassword(md5WithSalt);
+        AccessCheckRequestDTO accessCheckRequestDTO = new AccessCheckRequestDTO();
+        accessCheckRequestDTO.setTimestamp(System.currentTimeMillis());
+        accessCheckRequestDTO.setUsername(username);
+        accessCheckRequestDTO.setPassword(md5WithSalt);
         return Poster.jacksonPost(
                 SettingDao.getUrl(context, SettingDao.ACCESS_URL_NAME, SettingDao.ACCESS_URL_RES) + "/check",
-                accessCheckPostDTO,
+                accessCheckRequestDTO,
                 AccessCheckResponseDTO.class
         );
     }
@@ -40,12 +40,12 @@ public class TokenDownloader {
      */
     @Nullable
     public static AccessCheckResponseDTO checkTokenFromServer(Context context) {
-        AccessCheckPostDTO accessCheckPostDTO = new AccessCheckPostDTO();
-        accessCheckPostDTO.setTimestamp(System.currentTimeMillis());
-        accessCheckPostDTO.setToken(UserDao.getToken(context));
+        AccessCheckRequestDTO accessCheckRequestDTO = new AccessCheckRequestDTO();
+        accessCheckRequestDTO.setTimestamp(System.currentTimeMillis());
+        accessCheckRequestDTO.setToken(UserDao.getToken(context));
         return Poster.jacksonPost(
                 SettingDao.getUrl(context, SettingDao.ACCESS_URL_NAME, SettingDao.ACCESS_URL_RES) + "/check",
-                accessCheckPostDTO,
+                accessCheckRequestDTO,
                 AccessCheckResponseDTO.class
         );
     }

@@ -17,7 +17,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="发单">立即发单</string>
     <string name="接单">接单</string>
-    <string name="username"> </string>
+    <string name="username">用户名</string>
     <string name="title">标题</string>
     <string name="text">内容\n内容</string>
     <string name="user_avatar">用户头像</string>
@@ -35,16 +35,13 @@
     <string name="showMode">演示模式</string>
     <string name="comment">全部评论</string>
     <string name="userText">userText</string>
+    <string name="signature">用户签名</string>
     <string name="change_url">数据获取链接更改</string>
-<!--    <string name="sh_url">http://rap2api.taobao.org/app/mock/data/2307034</string>-->
-<!--    <string name="re_url">http://rap2api.taobao.org/app/mock/data/2307037</string>-->
-    <string name="comment_url">http://rap2api.taobao.org/app/mock/data/2324413</string>
-<!--    <string name="forum_url">http://rap2api.taobao.org/app/mock/data/2255088</string>-->
-<!--    <string name="access_url">http://rap2api.taobao.org/app/mock/data/2329810</string>-->
-    <string name="signature"> </string>
-    <string name="sh_url">http://xytong.top/secondhand</string>
-    <string name="re_url">http://xytong.top/run_errands</string>
-    <string name="forum_url">http://xytong.top/forums</string>
-    <string name="access_url">http://xytong.top/access</string>
-    <string name="user_url">http://xytong.top/user</string>
+    <string name="comment_url">https://api.xytong.top/comment/v1</string>
+    <string name="sh_url"     >https://api.xytong.top/secondhand/v1</string>
+    <string name="re_url"     >https://api.xytong.top/run_errands/v1</string>
+    <string name="forum_url"  >https://api.xytong.top/forums/v1</string>
+    <string name="access_url" >https://api.xytong.top/access/v1</string>
+    <string name="user_url"   >https://api.xytong.top/user/v1</string>
+    <string name="captcha_url">"https://api.xytong.top/captcha/v1"</string>
 </resources>

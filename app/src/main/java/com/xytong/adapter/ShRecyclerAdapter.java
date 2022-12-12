@@ -116,7 +116,8 @@ public class ShRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         ShRecyclerAdapter.ViewHolder shCardViewHolder = (ViewHolder) viewHolder;
-        ImageUtils.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getUserAvatarUrl());
+        ShVO shVO = localDataSet.get(shCardViewHolder.getAdapterPosition());
+        ImageUtils.setAvatarViewBitmap(shCardViewHolder.getUserAvatar(), shVO.getUserAvatarUrl());
         ImageUtils.setImageBitmap(shCardViewHolder.getImage(), localDataSet.get(shCardViewHolder.getAdapterPosition()).getImageUrl());
         shCardViewHolder.getDate().setText(localDataSet.get(position).getDate());
         shCardViewHolder.getUserName().setText(localDataSet.get(position).getUserName());

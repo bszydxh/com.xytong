@@ -1,10 +1,7 @@
 package com.xytong.model.vo;
 
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -15,43 +12,21 @@ import java.io.Serializable;
  */
 @Entity
 public class CardVO implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private int id = -1;//主键
-    @Ignore
-    private String uid;
-    @Ignore
-    private String cid;//卡片消息id，TODO
-    @ColumnInfo(name = "user_name")
+    private Long id;//主键
+    private Long uid;
+    private Long cid;//卡片消息id，TODO
     @JsonProperty(value = "user_name")
     private String userName = "null";
     @JsonProperty(value = "user_avatar")
-    @ColumnInfo(name = "user_avatar")
     private String userAvatarUrl = null;
-    @ColumnInfo
     private String title = "(没有标题)";
-    @ColumnInfo
     private String text = "";
-    @ColumnInfo
     private Long timestamp = 0L;
 
     public CardVO() {
     }
+
     ////////////////////////////////////////////////////////
-
-    public int getId() {
-        return id;
-    }
-
-    @Deprecated
-    public String getCid() {
-        return cid;
-    }//TODO
-
-    @Deprecated
-    public String getUid() {
-        return uid;
-    }//TODO
-
     public String getText() {
         if (text == null) {
             return null;
@@ -68,9 +43,6 @@ public class CardVO implements Serializable {
         }
     }
 
-    public String getUserAvatarUrl() {
-        return userAvatarUrl;
-    }
 
     public String getUserName() {
         if (userName == null) {
@@ -78,10 +50,6 @@ public class CardVO implements Serializable {
         } else {
             return userName.trim();
         }
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
     }
 
     public String getDate() {
@@ -127,36 +95,58 @@ public class CardVO implements Serializable {
 
     }
 
-    public void setId(int id) {
+    public Long getId() {
+        return this.id;
+    }
+
+    public Long getUid() {
+        return this.uid;
+    }
+
+    public Long getCid() {
+        return this.cid;
+    }
+
+    public String getUserAvatarUrl() {
+        return this.userAvatarUrl;
+    }
+
+    public Long getTimestamp() {
+        return this.timestamp;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setCid(String cid) {
-        this.cid = cid;
-    }
-
-    public void setUid(String uid) {
+    public void setUid(Long uid) {
         this.uid = uid;
     }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
+    public void setCid(Long cid) {
+        this.cid = cid;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    @JsonProperty("user_name")
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @JsonProperty("user_avatar")
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public void setUserAvatarUrl(String userAvatarUrl) {
-        this.userAvatarUrl = userAvatarUrl;
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public boolean equals(final Object o) {
@@ -164,7 +154,9 @@ public class CardVO implements Serializable {
         if (!(o instanceof CardVO)) return false;
         final CardVO other = (CardVO) o;
         if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
+        final Object this$id = this.getId();
+        final Object other$id = other.getId();
+        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
         final Object this$uid = this.getUid();
         final Object other$uid = other.getUid();
         if (this$uid == null ? other$uid != null : !this$uid.equals(other$uid)) return false;
@@ -197,7 +189,8 @@ public class CardVO implements Serializable {
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
-        result = result * PRIME + this.getId();
+        final Object $id = this.getId();
+        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
         final Object $uid = this.getUid();
         result = result * PRIME + ($uid == null ? 43 : $uid.hashCode());
         final Object $cid = this.getCid();

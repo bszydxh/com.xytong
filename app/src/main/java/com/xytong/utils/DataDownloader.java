@@ -25,16 +25,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataDownloader {
+    public static final String FORUM_MODULE_NAME = "forums";
+    public static final String SH_MODULE_NAME = "secondhand";
+    public static final String RE_MODULE_NAME = "run_errands";
     public static List<ForumVO> getForumDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
         ForumGetRequestDTO forumGetRequestDTO = new ForumGetRequestDTO();
-        forumGetRequestDTO.setModule("forums");
+        forumGetRequestDTO.setModule(FORUM_MODULE_NAME);
+
         forumGetRequestDTO.setMode(mode);
         forumGetRequestDTO.setNumStart(start);
         forumGetRequestDTO.setNumEnd(end);
         forumGetRequestDTO.setNeedNum(need_num);
         if (start == 0) {
-            Log.e("DataDownloader.getForumDataList()", "new timestamp");
             ListTimeDao.setForumTime(context, System.currentTimeMillis());
         }
         forumGetRequestDTO.setTimestamp(ListTimeDao.getForumTime(context));
@@ -52,7 +55,7 @@ public class DataDownloader {
     public static List<ReVO> getReDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
         ReGetRequestDTO reGetRequestDTO = new ReGetRequestDTO();
-        reGetRequestDTO.setModule("run_errands");
+        reGetRequestDTO.setModule(RE_MODULE_NAME);
         reGetRequestDTO.setMode(mode);
         reGetRequestDTO.setNumStart(start);
         reGetRequestDTO.setNumEnd(end);
@@ -73,7 +76,7 @@ public class DataDownloader {
     public static List<ShVO> getShDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
         ShGetRequestDTO shGetRequestDTO = new ShGetRequestDTO();
-        shGetRequestDTO.setModule("secondhand");
+        shGetRequestDTO.setModule(SH_MODULE_NAME);
         shGetRequestDTO.setMode(mode);
         shGetRequestDTO.setNumStart(start);
         shGetRequestDTO.setNumEnd(end);
@@ -90,6 +93,7 @@ public class DataDownloader {
         return shGetResponseDTO.getShData();
     }
 
+    @Deprecated
     public static List<CommentVO> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
         List<CommentVO> data = new ArrayList<>();
         if ("newest".equals(mode)) {

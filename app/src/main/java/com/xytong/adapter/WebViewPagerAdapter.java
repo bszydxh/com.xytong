@@ -47,6 +47,10 @@ public class WebViewPagerAdapter extends PagerAdapter {
         container.removeView(viewLists.get(position));
     }
 
+    public ArrayList<View> getViewLists() {
+        return viewLists;
+    }
+
     @Override
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         currentView = (View) object;

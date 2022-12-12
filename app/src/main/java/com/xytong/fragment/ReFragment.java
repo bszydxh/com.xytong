@@ -73,8 +73,6 @@ public class ReFragment extends Fragment {
             model.loadMoreData();
             refreshLayout.finishLoadMore(2000);
         });
-        reRefreshLayout.setEnableAutoLoadMore(true);
-
         reRecyclerView.setLayoutManager(reLinearLayoutManager);
         reLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reRecyclerAdapter = new ReRecyclerAdapter(liveData.getValue());
@@ -157,6 +155,7 @@ public class ReFragment extends Fragment {
             }
         });
         model.refreshData();
+
         return binding.getRoot();
     }
 }
