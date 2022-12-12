@@ -1,4 +1,4 @@
-package com.xytong.utils;
+package com.xytong.service;
 
 import android.content.Context;
 import com.xytong.dao.SettingDao;

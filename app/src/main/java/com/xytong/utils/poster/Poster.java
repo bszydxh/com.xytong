@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xytong.utils.AccessUtils;
+import com.xytong.service.AccessController;
 import com.xytong.utils.poster.callable.HttpCallable;
 import com.xytong.utils.poster.callable.HttpWithTokenCallable;
 
@@ -71,7 +71,7 @@ public class Poster<T> {
     }
 
     public Poster<T> postWithToken(Context context, PostListener<T> posterListener) {
-        AccessUtils.getTokenForHttp(context, new AccessUtils.TokenListener() {
+        AccessController.getTokenForHttp(context, new AccessController.TokenListener() {
             @Override
             public void onStart(Context context) {
                 posterListener.onStart(context);

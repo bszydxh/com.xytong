@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.xytong.model.vo.CommentVO;
-import com.xytong.utils.DataDownloader;
+import com.xytong.service.DataDownloader;
 
 import java.util.ArrayList;
 import java.util.List;

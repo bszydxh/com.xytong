@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.xytong.model.dto.user.UserResponseDTO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.UserDownloader;
+import com.xytong.service.UserDownloader;
 
 public class UserDataViewModel extends AndroidViewModel {
     private MutableLiveData<UserVO> userLiveData;

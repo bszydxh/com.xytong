@@ -22,19 +22,19 @@ import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.R;
 import com.xytong.adapter.CommentRecyclerAdapter;
+import com.xytong.service.ImageController;
 import com.xytong.databinding.ActivityForumBinding;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.ForumVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.DataSender;
-import com.xytong.utils.ImageUtils;
+import com.xytong.service.DataSender;
 import com.xytong.utils.ViewCreateUtils;
 import com.xytong.view.Thump;
 import com.xytong.viewModel.CommentDataViewModel;
 
 import java.util.List;
 
-import static com.xytong.utils.DataDownloader.FORUM_MODULE_NAME;
+import static com.xytong.service.DataDownloader.FORUM_MODULE_NAME;
 
 public class ForumActivity extends AppCompatActivity {
     private ActivityForumBinding binding;
@@ -58,7 +58,7 @@ public class ForumActivity extends AppCompatActivity {
         ///////////////////////////////////////////
         ViewCreateUtils.setBlackStatusBar(this);
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
-        ImageUtils.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumVO.getUserAvatarUrl());
+        ImageController.setAvatarViewBitmap(binding.cardForumIndex.cardForumUserAvatar, forumVO.getUserAvatarUrl());
         ///////////////////////////////////////////
         binding.cardForumIndex.cardForumUserName.setText(forumVO.getUserName());
         binding.cardForumIndex.cardForumTitle.setText(forumVO.getTitle());

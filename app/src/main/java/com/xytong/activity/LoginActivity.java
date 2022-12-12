@@ -20,7 +20,7 @@ import com.xytong.databinding.PageSignupBinding;
 import com.xytong.model.dto.captcha.CaptchaSendRequestDTO;
 import com.xytong.model.dto.captcha.CaptchaSendResponseDTO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.AccessUtils;
+import com.xytong.service.AccessController;
 import com.xytong.utils.ViewCreateUtils;
 import com.xytong.utils.poster.Poster;
 
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         signupBinding.progress.setVisibility(View.INVISIBLE);
         loginBinding.progress.setVisibility(View.INVISIBLE);
 
-        AccessUtils.StatusListener loginListener = new AccessUtils.StatusListener() {
+        AccessController.StatusListener loginListener = new AccessController.StatusListener() {
             @Override
             public void onStart(Context context) {
                 loginBinding.progress.setVisibility(View.VISIBLE);
@@ -57,9 +57,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(Context context, int errorFlag) {
-                if (errorFlag == AccessUtils.USERNAME_OR_PASSWORD_ERROR) {
+                if (errorFlag == AccessController.USERNAME_OR_PASSWORD_ERROR) {
                     Toast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-                } else if (errorFlag == AccessUtils.SERVER_ERROR) {
+                } else if (errorFlag == AccessController.SERVER_ERROR) {
                     Toast.makeText(context, "未连接网络", Toast.LENGTH_SHORT).show();
                 }
                 loginBinding.progress.setVisibility(View.INVISIBLE);
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = username_edit_text == null ? "" : username_edit_text.toString();
             String pwd = password_edit_text == null ? "" : password_edit_text.toString();
             Log.i("login", "username:" + username + "\npassword:" + pwd);
-            AccessUtils.login(this, username, pwd, loginListener);
+            AccessController.login(this, username, pwd, loginListener);
         });
         var pwdWatcher = new TextWatcher() {
             @Override
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
             UserVO userVO = new UserVO();
             userVO.setName(username);
             userVO.setEmail(email);
-            AccessUtils.signup(this, userVO, captcha, pwd, new AccessUtils.StatusListener() {
+            AccessController.signup(this, userVO, captcha, pwd, new AccessController.StatusListener() {
                 @Override
                 public void onStart(Context context) {
                     signupBinding.progress.setVisibility(View.VISIBLE);

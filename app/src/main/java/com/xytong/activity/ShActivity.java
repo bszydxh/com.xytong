@@ -21,18 +21,18 @@ import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.xytong.R;
 import com.xytong.adapter.CommentRecyclerAdapter;
+import com.xytong.service.ImageController;
 import com.xytong.databinding.ActivityShBinding;
 import com.xytong.model.vo.CommentVO;
 import com.xytong.model.vo.ShVO;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.DataSender;
-import com.xytong.utils.ImageUtils;
+import com.xytong.service.DataSender;
 import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.CommentDataViewModel;
 
 import java.util.List;
 
-import static com.xytong.utils.DataDownloader.SH_MODULE_NAME;
+import static com.xytong.service.DataDownloader.SH_MODULE_NAME;
 
 public class ShActivity extends AppCompatActivity {
     private ActivityShBinding binding;
@@ -59,8 +59,8 @@ public class ShActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim);//进入渐变动画
         ///////////////////////////////////////////
 
-        ImageUtils.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shVO.getUserAvatarUrl());
-        ImageUtils.setImageBitmap(binding.cardShIndex.cardShImage, shVO.getImageUrl());
+        ImageController.setAvatarViewBitmap(binding.cardShIndex.cardShUserAvatar, shVO.getUserAvatarUrl());
+        ImageController.setImageBitmap(binding.cardShIndex.cardShImage, shVO.getImageUrl());
         binding.cardShIndex.cardShUserName.setText(shVO.getUserName());
         binding.cardShIndex.cardShTitle.setText(shVO.getTitle());
         binding.cardShIndex.cardShDate.setText(shVO.getDate());

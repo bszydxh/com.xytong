@@ -26,7 +26,7 @@ import com.xytong.fragment.MoralFragment;
 import com.xytong.fragment.ReFragment;
 import com.xytong.fragment.ShFragment;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.AccessUtils;
+import com.xytong.service.AccessController;
 import com.xytong.utils.ViewCreateUtils;
 
 import java.util.Objects;
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 UserDao.getUser(this)
         );
         //此处进行异步用户鉴权，确保用户登录状态（过期没）
-        AccessUtils.getTokenForStart(this, new AccessUtils.UserDataListener() {
+        AccessController.getTokenForStart(this, new AccessController.UserDataListener() {
             @Override
             public void onStart(Context context) {
                 Log.i("access", "开始鉴权");
