@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.xytong.dao.SettingDao;
 import com.xytong.model.dto.access.AccessCheckResponseDTO;
 import com.xytong.utils.AccessUtils;
+import com.xytong.utils.LogUtils;
 import com.xytong.utils.TokenDownloader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,19 +29,18 @@ public class TokenDownloaderTest {
     @Test
     public void getTokenTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        SettingDao.setAccessUrl(context,"http://xytong.top/access");
         AccessCheckResponseDTO accessCheckResponseDTO =
                 TokenDownloader.getTokenFromServer(context, "bszydxh",
                         AccessUtils.md5Salt("bszydxh", "1357924680"));
         assertNotNull(accessCheckResponseDTO);
         assertNotNull(accessCheckResponseDTO.getToken());
         assertNotEquals("", accessCheckResponseDTO.getToken().trim());
-        Log.i("json", accessCheckResponseDTO.toString());
+        Log.i(LogUtils.getLogTag(), accessCheckResponseDTO.toString());
         AccessCheckResponseDTO accessCheckResponseDTO_illegal =
                 TokenDownloader.getTokenFromServer(context, "bszydxh",
                         AccessUtils.md5Salt("bszydxh", "1357924680_illegal"));
         assertNotNull(accessCheckResponseDTO_illegal);
         assertNull(accessCheckResponseDTO_illegal.getToken());
-        Log.i("json", accessCheckResponseDTO_illegal.toString());
+        Log.i(LogUtils.getLogTag(), accessCheckResponseDTO_illegal.toString());
     }
 }

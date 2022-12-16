@@ -1,55 +1,14 @@
 package com.xytong.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.io.Serializable;
-
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Data
 public class ShVO extends CardVO implements Serializable {
     private String price = "null";
     @JsonProperty("image_url")
     private String imageUrl;
-
-    ////////////////////////////////////////////////////////
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof ShVO)) return false;
-        final ShVO other = (ShVO) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$price = this.getPrice();
-        final Object other$price = other.getPrice();
-        if (this$price == null ? other$price != null : !this$price.equals(other$price)) return false;
-        return true;
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof ShVO;
-    }
-
-    public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $price = this.getPrice();
-        result = result * PRIME + ($price == null ? 43 : $price.hashCode());
-        return result;
-    }
-
-    public String toString() {
-        return "ShVO(title=" + this.getTitle() + ")";
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 }
