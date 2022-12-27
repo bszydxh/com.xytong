@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/run_errands"
+        android:icon="@drawable/ic_run"
+        android:title="@string/run_errands" />
+
+    <item
+        android:id="@+id/moral"
+        android:icon="@drawable/ic_books"
+        android:title="@string/moral" />
+
+    <item
+        android:id="@+id/secondhand"
+        android:icon="@drawable/ic_shop"
+        android:title="@string/secondhand" />
+
+    <item
+        android:id="@+id/forums"
+        android:icon="@drawable/ic_message"
+        android:title="@string/forums" />
+</menu>
