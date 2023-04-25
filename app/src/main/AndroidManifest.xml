@@ -64,5 +64,9 @@
             android:name=".activity.PublishActivity"
             android:exported="true"
             android:theme="@style/Theme.校园通.NoActionBar" />
+        <activity
+            android:name=".activity.ImageUploadActivity"
+            android:exported="true"
+            android:theme="@style/Theme.校园通.NoActionBar" />
     </application>
 </manifest>

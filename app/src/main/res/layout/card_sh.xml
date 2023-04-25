@@ -28,7 +28,8 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_sh_image_layout"
             android:layout_width="0dp"
-            android:layout_height="240dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h,1:1"
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +39,8 @@
             <ImageView
                 android:id="@+id/card_sh_image"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="h,1:1"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/pic"/>
         </com.google.android.material.card.MaterialCardView>

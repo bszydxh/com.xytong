@@ -40,6 +40,7 @@ public class ShActivity extends AppCompatActivity {
     CommentRecyclerAdapter commentRecyclerAdapter;
     CommentDataViewModel model;
     int position;
+    boolean isFullScreen = false;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -111,6 +112,7 @@ public class ShActivity extends AppCompatActivity {
                 //TODO
             }
         });
+
         liveData.observe(this, dataList -> {
             if (commentRecyclerView.getAdapter() != null) {
                 Log.i("dataChange", "data num:" + commentRecyclerAdapter.getItemCount());
@@ -127,6 +129,11 @@ public class ShActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
             return true;
+        });
+        binding.shCommentRefreshLayout.setOnClickListener(v -> {
+            binding.cardShCommentEdit.clearFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         });
         binding.cardShComment.setOnTouchListener((v, event) -> true);
         binding.cardShCommentSend.setVisibility(View.INVISIBLE);
@@ -176,6 +183,24 @@ public class ShActivity extends AppCompatActivity {
             );
         });
         model.refreshData();
+        binding.shCommentTab.setOnClickListener(v -> {
+            if (!isFullScreen) {
+                ViewCreateUtils.setBackground(
+                        binding.shFullscreen,
+                        R.drawable.baseline_close_fullscreen_24,
+                        R.color.dark_gray
+                );
+                binding.cardShIndex.getRoot().setVisibility(View.GONE);
+            } else {
+                ViewCreateUtils.setBackground(
+                        binding.shFullscreen,
+                        R.drawable.baseline_open_in_full_24,
+                        R.color.dark_gray);
+                binding.cardShIndex.getRoot().setVisibility(View.VISIBLE);
+            }
+            isFullScreen = !isFullScreen;
+        });
+
     }
 
     @Override

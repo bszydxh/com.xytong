@@ -18,25 +18,27 @@
         android:layout_height="wrap_content"
         android:id="@+id/card_sh_touch"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_sh_image_layout"
             android:layout_width="0dp"
-            android:layout_height="240dp"
+            android:layout_height="0dp"
             app:cardCornerRadius="10dp"
+            app:layout_constraintDimensionRatio="h,4:3"
             app:cardElevation="0dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/card_sh_image"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:contentDescription="@string/user_avatar"
+                android:layout_height="match_parent"
+                android:contentDescription="商品图片"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/default_user_avatar"/>
         </com.google.android.material.card.MaterialCardView>
@@ -47,7 +49,7 @@
             android:layout_height="40dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_sh_image_layout">
 

@@ -48,4 +48,14 @@ public class ViewCreateUtils {
             imageView.setImageDrawable(wrap);
         }
     }
+    public static void setBackground(@NonNull ImageView imageView, @DrawableRes int ResId, @ColorRes int colorId) {
+        Context context = imageView.getContext();
+        Drawable bmpDrawable = ContextCompat.getDrawable(context, ResId);
+        if (bmpDrawable != null) {
+            Drawable.ConstantState state = bmpDrawable.getConstantState();
+            Drawable wrap = DrawableCompat.wrap(state == null ? bmpDrawable : state.newDrawable());
+            DrawableCompat.setTint(wrap, ContextCompat.getColor(context, colorId));
+            imageView.setBackground(wrap);
+        }
+    }
 }
