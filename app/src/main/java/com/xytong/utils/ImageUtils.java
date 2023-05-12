@@ -1,10 +1,6 @@
 package com.xytong.utils;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.xytong.R;
 
 public class ImageUtils {
     /**
@@ -41,13 +37,6 @@ public class ImageUtils {
         Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         result.setPixels(pixels, 0, width, 0, 0, width, height);
         return result;
-    }
-    static public void setImageBitmapNoCache(ImageView view, String url) {
-        Glide.with(view.getContext())
-                .load(url)
-                .override(view.getWidth(), view.getHeight())
-//                .apply(requestOptions)
-                .into(view);
     }
 }
 

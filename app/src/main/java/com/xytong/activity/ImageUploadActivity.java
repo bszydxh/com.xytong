@@ -5,20 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.xytong.R;
-import com.xytong.dao.UserDao;
 import com.xytong.databinding.ActivityImageUploadBinding;
-import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageUtils;
+import com.xytong.service.ImageController;
 import com.xytong.utils.ViewCreateUtils;
 
 import java.io.File;
-import java.util.Objects;
 
 public class ImageUploadActivity extends AppCompatActivity {
     private ActivityImageUploadBinding binding;
@@ -40,7 +35,7 @@ public class ImageUploadActivity extends AppCompatActivity {
                     Intent data = result.getData();
                     if (data != null) {
                         Uri currentUri = data.getData();
-                        ImageUtils.setImageBitmapNoCache(binding.imageUploadImage, currentUri.toString());
+                        ImageController.setImageBitmapNoCache(binding.imageUploadImage, currentUri.toString());
                         File file = new File(currentUri.getPath());
 
                     }
