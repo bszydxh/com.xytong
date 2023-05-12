@@ -37,11 +37,11 @@
     <string name="userText">userText</string>
     <string name="signature">用户签名</string>
     <string name="change_url">数据获取链接更改</string>
-    <string name="comment_url">https://api.xytong.top/comment/v1</string>
-    <string name="sh_url"     >https://api.xytong.top/secondhand/v1</string>
-    <string name="re_url"     >https://api.xytong.top/run_errands/v1</string>
-    <string name="forum_url"  >https://api.xytong.top/forums/v1</string>
-    <string name="access_url" >https://api.xytong.top/access/v1</string>
-    <string name="user_url"   >https://api.xytong.top/user/v1</string>
-    <string name="captcha_url">"https://api.xytong.top/captcha/v1"</string>
+    <string name="comment_url" >https://xytong.top/comment/v1</string>
+    <string name="sh_url"      >https://xytong.top/secondhand/v1</string>
+    <string name="re_url"      >https://xytong.top/run_errands/v1</string>
+    <string name="forum_url"   >https://xytong.top/forums/v1</string>
+    <string name="access_url"  >https://xytong.top/access/v1</string>
+    <string name="user_url"    >https://xytong.top/user/v1</string>
+    <string name="captcha_url">"https://xytong.top/captcha/v1"</string>
 </resources>

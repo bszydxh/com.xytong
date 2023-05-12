@@ -28,6 +28,7 @@ public class DataDownloader {
     public static final String FORUM_MODULE_NAME = "forums";
     public static final String SH_MODULE_NAME = "secondhand";
     public static final String RE_MODULE_NAME = "run_errands";
+
     public static List<ForumVO> getForumDataList(Context context, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
         ForumGetRequestDTO forumGetRequestDTO = new ForumGetRequestDTO();
@@ -92,48 +93,6 @@ public class DataDownloader {
         }
         return shGetResponseDTO.getShData();
     }
-
-    @Deprecated
-    public static List<CommentVO> getCommentDataList(Context context, @NonNull String mode, int start, int end) {
-        List<CommentVO> data = new ArrayList<>();
-        if ("newest".equals(mode)) {
-            int need_num = end - start + 1;
-            String text = "{\n" +
-                    "  \"module\": \"comment\",\n" +
-                    "  \"mode\": \"newest\",\n" +
-                    "  \"need_num\": " + need_num + ",\n" +
-                    "  \"num_start\": " + start + ",\n" +
-                    "  \"num_end\": " + end + ",\n" +
-                    "  \"timestamp\": 1650098900\n" +
-                    "}";
-            Poster<List<CommentVO>> poster = new Poster<>(SettingDao.getUrl(context, SettingDao.COMMENT_URL_NAME, SettingDao.COMMENT_URL_RES), text);
-            poster.setHttpListener(result -> {
-                List<CommentVO> data_init = new ArrayList<>();
-                try {
-                    JSONObject root = new JSONObject(result);
-                    JSONArray comment_data_array = root.getJSONArray("comment_data");
-                    for (int i = 0; i < comment_data_array.length(); i++) {
-                        CommentVO commentData = new CommentVO();
-                        JSONObject comment_data = comment_data_array.getJSONObject(i);
-                        commentData.setUserAvatarUrl(comment_data.getString("user_avatar"));
-                        commentData.setUserName(comment_data.getString("user_name"));
-                        commentData.setText(comment_data.getString("text"));
-                        commentData.setLikes(comment_data.getInt("likes"));
-                        commentData.setTimestamp(Long.valueOf(comment_data.getString("timestamp")));
-                        data_init.add(commentData);
-                    }
-                    Log.i("DataDownloader.getCommentData()", "get ok");
-                } catch (Exception e) {
-                    Log.e("DataDownloader.getCommentData()", "error");
-                    e.printStackTrace();
-                }
-                return data_init;//www,我错了，主线程在等你！宝贝回家！
-            });
-            data = poster.post();
-        }
-        return data;
-    }
-
     public static List<CommentVO> getCommentDataList(Context context, Long cid, String module, @NonNull String mode, int start, int end) {
         int need_num = end - start + 1;
         CommentGetRequestDTO commentGetRequestDTO = new CommentGetRequestDTO();

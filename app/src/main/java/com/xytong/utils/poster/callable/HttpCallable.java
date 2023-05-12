@@ -2,6 +2,7 @@ package com.xytong.utils.poster.callable;
 
 import android.util.Log;
 import com.xytong.utils.poster.HttpListener;
+import com.xytong.utils.poster.Poster;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -10,12 +11,12 @@ import java.util.concurrent.Callable;
 
 public class HttpCallable<T> implements Callable<T> {
     private HttpListener<T> httpListener;
+    private Poster.PostListener<T> posterListener;
     private String path = "";
     private String text = "";
 
     public HttpCallable(String path, String text, HttpListener<T> httpListener) {
-        if(httpListener==null)
-        {
+        if (httpListener == null) {
             httpListener = result -> null;
         }
         this.path = path;
@@ -23,7 +24,14 @@ public class HttpCallable<T> implements Callable<T> {
         this.httpListener = httpListener;
     }
 
+    public HttpListener<T> setPosterListener(Poster.PostListener<T> postListener) {
+        return httpListener;
+    }
+
     public T call() {
+        if (posterListener != null) {
+            posterListener.onStart();
+        }
         T data_init = null;
         //get的方式提交就是url拼接的方式
         try {
@@ -61,16 +69,22 @@ public class HttpCallable<T> implements Callable<T> {
             } else {
                 //请求失败
                 Log.e("Poster", "http error");
-
+                if (posterListener != null) {
+                    posterListener.onError("http error", responseCode);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("Poster", "get error");
+            Log.e("Poster", "io error");
+            if (posterListener != null) {
+                posterListener.onError("io error", 401);
+            }
+        }
+        if (posterListener != null) {
+            posterListener.onDone(data_init);
         }
         return data_init;
     }
-
-
 
 
 }

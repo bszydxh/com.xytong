@@ -116,7 +116,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem settingItem = navMenu.findItem(R.id.nav_setting);
         MenuItem aboutItem = navMenu.findItem(R.id.nav_about);
         settingItem.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+//          Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            Intent intent = new Intent(MainActivity.this, ImageUploadActivity.class);
             startActivity(intent);
             return true;
         });

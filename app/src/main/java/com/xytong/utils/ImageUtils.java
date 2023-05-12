@@ -59,5 +59,12 @@ public class ImageUtils {
 //                .apply(requestOptions)
                 .into(view);
     }
+    static public void setImageBitmapNoCache(ImageView view, String url) {
+        Glide.with(view.getContext())
+                .load(url)
+                .override(view.getWidth(), view.getHeight())
+//                .apply(requestOptions)
+                .into(view);
+    }
 }
 
