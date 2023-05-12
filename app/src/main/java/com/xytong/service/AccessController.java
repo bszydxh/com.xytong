@@ -1,4 +1,4 @@
-package com.xytong.utils;
+package com.xytong.service;
 
 import android.content.Context;
 import android.os.Handler;
@@ -26,7 +26,7 @@ import java.security.spec.X509EncodedKeySpec;
 import static java.lang.Thread.sleep;
 
 
-public class AccessUtils {
+public class AccessController {
     public static final int UNKNOWN_ERROR = -1;
     public static final int SERVER_ERROR = -2;
     public static final int TOKEN_EXPIRED_ERROR = -3;
@@ -147,7 +147,7 @@ public class AccessUtils {
                 accessSignupRequestDTO.setTimestamp(System.currentTimeMillis());
                 accessSignupRequestDTO.setUsername(userVO.getName());
                 accessSignupRequestDTO.setEmail(userVO.getEmail());
-                accessSignupRequestDTO.setPassword(AccessUtils.md5Salt(userVO.getName(), pwd));
+                accessSignupRequestDTO.setPassword(AccessController.md5Salt(userVO.getName(), pwd));
                 accessSignupRequestDTO.setCaptchaCode(captcha);
                 accessSignupResponseDTO = Poster.jacksonPost(
                         SettingDao.getUrl(context, SettingDao.ACCESS_URL_NAME, SettingDao.ACCESS_URL_RES) + "/signup",

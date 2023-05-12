@@ -1,4 +1,4 @@
-package com.xytong.utils;
+package com.xytong.service;
 
 import android.content.Context;
 import android.os.Handler;
@@ -19,7 +19,7 @@ import com.xytong.utils.poster.Poster;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.xytong.utils.DataDownloader.*;
+import static com.xytong.service.DataDownloader.*;
 
 public class DataSender {
     public static final int NETWORK_ERROR = -1;

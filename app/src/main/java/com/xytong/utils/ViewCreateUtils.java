@@ -12,6 +12,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import com.xytong.service.ImageController;
 import com.xytong.model.vo.UserVO;
 
 public class ViewCreateUtils {
@@ -23,7 +24,7 @@ public class ViewCreateUtils {
     }
 
     public static void setupUserDataViewGroup(ImageView imageView, TextView name, TextView signature, UserVO userVO) {
-        ImageUtils.setAvatarViewBitmap(imageView,
+        ImageController.setAvatarViewBitmap(imageView,
                 userVO.getUserAvatarUrl());
         name.setText(userVO.getName());
         signature.setText(userVO.getSignature());

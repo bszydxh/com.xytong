@@ -8,12 +8,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.xytong.R;
 import com.xytong.adapter.RootFragmentPagerAdapter;
+import com.xytong.service.ImageController;
 import com.xytong.databinding.ActivityUserBinding;
 import com.xytong.fragment.ForumFragment;
 import com.xytong.fragment.ReFragment;
 import com.xytong.fragment.ShFragment;
 import com.xytong.model.vo.UserVO;
-import com.xytong.utils.ImageUtils;
 import com.xytong.utils.ViewCreateUtils;
 import com.xytong.viewModel.UserDataViewModel;
 
@@ -46,7 +46,7 @@ public class UserActivity extends AppCompatActivity {
         });
 
         binding.userName.setText(userVO.getName());
-        ImageUtils.setAvatarViewBitmap(binding.userAvatar, userVO.getUserAvatarUrl());
+        ImageController.setAvatarViewBitmap(binding.userAvatar, userVO.getUserAvatarUrl());
         binding.userBack.setOnClickListener(v -> finish());
         RootFragmentPagerAdapter rootFragmentPagerAdapter;
         rootFragmentPagerAdapter = new RootFragmentPagerAdapter(

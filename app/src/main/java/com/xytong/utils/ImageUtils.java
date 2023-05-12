@@ -42,23 +42,6 @@ public class ImageUtils {
         result.setPixels(pixels, 0, width, 0, 0, width, height);
         return result;
     }
-    static public void setAvatarViewBitmap(ImageView view, String url) {
-        RequestOptions requestOptions = RequestOptions.bitmapTransform(new GreyPicTransformer(view.getContext()));
-        Glide.with(view.getContext())
-                .load(url)
-                .placeholder(R.mipmap.default_user_avatar)
-                .override(view.getWidth(), view.getHeight())
-//                .apply(requestOptions)
-                .into(view);
-    }
-    static public void setImageBitmap(ImageView view, String url) {
-        Glide.with(view.getContext())
-                .load(url)
-                .placeholder(R.mipmap.pic)
-                .override(view.getWidth(), view.getHeight())
-//                .apply(requestOptions)
-                .into(view);
-    }
     static public void setImageBitmapNoCache(ImageView view, String url) {
         Glide.with(view.getContext())
                 .load(url)

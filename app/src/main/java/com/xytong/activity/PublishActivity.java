@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.xytong.R;
 import com.xytong.databinding.ActivityPublishBinding;
-import com.xytong.utils.DataSender;
+import com.xytong.service.DataSender;
 import com.xytong.utils.ViewCreateUtils;
 
 import java.math.BigDecimal;
